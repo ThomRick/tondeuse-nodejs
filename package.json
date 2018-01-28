@@ -1,0 +1,44 @@
+{
+  "name": "tondeuse-nodejs",
+  "version": "1.0.0",
+  "description": "A solution about tondeuse Node.js recruitment exercise",
+  "main": "index.js",
+  "scripts": {
+    "build:src": "tsc --project src/tsconfig.json",
+    "build:test": "tsc --project test/tsconfig.json",
+    "clean:src": "rm -rf dist src/**/*.js src/**/*.map",
+    "clean:test": "rm -rf test/**/*.js test/**/*.map",
+    "lint:test": "tslint --config tslint.json --project test/tsconfig.json",
+    "test": "mocha test",
+    "start": "node dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThomRick/tondeuse-nodejs.git"
+  },
+  "author": "ThomRick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThomRick/tondeuse-nodejs/issues"
+  },
+  "homepage": "https://github.com/ThomRick/tondeuse-nodejs#readme",
+  "dependencies": {
+    "koa": "^2.4.1",
+    "koa-router": "^7.3.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/koa": "^2.0.43",
+    "@types/koa-router": "^7.0.27",
+    "@types/mocha": "^2.2.47",
+    "@types/node": "^9.4.0",
+    "@types/sinon": "^4.1.3",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "nodemon": "^1.14.11",
+    "sinon": "^4.2.2",
+    "ts-lint": "^4.5.1",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2"
+  }
+}
