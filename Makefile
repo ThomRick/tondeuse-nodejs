@@ -1,4 +1,10 @@
-all: test
+all: prepare test build
+
+build:
+	npm run -s build:src
+
+prepare:
+	npm install
 
 test: lint-test build-test test-app
 
