@@ -29,6 +29,7 @@ jobs:
           keys:
             - bootstrap
       - run: echo ${CIRCLE_SHA1}
+      - run: docker build -t thomrick/mow-it .
       - run: docker image ls
 
 workflows:
