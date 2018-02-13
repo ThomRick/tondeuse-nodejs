@@ -1,0 +1,45 @@
+version: 2
+jobs:
+  prepare:
+    working_directory: ~/app
+    docker:
+        - image: circleci/node:8.9
+    steps:
+      - checkout
+      - run: npm install
+      - save_cache:
+          paths:
+            - .
+          key: bootstrap
+  test:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - restore_cache:
+          keys:
+            - bootstrap
+      - run: make test
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - restore_cache:
+          keys:
+            - bootstrap
+      - run: echo ${CIRCLE_SHA1}
+      - run: docker image ls
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - prepare
+      - test:
+          requires:
+            - prepare
+      - build:
+          requires:
+            - prepare
+            - test
