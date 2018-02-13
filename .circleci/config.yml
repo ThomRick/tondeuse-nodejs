@@ -31,7 +31,16 @@ jobs:
           keys:
             - bootstrap
       - run: docker build -t thomrick/mow-it:${CIRCLE_SHA1} .
+  deploy:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
+      - run: docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
       - run: docker image ls
+
 
 workflows:
   version: 2
@@ -43,5 +52,7 @@ workflows:
             - prepare
       - build:
           requires:
-            - prepare
             - test
+      - deploy:
+          requires:
+            - build
