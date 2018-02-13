@@ -1,7 +1,10 @@
 FROM node:carbon-alpine as builder
 WORKDIR /usr/local/app
 COPY . .
-RUN apk add -U bash make && make
+RUN apk add -U bash make
+RUN make prepare && \
+    make build && \
+    rm -rf src Makefile tsconfig.json
 
 FROM node:carbon-alpine
 WORKDIR /usr/local/app

@@ -1,18 +1,13 @@
-all: prepare test build
-
-build:
-	npm run -s build:src
+.PHONY: test
 
 prepare:
 	npm install
 
-test: lint-test build-test test-app
+build:
+	npm run -s build
 
-build-test:
-	npm run -s build:test
-
-lint-test:
-	npm run -s lint:test
-
-test-app:
+test:
 	npm test -s
+
+start:
+	npm start -s
