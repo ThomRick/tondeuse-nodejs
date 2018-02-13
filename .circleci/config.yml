@@ -25,11 +25,12 @@ jobs:
     docker:
       - image: circleci/node:8.9
     steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
       - restore_cache:
           keys:
             - bootstrap
-      - run: echo ${CIRCLE_SHA1}
-      - run: docker build -t thomrick/mow-it .
+      - run: docker build -t thomrick/mow-it:${CIRCLE_SHA1} .
       - run: docker image ls
 
 workflows:
