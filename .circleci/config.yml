@@ -31,7 +31,7 @@ jobs:
           keys:
             - bootstrap
       - run: docker build -t ${DOCKER_USER}/mow-it:${CIRCLE_SHA1} .
-      - run: docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_PASSWORD}
+      - run: docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
       - run: docker push ${DOCKER_USER}/mow-it:${CIRCLE_SHA1}
 
 workflows:
