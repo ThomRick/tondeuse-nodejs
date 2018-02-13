@@ -1,0 +1,13 @@
+.idea/
+
+README.md
+
+.dockerignore/
+Dockerfile
+
+.gitignore
+
+node_modules/
+test/
+
+tslint.json

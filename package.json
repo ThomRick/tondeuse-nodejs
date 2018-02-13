@@ -4,12 +4,9 @@
   "description": "A solution about tondeuse Node.js recruitment exercise",
   "main": "index.js",
   "scripts": {
-    "build:src": "tsc --project src/tsconfig.json",
-    "build:test": "tsc --project test/tsconfig.json",
-    "clean:src": "rm -rf dist src/**/*.js src/**/*.map",
-    "clean:test": "rm -rf test/**/*.js test/**/*.map",
-    "lint:test": "tslint --config tslint.json --project test/tsconfig.json",
-    "test": "mocha test",
+    "build": "tsc --project tsconfig.json",
+    "lint": "tslint --config tslint.json --project test/tsconfig.json",
+    "test": "mocha test/**/*.ts --require ts-node/register",
     "start": "node dist/server.js"
   },
   "repository": {
