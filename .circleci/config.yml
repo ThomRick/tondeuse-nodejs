@@ -30,17 +30,9 @@ jobs:
       - restore_cache:
           keys:
             - bootstrap
-      - run: docker build -t thomrick/mow-it:${CIRCLE_SHA1} .
-  deploy:
-    working_directory: ~/app
-    docker:
-      - image: circleci/node:8.9
-    steps:
-      - setup_remote_docker:
-          version: 17.11.0-ce
-      - run: docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
-      - run: docker image ls
-
+      - run: docker build -t ${DOCKER_USER}/mow-it:${CIRCLE_SHA1} .
+      - run: docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_PASSWORD}
+      - run: docker push ${DOCKER_USER}/mow-it:${CIRCLE_SHA1}
 
 workflows:
   version: 2
@@ -53,6 +45,3 @@ workflows:
       - build:
           requires:
             - test
-      - deploy:
-          requires:
-            - build
