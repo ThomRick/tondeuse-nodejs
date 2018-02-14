@@ -34,20 +34,20 @@ jobs:
           docker build -t $DOCKER_USER/mow-it:$CIRCLE_SHA1 .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push $DOCKER_USER/mow-it:$CIRCLE_SHA1
-    release:
-      working_directory: ~/app
-      docker:
-        - image: circleci/node:8.9
-      steps:
-        - setup_remote_docker:
-            version: 17.11.0-ce
-        - run: |
-            docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-            docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
-            docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
-            docker push $DOCKER_USER/mow-it:latest
-            docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:CIRCLE_TAG
-            docker push $DOCKER_USER/mow-it:CIRCLE_TAG
+  release:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
+          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
+          docker push $DOCKER_USER/mow-it:latest
+          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:CIRCLE_TAG
+          docker push $DOCKER_USER/mow-it:CIRCLE_TAG
 
 workflows:
   version: 2
