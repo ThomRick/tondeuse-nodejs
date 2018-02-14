@@ -1,0 +1,70 @@
+version: 2
+jobs:
+  prepare:
+    working_directory: ~/app
+    docker:
+        - image: circleci/node:8.9
+    steps:
+      - checkout
+      - run: npm install
+      - save_cache:
+          paths:
+            - .
+          key: bootstrap
+  test:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - restore_cache:
+          keys:
+            - bootstrap
+      - run: make test
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
+      - restore_cache:
+          keys:
+            - bootstrap
+      - run: |
+          docker build -t $DOCKER_USER/mow-it:$CIRCLE_SHA1 .
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker push $DOCKER_USER/mow-it:$CIRCLE_SHA1
+  release:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
+          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
+          docker push $DOCKER_USER/mow-it:latest
+          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:$CIRCLE_TAG
+          docker push $DOCKER_USER/mow-it:$CIRCLE_TAG
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - prepare
+      - test:
+          requires:
+            - prepare
+      - build:
+          requires:
+            - test
+      - release:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
