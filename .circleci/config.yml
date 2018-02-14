@@ -30,9 +30,11 @@ jobs:
       - restore_cache:
           keys:
             - bootstrap
-      - run: docker build -t ${DOCKER_USER}/mow-it:${CIRCLE_SHA1} .
-      - run: docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
-      - run: docker push ${DOCKER_USER}/mow-it:${CIRCLE_SHA1}
+      - run: |
+          TAG=$CIRCLE_SHA1
+          docker build -t $DOCKER_USER/mow-it:$TAG .
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker push $DOCKER_USER/mow-it:$TAG
 
 workflows:
   version: 2
