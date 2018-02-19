@@ -53,18 +53,33 @@ workflows:
   version: 2
   commit:
     jobs:
-      - prepare
+      - prepare:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              ignore: /.*/
       - test:
           requires:
             - prepare
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              ignore: /.*/
       - build:
           requires:
             - test
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              ignore: /.*/
       - release:
           requires:
             - build
           filters:
-            tags:
-              only: /.*/
             branches:
               ignore: /.*/
+            tags:
+              only: /.*/
