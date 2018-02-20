@@ -44,14 +44,13 @@ jobs:
       - restore_cache:
           keys:
             - bootstrap
-      - run: |
-          VERSION=$(npm version)
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-          docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
-          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
-          docker push $DOCKER_USER/mow-it:latest
-          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:$VERSION
-          docker push $DOCKER_USER/mow-it:$VERSION
+      - run: VERSION=$(npm version)
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - run: docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
+      - run: docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
+      - run: docker push $DOCKER_USER/mow-it:latest
+      - run: docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:$VERSION
+      - run: docker push $DOCKER_USER/mow-it:$VERSION
 
 workflows:
   version: 2
