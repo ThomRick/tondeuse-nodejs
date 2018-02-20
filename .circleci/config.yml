@@ -55,31 +55,25 @@ workflows:
     jobs:
       - prepare:
           filters:
-            branches:
-              only: /.*/
             tags:
               ignore: /.*/
       - test:
           requires:
             - prepare
           filters:
-            branches:
-              only: /.*/
             tags:
               ignore: /.*/
       - build:
           requires:
             - test
           filters:
-            branches:
-              only: /.*/
             tags:
               ignore: /.*/
       - release:
           requires:
             - build
           filters:
-            branches:
-              only: master
             tags:
               only: /.*/
+            branches:
+              ignore: /.*/
