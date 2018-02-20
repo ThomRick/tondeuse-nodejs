@@ -10,7 +10,7 @@ jobs:
       - save_cache:
           paths:
             - .
-          key: bootstrap
+          key: bootstrap-{{ .Revision }}
   test:
     working_directory: ~/app
     docker:
@@ -18,7 +18,7 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - bootstrap
+            - bootstrap-{{ .Revision }}
       - run: make test
   build:
     working_directory: ~/app
@@ -29,15 +29,11 @@ jobs:
           version: 17.11.0-ce
       - restore_cache:
           keys:
-            - bootstrap
+            - bootstrap-{{ .Revision }}
       - run: |
           docker build -t $DOCKER_USER/mow-it:$CIRCLE_SHA1 .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push $DOCKER_USER/mow-it:$CIRCLE_SHA1
-      - run: |
-          APP_VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
-          echo $APP_VERSION
-          cat package.json
   release:
     working_directory: ~/app
     docker:
@@ -47,14 +43,15 @@ jobs:
           version: 17.11.0-ce
       - restore_cache:
           keys:
-            - bootstrap
-      - run: VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
-      - run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-      - run: docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
-      - run: docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
-      - run: docker push $DOCKER_USER/mow-it:latest
-      - run: docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:$VERSION
-      - run: docker push $DOCKER_USER/mow-it:$VERSION
+            - bootstrap-{{ .Revision }}
+      - run: |
+          VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
+          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
+          docker push $DOCKER_USER/mow-it:latest
+          docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:$VERSION
+          docker push $DOCKER_USER/mow-it:$VERSION
 
 workflows:
   version: 2
