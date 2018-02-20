@@ -35,8 +35,8 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push $DOCKER_USER/mow-it:$CIRCLE_SHA1
       - run: |
-          VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
-          echo $VERSION
+          APP_VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
+          echo $APP_VERSION
   release:
     working_directory: ~/app
     docker:
