@@ -34,6 +34,9 @@ jobs:
           docker build -t $DOCKER_USER/mow-it:$CIRCLE_SHA1 .
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push $DOCKER_USER/mow-it:$CIRCLE_SHA1
+      - run: |
+          VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
+          echo $VERSION
   release:
     working_directory: ~/app
     docker:
@@ -44,7 +47,7 @@ jobs:
       - restore_cache:
           keys:
             - bootstrap
-      - run: VERSION=$(npm version)
+      - run: VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - run: docker pull $DOCKER_USER/mow-it:$CIRCLE_SHA1
       - run: docker tag $DOCKER_USER/mow-it:$CIRCLE_SHA1 $DOCKER_USER/mow-it:latest
