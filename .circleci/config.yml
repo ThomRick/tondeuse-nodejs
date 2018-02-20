@@ -37,6 +37,7 @@ jobs:
       - run: |
           APP_VERSION=$(echo "console.log(require('./package.json').version)" >> version.js && node version.js)
           echo $APP_VERSION
+          cat package.json
   release:
     working_directory: ~/app
     docker:
