@@ -2,19 +2,19 @@ import { expect } from 'chai';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as request from 'supertest';
-import { FieldApi } from '../../src/api/field.api';
+import { MowerApi } from '../../src/api/mower.api';
 
-describe('Field API', () => {
-  it('should expose POST /api/fields endpoint', async () => {
+describe('Mower API', () => {
+  it('should expose POST /api/mowers', async () => {
     const router = new Router();
-    const api = new FieldApi(router);
+    const api = new MowerApi(router);
     expect(api).to.exist;
 
     const server = new Koa();
     server.use(router.routes());
 
     const response = await request(server.callback())
-      .post('/api/fields')
+      .post('/api/mowers')
       .send({});
 
     expect(response.status).to.be.equal(201);

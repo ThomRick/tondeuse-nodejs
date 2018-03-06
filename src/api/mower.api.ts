@@ -1,9 +1,9 @@
 import * as Router from 'koa-router';
 import { Context } from 'koa';
 
-export class FieldApi {
+export class MowerApi {
   constructor(private router: Router) {
-    this.router.post('/api/fields', this.post);
+    this.router.post('/api/mowers', this.post);
   }
 
   private async post(context: Context) {
