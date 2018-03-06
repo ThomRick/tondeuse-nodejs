@@ -1,13 +1,16 @@
 .PHONY: test
 
-prepare:
-	npm install
+install:
+	docker run -t -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm install"
 
-build:
-	npm run -s build
+lint:
+	docker run -t -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm run -s lint"
 
 test:
-	npm test -s
+	docker run -t -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm run -s test"
 
-start:
-	npm start -s
+compile:
+	docker run -t -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm run -s build"
+
+build:
+	docker build -t local/mow-it .

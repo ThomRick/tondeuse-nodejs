@@ -5,21 +5,51 @@ jobs:
     docker:
         - image: circleci/node:8.9
     steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
       - checkout
-      - run: npm install
+      - run: make install
       - save_cache:
           paths:
             - .
-          key: bootstrap-{{ .Revision }}
+          key: build-{{ .Revision }}
+  lint:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
+      - restore_cache:
+          keys:
+            - build-{{ .Revision }}
+      - run: make lint
   test:
     working_directory: ~/app
     docker:
       - image: circleci/node:8.9
     steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
       - restore_cache:
           keys:
-            - bootstrap-{{ .Revision }}
+            - build-{{ .Revision }}
       - run: make test
+  compile:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
+      - restore_cache:
+          keys:
+            - build-{{ .Revision }}
+      - run: make compile
+      - save_cache:
+          paths:
+            - .
+          key: build-{{ .Revision }}
   build:
     working_directory: ~/app
     docker:
@@ -29,9 +59,10 @@ jobs:
           version: 17.11.0-ce
       - restore_cache:
           keys:
-            - bootstrap-{{ .Revision }}
+            - build-{{ .Revision }}
       - run: |
-          docker build -t $DOCKER_USER/mow-it:$CIRCLE_SHA1 .
+          make build
+          docker tag local/mow-it $DOCKER_USER/mow-it:$CIRCLE_SHA1
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
           docker push $DOCKER_USER/mow-it:$CIRCLE_SHA1
   release:
@@ -58,12 +89,15 @@ workflows:
   commit:
     jobs:
       - prepare
-      - test:
+      - lint
+      - test
+      - compile:
           requires:
-            - prepare
+            - lint
+            - test
       - build:
           requires:
-            - test
+            - compile
       - release:
           requires:
             - build
