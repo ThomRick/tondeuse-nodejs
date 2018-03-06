@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+install: false
+jobs:
+  include:
+    - stage: continuous_integration
+      if: NOT tag IS present
+      script:
+        - make install && make lint && make test && make compile && make build
+        - docker tag local/mow-it $DOCKER_USER/mow-it:$TRAVIS_COMMIT
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - docker push $DOCKER_USER/mow-it:$TRAVIS_COMMIT
+    - stage: deployment
+      if: tag IS present
+      script:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        - docker pull $DOCKER_USER/mow-it:$TRAVIS_COMMIT
+        - docker tag $DOCKER_USER/mow-it:$TRAVIS_COMMIT $DOCKER_USER/mow-it:$TRAVIS_TAG
+        - docker push $DOCKER_USER/mow-it:$TRAVIS_TAG
+        - docker tag $DOCKER_USER/mow-it:$TRAVIS_COMMIT $DOCKER_USER/mow-it:latest
+        - docker push $DOCKER_USER/mow-it:latest
