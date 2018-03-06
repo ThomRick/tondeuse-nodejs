@@ -1,13 +1,18 @@
 .idea/
+.circleci/
 
-README.md
-
+.docker/
 .dockerignore/
 Dockerfile
 
 .gitignore
 
+README.md
+Makefile
+
 node_modules/
+src/
 test/
 
+tsconfig.json
 tslint.json
