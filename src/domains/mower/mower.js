@@ -39,6 +39,14 @@ class Mower {
     this.position = position;
   }
 
+  placeOn(field) {
+    this.field = field;
+  }
+
+  getField() {
+    return this.field;
+  }
+
   getId() {
     return this.id;
   }

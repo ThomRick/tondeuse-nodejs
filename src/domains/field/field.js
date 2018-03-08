@@ -13,11 +13,6 @@ class FieldBuilder {
     return this;
   }
 
-  withMowers(mowers) {
-    this.mowers = mowers;
-    return this;
-  }
-
   build() {
     if (this.dimension === undefined) {
       throw new Error('Dimension must be specified');
@@ -25,18 +20,14 @@ class FieldBuilder {
     if (this.id === undefined) {
       this.id = FieldId.create();
     }
-    if (this.mowers === undefined) {
-      this.mowers = [];
-    }
-    return new Field(this.id, this.dimension, this.mowers);
+    return new Field(this.id, this.dimension);
   }
 }
 
 class Field {
-  constructor(id, dimension, mowers) {
+  constructor(id, dimension) {
     this.id = id;
     this.dimension = dimension;
-    this.mowers = mowers;
   }
 
   getId() {
@@ -45,10 +36,6 @@ class Field {
 
   getDimension() {
     return this.dimension;
-  }
-
-  getMowers() {
-    return this.mowers;
   }
 
   static Builder() {

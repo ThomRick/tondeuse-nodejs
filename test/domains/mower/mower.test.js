@@ -1,6 +1,9 @@
 const chai = require('chai');
 chai.should();
 
+const Field = require('../../../src/domains/field/field');
+const FieldDimension = require('../../../src/domains/field/dimension');
+
 const Mower = require('../../../src/domains/mower/mower');
 const MowerOrientation = require('../../../src/domains/mower/orientation');
 const MowerPosition = require('../../../src/domains/mower/position');
@@ -20,5 +23,11 @@ describe('Mower', () => {
   });
   it('should fail if no orientation is specified', () => {
     (() => Mower.Builder().withPosition(MowerPosition.at(0, 0)).build()).should.throw('Orientation must be specified');
+  });
+  it('should have a field when it is been place on', () => {
+    const field = Field.Builder().withDimension(FieldDimension.of(5, 5)).build();
+    const mower = Mower.Builder().withPosition(MowerPosition.at(0, 0)).withOrientation(MowerOrientation.NORTH).build();
+    mower.placeOn(field);
+    mower.getField().should.be.deep.equal(field);
   });
 });
