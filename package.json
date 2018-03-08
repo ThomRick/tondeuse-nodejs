@@ -7,7 +7,7 @@
     "build": "mkdir -p dist && cp -R src/* dist/",
     "lint": "eslint src",
     "test": "mocha test",
-    "start": "node dist/server.js"
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
