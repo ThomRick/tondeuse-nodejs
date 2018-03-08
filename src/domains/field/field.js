@@ -1,21 +1,21 @@
 const FieldId = require('./fieldId');
 
 class Field {
-  constructor(fieldId, mowers) {
-    this.fieldId = fieldId;
-    this.mowers = mowers;
+  constructor(id, dimension) {
+    this.id = id;
+    this.dimension = dimension;
   }
 
-  getFieldId() {
-    return this.fieldId;
+  getId() {
+    return this.id;
   }
 
-  getMowers() {
-    return this.mowers;
+  getDimension() {
+    return this.dimension;
   }
 
-  static empty() {
-    return new Field(FieldId.create(), []);
+  static withDimension(dimension) {
+    return new Field(FieldId.create(), dimension);
   }
 }
 
