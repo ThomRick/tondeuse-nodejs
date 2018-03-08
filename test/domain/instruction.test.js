@@ -95,4 +95,60 @@ describe('Instruction', () => {
     const instruction = Instruction.from(Instruction.TURN_RIGHT);
     instruction.applyOn(mower).getOrientation().should.be.deep.equal(Orientation.from(Orientation.EST));
   });
+  it('should fail because mower is out of the field by moving forward to north', () => {
+    const field = Field
+      .Builder()
+      .withDimension(Dimension.of(4, 4))
+      .build();
+    const mower = Mower
+      .Builder()
+      .withPosition(Position.at(4, 4))
+      .withOrientation(Orientation.from(Orientation.NORTH))
+      .build();
+    mower.placeOn(field);
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
+    (() => instruction.applyOn(mower)).should.throw('Mower is out of the field.');
+  });
+  it('should fail because mower is out of the field by moving forward to the east', () => {
+    const field = Field
+      .Builder()
+      .withDimension(Dimension.of(4, 4))
+      .build();
+    const mower = Mower
+      .Builder()
+      .withPosition(Position.at(4, 4))
+      .withOrientation(Orientation.from(Orientation.EST))
+      .build();
+    mower.placeOn(field);
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
+    (() => instruction.applyOn(mower)).should.throw('Mower is out of the field.');
+  });
+  it('should fail because mower is out of the field by moving forward to south', () => {
+    const field = Field
+      .Builder()
+      .withDimension(Dimension.of(4, 4))
+      .build();
+    const mower = Mower
+      .Builder()
+      .withPosition(Position.at(0, 0))
+      .withOrientation(Orientation.from(Orientation.SOUTH))
+      .build();
+    mower.placeOn(field);
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
+    (() => instruction.applyOn(mower)).should.throw('Mower is out of the field.');
+  });
+  it('should fail because mower is out of the field by moving forward to west', () => {
+    const field = Field
+      .Builder()
+      .withDimension(Dimension.of(4, 4))
+      .build();
+    const mower = Mower
+      .Builder()
+      .withPosition(Position.at(0, 0))
+      .withOrientation(Orientation.from(Orientation.WEST))
+      .build();
+    mower.placeOn(field);
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
+    (() => instruction.applyOn(mower)).should.throw('Mower is out of the field.');
+  });
 });
