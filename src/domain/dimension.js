@@ -1,4 +1,4 @@
-class FieldDimension {
+class Dimension {
   constructor(width, length) {
     this.width = width;
     this.length = length;
@@ -13,8 +13,8 @@ class FieldDimension {
   }
 
   static of(width, length) {
-    return new FieldDimension(width, length);
+    return new Dimension(width, length);
   }
 }
 
-module.exports = FieldDimension;
+module.exports = Dimension;

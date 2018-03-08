@@ -1,4 +1,4 @@
-class MowerPosition {
+class Position {
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -13,8 +13,8 @@ class MowerPosition {
   }
 
   static at(x, y) {
-    return new MowerPosition(x, y);
+    return new Position(x, y);
   }
 }
 
-module.exports = MowerPosition;
+module.exports = Position;

@@ -1,4 +1,4 @@
-class MowerOrientation {
+class Orientation {
   constructor(value) {
     this.value = value;
   }
@@ -6,33 +6,33 @@ class MowerOrientation {
   right() {
     switch (this.value) {
       case 'N':
-        return new MowerOrientation('E');
+        return new Orientation('E');
       case 'E':
-        return new MowerOrientation('S');
+        return new Orientation('S');
       case 'S':
-        return new MowerOrientation('W');
+        return new Orientation('W');
       case 'W':
-        return new MowerOrientation('N');
+        return new Orientation('N');
     }
   }
 
   left() {
     switch (this.value) {
       case 'N':
-        return new MowerOrientation('W');
+        return new Orientation('W');
       case 'E':
-        return new MowerOrientation('N');
+        return new Orientation('N');
       case 'S':
-        return new MowerOrientation('E');
+        return new Orientation('E');
       case 'W':
-        return new MowerOrientation('S');
+        return new Orientation('S');
     }
   }
 }
 
-MowerOrientation.EST = new MowerOrientation('E');
-MowerOrientation.NORTH = new MowerOrientation('N');
-MowerOrientation.SOUTH = new MowerOrientation('S');
-MowerOrientation.WEST = new MowerOrientation('W');
+Orientation.EST = new Orientation('E');
+Orientation.NORTH = new Orientation('N');
+Orientation.SOUTH = new Orientation('S');
+Orientation.WEST = new Orientation('W');
 
-module.exports = MowerOrientation;
+module.exports = Orientation;
