@@ -8,6 +8,11 @@ class FieldBuilder {
     return this;
   }
 
+  withId(id) {
+    this.id = id;
+    return this;
+  }
+
   withMowers(mowers) {
     this.mowers = mowers;
     return this;
@@ -17,10 +22,13 @@ class FieldBuilder {
     if (this.dimension === undefined) {
       throw new Error('Dimension must be specified');
     }
+    if (this.id === undefined) {
+      this.id = FieldId.create();
+    }
     if (this.mowers === undefined) {
       this.mowers = [];
     }
-    return new Field(FieldId.create(), this.dimension, this.mowers);
+    return new Field(this.id, this.dimension, this.mowers);
   }
 }
 

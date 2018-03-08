@@ -3,6 +3,11 @@ const MowerId = require('./mowerId');
 class MowerBuilder {
   constructor() {}
 
+  withId(id) {
+    this.id = id;
+    return this;
+  }
+
   withPosition(position) {
     this.positon = position;
     return this;
@@ -14,13 +19,16 @@ class MowerBuilder {
   }
 
   build() {
+    if (this.id === undefined) {
+      this.id = MowerId.create();
+    }
     if (this.positon === undefined) {
       throw new Error('Position must be specified');
     }
     if (this.orientation === undefined) {
       throw new Error('Orientation must be specified');
     }
-    return new Mower(MowerId.create(), this.positon, this.orientation);
+    return new Mower(this.id, this.positon, this.orientation);
   }
 }
 
