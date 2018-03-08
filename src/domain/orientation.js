@@ -3,40 +3,83 @@ class Orientation {
     this.value = value;
   }
 
-  right() {
-    switch (this.value) {
-      case 'N':
-        return new Orientation('E');
-      case 'E':
-        return new Orientation('S');
-      case 'S':
-        return new Orientation('W');
-      case 'W':
-        return new Orientation('N');
-    }
-  }
-
-  left() {
-    switch (this.value) {
-      case 'N':
-        return new Orientation('W');
-      case 'E':
-        return new Orientation('N');
-      case 'S':
-        return new Orientation('E');
-      case 'W':
-        return new Orientation('S');
-    }
-  }
-
   getValue() {
     return this.value;
   }
+
+  static from(value) {
+    switch (value) {
+      case Orientation.NORTH:
+        return new North();
+      case Orientation.EST:
+        return new East();
+      case Orientation.SOUTH:
+        return new South();
+      case Orientation.WEST:
+        return new West();
+    }
+  }
 }
 
-Orientation.EST = new Orientation('E');
-Orientation.NORTH = new Orientation('N');
-Orientation.SOUTH = new Orientation('S');
-Orientation.WEST = new Orientation('W');
+class East extends Orientation {
+  constructor() {
+    super(Orientation.EST);
+  }
+
+  left() {
+    return new North();
+  }
+
+  right() {
+    return new South();
+  }
+}
+
+class North extends Orientation {
+  constructor() {
+    super(Orientation.NORTH);
+  }
+
+  left() {
+    return new West();
+  }
+
+  right() {
+    return new East();
+  }
+}
+
+class South extends Orientation {
+  constructor() {
+    super(Orientation.SOUTH);
+  }
+
+  left() {
+    return new East();
+  }
+
+  right() {
+    return new West();
+  }
+}
+
+class West extends Orientation {
+  constructor() {
+    super(Orientation.WEST);
+  }
+
+  left() {
+    return new South();
+  }
+
+  right() {
+    return new North();
+  }
+}
+
+Orientation.EST = 'E';
+Orientation.NORTH = 'N';
+Orientation.SOUTH = 'S';
+Orientation.WEST = 'W';
 
 module.exports = Orientation;

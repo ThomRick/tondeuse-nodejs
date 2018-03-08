@@ -13,20 +13,20 @@ describe('Mower', () => {
     const mower = Mower
       .Builder()
       .withPosition(Position.at(0, 0))
-      .withOrientation(Orientation.NORTH)
+      .withOrientation(Orientation.from(Orientation.NORTH))
       .build();
     mower.getPosition().should.be.deep.equal(Position.at(0, 0));
-    mower.getOrientation().should.be.deep.equal(Orientation.NORTH);
+    mower.getOrientation().should.be.deep.equal(Orientation.from(Orientation.NORTH));
   });
   it('should fail if no position is specified', () => {
-    (() => Mower.Builder().withOrientation(Orientation.NORTH).build()).should.throw('Position must be specified');
+    (() => Mower.Builder().withOrientation(Orientation.from(Orientation.NORTH)).build()).should.throw('Position must be specified');
   });
   it('should fail if no orientation is specified', () => {
     (() => Mower.Builder().withPosition(Position.at(0, 0)).build()).should.throw('Orientation must be specified');
   });
   it('should have a field when it is been place on', () => {
     const field = Field.Builder().withDimension(FieldDimension.of(5, 5)).build();
-    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.NORTH).build();
+    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
     mower.placeOn(field);
     mower.getField().should.be.deep.equal(field);
   });

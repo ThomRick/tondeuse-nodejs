@@ -1,14 +1,15 @@
 const Mower = require('./mower');
 const Position = require('./position');
+const Orientation = require('./orientation');
 
 class Instruction {
   static from(value) {
     switch (value) {
-      case 'A':
+      case Instruction.MOVE_FORWARD:
         return new MoveForwardInstruction();
-      case 'D':
+      case Instruction.TURN_RIGHT:
         return new TurnRightInstruction();
-      case 'G':
+      case Instruction.TURN_LEFT:
         return new TurnLeftInstruction();
     }
   }
@@ -27,13 +28,13 @@ class MoveForwardInstruction extends Instruction {
   _computeNewPositionOf(mower) {
     const currentPosition = mower.getPosition();
     switch (mower.getOrientation().getValue()) {
-      case 'N':
+      case Orientation.NORTH:
         return Position.at(currentPosition.getX() + 1, currentPosition.getY());
-      case 'E':
+      case Orientation.EST:
         return Position.at(currentPosition.getX(), currentPosition.getY() + 1);
-      case 'S':
+      case Orientation.SOUTH:
         return Position.at(currentPosition.getX() - 1, currentPosition.getY());
-      case 'W':
+      case Orientation.WEST:
         return Position.at(currentPosition.getX(), currentPosition.getY() - 1);
     }
   }
@@ -68,5 +69,9 @@ class TurnRightInstruction extends Instruction {
     return mower.getOrientation().right();
   }
 }
+
+Instruction.MOVE_FORWARD = 'A';
+Instruction.TURN_RIGHT = 'D';
+Instruction.TURN_LEFT = 'G';
 
 module.exports = Instruction;

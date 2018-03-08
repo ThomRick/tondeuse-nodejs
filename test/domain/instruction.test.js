@@ -19,10 +19,10 @@ describe('Instruction', () => {
     const mower = Mower
       .Builder()
       .withPosition(Position.at(0, 0))
-      .withOrientation(Orientation.NORTH)
+      .withOrientation(Orientation.from(Orientation.NORTH))
       .build();
     mower.placeOn(field);
-    const instruction = Instruction.from('A');
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
     instruction.applyOn(mower).getPosition().should.be.deep.equal(Position.at(1, 0));
   });
   it('should update the position to y + 1 when move forward instruction is applied on a est oriented mower', () => {
@@ -33,10 +33,10 @@ describe('Instruction', () => {
     const mower = Mower
       .Builder()
       .withPosition(Position.at(0, 0))
-      .withOrientation(Orientation.EST)
+      .withOrientation(Orientation.from(Orientation.EST))
       .build();
     mower.placeOn(field);
-    const instruction = Instruction.from('A');
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
     instruction.applyOn(mower).getPosition().should.be.deep.equal(Position.at(0, 1));
   });
   it('should update the position to x - 1 when move forward instruction is applied on a south oriented mower', () => {
@@ -47,10 +47,10 @@ describe('Instruction', () => {
     const mower = Mower
       .Builder()
       .withPosition(Position.at(4, 4))
-      .withOrientation(Orientation.SOUTH)
+      .withOrientation(Orientation.from(Orientation.SOUTH))
       .build();
     mower.placeOn(field);
-    const instruction = Instruction.from('A');
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
     instruction.applyOn(mower).getPosition().should.be.deep.equal(Position.at(3, 4));
   });
   it('should update the position to y - 1 when move forward instruction is applied on a west oriented mower', () => {
@@ -61,10 +61,10 @@ describe('Instruction', () => {
     const mower = Mower
       .Builder()
       .withPosition(Position.at(4, 4))
-      .withOrientation(Orientation.WEST)
+      .withOrientation(Orientation.from(Orientation.WEST))
       .build();
     mower.placeOn(field);
-    const instruction = Instruction.from('A');
+    const instruction = Instruction.from(Instruction.MOVE_FORWARD);
     instruction.applyOn(mower).getPosition().should.be.deep.equal(Position.at(4, 3));
   });
   it('should update the orientation to the left when turn left instruction is applied', () => {
@@ -75,11 +75,11 @@ describe('Instruction', () => {
     const mower = Mower
       .Builder()
       .withPosition(Position.at(4, 4))
-      .withOrientation(Orientation.NORTH)
+      .withOrientation(Orientation.from(Orientation.NORTH))
       .build();
     mower.placeOn(field);
-    const instruction = Instruction.from('G');
-    instruction.applyOn(mower).getOrientation().should.be.deep.equal(Orientation.WEST);
+    const instruction = Instruction.from(Instruction.TURN_LEFT);
+    instruction.applyOn(mower).getOrientation().should.be.deep.equal(Orientation.from(Orientation.WEST));
   });
   it('should update the orientation to the right when turn right instruction is applied', () => {
     const field = Field
@@ -89,10 +89,10 @@ describe('Instruction', () => {
     const mower = Mower
       .Builder()
       .withPosition(Position.at(4, 4))
-      .withOrientation(Orientation.NORTH)
+      .withOrientation(Orientation.from(Orientation.NORTH))
       .build();
     mower.placeOn(field);
-    const instruction = Instruction.from('D');
-    instruction.applyOn(mower).getOrientation().should.be.deep.equal(Orientation.EST);
+    const instruction = Instruction.from(Instruction.TURN_RIGHT);
+    instruction.applyOn(mower).getOrientation().should.be.deep.equal(Orientation.from(Orientation.EST));
   });
 });
