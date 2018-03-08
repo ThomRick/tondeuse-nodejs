@@ -12,8 +12,8 @@ class MowerPosition {
     return this.y;
   }
 
-  static default() {
-    return new MowerPosition(0, 0);
+  static at(x, y) {
+    return new MowerPosition(x, y);
   }
 }
 

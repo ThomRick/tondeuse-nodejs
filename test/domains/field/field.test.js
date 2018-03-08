@@ -23,9 +23,9 @@ describe('Field', () => {
     const field = Field
       .Builder()
       .withDimension(FieldDimension.of(5, 5))
-      .withMowers([ new Mower(mowerId, MowerPosition.default(), MowerOrientation.default()) ])
+      .withMowers([ new Mower(mowerId, MowerPosition.at(0, 0), MowerOrientation.NORTH) ])
       .build();
-    field.getMowers().should.be.an('array').that.is.deep.equal([ new Mower(mowerId, MowerPosition.default(), MowerOrientation.default()) ]);
+    field.getMowers().should.be.an('array').that.is.deep.equal([ new Mower(mowerId, MowerPosition.at(0, 0), MowerOrientation.NORTH) ]);
   });
   it('should fail if no dimension is specified', () => {
     (() => Field.Builder().build()).should.throw('Dimension must be specified');

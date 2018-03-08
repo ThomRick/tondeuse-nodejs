@@ -1,6 +1,28 @@
 const MowerId = require('./mowerId');
-const MowerOrientation = require('./orientation');
-const MowerPosition = require('./position');
+
+class MowerBuilder {
+  constructor() {}
+
+  withPosition(position) {
+    this.positon = position;
+    return this;
+  }
+
+  withOrientation(orientation) {
+    this.orientation = orientation;
+    return this;
+  }
+
+  build() {
+    if (this.positon === undefined) {
+      throw new Error('Position must be specified');
+    }
+    if (this.orientation === undefined) {
+      throw new Error('Orientation must be specified');
+    }
+    return new Mower(MowerId.create(), this.positon, this.orientation);
+  }
+}
 
 class Mower {
   constructor(id, position, orientation) {
@@ -21,8 +43,8 @@ class Mower {
     return this.position;
   }
 
-  static default() {
-    return new Mower(MowerId.create(), MowerPosition.default(), MowerOrientation.default());
+  static Builder() {
+    return new MowerBuilder();
   }
 }
 
