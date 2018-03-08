@@ -8,6 +8,8 @@ const Mower = require('../../src/domain/mower');
 const Orientation = require('../../src/domain/orientation');
 const Position = require('../../src/domain/position');
 
+const Instruction = require('../../src/domain/instruction');
+
 describe('Mower', () => {
   it('should have a { 0, 0 } position and be North oriented when created as default', () => {
     const mower = Mower
@@ -29,5 +31,17 @@ describe('Mower', () => {
     const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
     mower.placeOn(field);
     mower.getField().should.be.deep.equal(field);
+  });
+  it('should update the mower position after executing an move forward instruction', () => {
+    const field = Field.Builder().withDimension(FieldDimension.of(5, 5)).build();
+    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
+    mower.placeOn(field);
+    mower.execute(Instruction.from(Instruction.MOVE_FORWARD));
+    mower.getPosition().should.be.deep.equal(Position.at(1, 0));
+  });
+  it('should fail to execute instruction because mower is not placed on a field', () => {
+    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
+    (() => mower.execute(Instruction.from(Instruction.MOVE_FORWARD)))
+      .should.throw('Mower must be placed on a field before executing instruction.');
   });
 });

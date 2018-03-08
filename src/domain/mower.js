@@ -43,6 +43,15 @@ class Mower {
     this.field = field;
   }
 
+  execute(instruction) {
+    if (this.field === undefined) {
+      throw new Error('Mower must be placed on a field before executing instruction.');
+    }
+    const newState = instruction.applyOn(this);
+    this.position = newState.getPosition();
+    this.orientation = newState.getOrientation();
+  }
+
   getField() {
     return this.field;
   }
