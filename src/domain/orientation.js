@@ -28,6 +28,10 @@ class Orientation {
         return new Orientation('S');
     }
   }
+
+  getValue() {
+    return this.value;
+  }
 }
 
 Orientation.EST = new Orientation('E');
