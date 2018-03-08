@@ -1,9 +1,9 @@
 const chai = require('chai');
 chai.should();
 
-const Mower = require('../../src/domain/mower');
-const MowerOrientation = require('../../src/domain/orientation');
-const MowerPosition = require('../../src/domain/position');
+const Mower = require('../../../src/domains/mower/mower');
+const MowerOrientation = require('../../../src/domains/mower/orientation');
+const MowerPosition = require('../../../src/domains/mower/position');
 
 describe('Mower', () => {
   it('should have a { 0, 0 } position and be North oriented when created as default', () => {
