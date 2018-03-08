@@ -1,12 +1,12 @@
 const chai = require('chai');
 chai.should();
 
-const Field = require('../../../src/domains/field/field');
-const FieldDimension = require('../../../src/domains/field/dimension');
+const Field = require('../../src/domain/field');
+const FieldDimension = require('../../src/domain/dimension');
 
-const Mower = require('../../../src/domains/mower/mower');
-const MowerOrientation = require('../../../src/domains/mower/orientation');
-const MowerPosition = require('../../../src/domains/mower/position');
+const Mower = require('../../src/domain/mower');
+const MowerOrientation = require('../../src/domain/orientation');
+const MowerPosition = require('../../src/domain/position');
 
 describe('Mower', () => {
   it('should have a { 0, 0 } position and be North oriented when created as default', () => {

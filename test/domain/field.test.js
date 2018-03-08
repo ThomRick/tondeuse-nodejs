@@ -1,8 +1,8 @@
 const chai = require('chai');
 chai.should();
 
-const Field = require('../../../src/domains/field/field');
-const FieldDimension = require('../../../src/domains/field/dimension');
+const Field = require('../../src/domain/field');
+const FieldDimension = require('../../src/domain/dimension');
 
 describe('Field', () => {
   it('should have the specified dimensions and no mowers when created with dimension', () => {
