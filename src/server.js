@@ -1,11 +1,10 @@
-import * as Koa from 'koa';
-import * as Router from 'koa-router';
-import { Context } from 'koa';
+const Koa = require('koa');
+const Router = require('koa-router');
 
 const app = new Koa();
 
 const router = new Router();
-router.get('/*', async (context: Context) => {
+router.get('/*', async (context) => {
   context.body = 'Hello World!';
 });
 
