@@ -8,10 +8,15 @@ class FieldController {
 
   _registerRoutes() {
     this.router.post('/api/fields', this._create);
+    this.router.get('/api/fields', this._getAll);
   }
 
   async _create(context) {
     context.status = 201;
+  }
+
+  async _getAll(context) {
+    context.status = 200;
   }
 
   routes() {
