@@ -28,12 +28,14 @@ class FieldBuilder {
 class Field {
   constructor(id, dimension) {
     this.uncommittedChanges = [];
-    const event = new NewFieldCreated(id, dimension);
-    this._apply(event);
-    this._saveUncommittedChange(event);
+    if (id !== undefined && dimension !== undefined) {
+      const event = new NewFieldCreated(id, dimension);
+      this.apply(event);
+      this._saveUncommittedChange(event);
+    }
   }
 
-  _apply(event) {
+  apply(event) {
     this.id = event.getId();
     this.dimension = event.getDimension();
   }
@@ -56,6 +58,15 @@ class Field {
 
   _saveUncommittedChange(event) {
     this.uncommittedChanges.push(event);
+  }
+
+  static rebuild(events) {
+    return events.reduce((field, event) => {
+      if (event instanceof NewFieldCreated) {
+        field.apply(event);
+      }
+      return field;
+    }, new Field());
   }
 }
 

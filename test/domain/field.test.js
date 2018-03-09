@@ -2,6 +2,7 @@ const chai = require('chai');
 chai.should();
 
 const Field = require('../../src/domain/field');
+const FieldId = require('../../src/domain/fieldId');
 const Dimension = require('../../src/domain/dimension');
 
 const NewFieldCreated = require('../../src/domain/events/new-field-created.event');
@@ -24,5 +25,14 @@ describe('Field', () => {
       .that.is.deep.equal([
         new NewFieldCreated(field.getId(), field.getDimension())
       ]);
+  });
+  it('should rebuild field from events', () => {
+    const id = FieldId.create();
+    const events = [
+      new NewFieldCreated(id, Dimension.of(5, 5))
+    ];
+    const field = Field.rebuild(events);
+    field.getId().should.be.deep.equal(id);
+    field.getDimension().should.be.deep.equal(Dimension.of(5, 5));
   });
 });
