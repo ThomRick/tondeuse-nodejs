@@ -1,6 +1,7 @@
 const MowerId = require('./mowerId');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
+const MowerPlacedOnField = require('./events/mower-placed-on-field.event');
 
 class MowerBuilder {
   constructor() {}
@@ -49,7 +50,13 @@ class Mower {
   }
 
   placeOn(field) {
-    this.field = field;
+    const event = new MowerPlacedOnField(field);
+    this._applyPlaceOn(event);
+    this._saveUncommittedChange(event);
+  }
+
+  _applyPlaceOn(event) {
+    this.field = event.getField();
   }
 
   execute(instruction) {
