@@ -38,6 +38,7 @@ class Field {
   apply(event) {
     this.id = event.getId();
     this.dimension = event.getDimension();
+    return this;
   }
 
   getId() {
@@ -61,12 +62,7 @@ class Field {
   }
 
   static rebuild(events) {
-    return events.reduce((field, event) => {
-      if (event instanceof NewFieldCreated) {
-        field.apply(event);
-      }
-      return field;
-    }, new Field());
+    return events.reduce((field, event) => event.apply(field), new Field());
   }
 }
 

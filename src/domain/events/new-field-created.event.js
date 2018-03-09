@@ -11,6 +11,10 @@ class NewFieldCreated {
   getDimension() {
     return this.dimension;
   }
+
+  apply(field) {
+    return field.apply(this);
+  }
 }
 
 module.exports = NewFieldCreated;
