@@ -10,6 +10,8 @@ const Position = require('../../src/domain/position');
 
 const Instruction = require('../../src/domain/instruction');
 
+const NewMowerCreated = require('../../src/domain/events/new-mower-created.event');
+
 describe('Mower', () => {
   it('should have a { 0, 0 } position and be North oriented when created as default', () => {
     const mower = Mower
@@ -43,5 +45,17 @@ describe('Mower', () => {
     const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
     (() => mower.execute(Instruction.from(Instruction.MOVE_FORWARD)))
       .should.throw('Mower must be placed on a field before executing instruction.');
+  });
+  it('should add creation event when creating mower', () => {
+    const mower = Mower
+      .Builder()
+      .withPosition(Position.at(0, 0))
+      .withOrientation(Orientation.from(Orientation.NORTH))
+      .build();
+    mower.getUncommittedChanges()
+      .should.be.an('array')
+      .that.is.deep.equal([
+        new NewMowerCreated(mower.getId(), mower.getPosition(), mower.getOrientation())
+      ]);
   });
 });

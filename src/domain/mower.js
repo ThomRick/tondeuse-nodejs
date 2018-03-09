@@ -1,5 +1,7 @@
 const MowerId = require('./mowerId');
 
+const NewMowerCreated = require('./events/new-mower-created.event');
+
 class MowerBuilder {
   constructor() {}
 
@@ -34,9 +36,16 @@ class MowerBuilder {
 
 class Mower {
   constructor(id, position, orientation) {
-    this.id = id;
-    this.orientation = orientation;
-    this.position = position;
+    this.uncommittedChanges = [];
+    const event = new NewMowerCreated(id, position, orientation);
+    this._apply(event);
+    this._saveUncommittedChange(event);
+  }
+
+  _apply(event) {
+    this.id = event.getId();
+    this.orientation = event.getOrientation();
+    this.position = event.getPosition();
   }
 
   placeOn(field) {
@@ -68,8 +77,16 @@ class Mower {
     return this.position;
   }
 
+  getUncommittedChanges() {
+    return this.uncommittedChanges;
+  }
+
   static Builder() {
     return new MowerBuilder();
+  }
+
+  _saveUncommittedChange(event) {
+    this.uncommittedChanges.push(event);
   }
 }
 
