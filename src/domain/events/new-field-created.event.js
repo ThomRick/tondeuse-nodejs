@@ -4,16 +4,16 @@ class NewFieldCreated {
     this.dimension = dimension;
   }
 
+  apply(field) {
+    return field.applyNew(this);
+  }
+
   getId() {
     return this.id;
   }
 
   getDimension() {
     return this.dimension;
-  }
-
-  apply(field) {
-    return field.apply(this);
   }
 }
 

@@ -5,6 +5,10 @@ class NewMowerCreated {
     this.orientation = orientation;
   }
 
+  apply(mower) {
+    return mower.applyNew(this);
+  }
+
   getId() {
     return this.id;
   }

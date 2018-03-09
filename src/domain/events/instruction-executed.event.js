@@ -5,6 +5,10 @@ class InstructionExecuted {
     this.orientation = orientation;
   }
 
+  apply(mower) {
+    return mower.applyExecute(this);
+  }
+
   getId() {
     return this.id;
   }

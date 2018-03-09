@@ -1,7 +1,7 @@
 const MowerId = require('./mowerId');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
-const MowerPlacedOnField = require('./events/mower-placed-on-field.event');
+const PlacedOn = require('./events/placed-on.event');
 const InstructionExecuted = require('./events/instruction-executed.event');
 
 class MowerBuilder {
@@ -50,16 +50,18 @@ class Mower {
     this.id = event.getId();
     this.orientation = event.getOrientation();
     this.position = event.getPosition();
+    return this;
   }
 
   placeOn(field) {
-    const event = new MowerPlacedOnField(this.id, field);
+    const event = new PlacedOn(this.id, field);
     this.applyPlaceOn(event);
     this._saveUncommittedChange(event);
   }
 
   applyPlaceOn(event) {
     this.field = event.getField();
+    return this;
   }
 
   execute(instruction) {
@@ -75,6 +77,7 @@ class Mower {
   applyExecute(event) {
     this.position = event.getPosition();
     this.orientation = event.getOrientation();
+    return this;
   }
 
   getField() {
@@ -106,16 +109,7 @@ class Mower {
   }
 
   static rebuild(events) {
-    return events.reduce((mower, event) => {
-      if (event instanceof NewMowerCreated) {
-        mower.applyNew(event);
-      } else if (event instanceof MowerPlacedOnField) {
-        mower.applyPlaceOn(event);
-      } else if (event instanceof InstructionExecuted) {
-        mower.applyExecute(event);
-      }
-      return mower;
-    }, new Mower());
+    return events.reduce((mower, event) => event.apply(mower), new Mower());
   }
 }
 

@@ -30,12 +30,12 @@ class Field {
     this.uncommittedChanges = [];
     if (id !== undefined && dimension !== undefined) {
       const event = new NewFieldCreated(id, dimension);
-      this.apply(event);
+      this.applyNew(event);
       this._saveUncommittedChange(event);
     }
   }
 
-  apply(event) {
+  applyNew(event) {
     this.id = event.getId();
     this.dimension = event.getDimension();
     return this;

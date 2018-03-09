@@ -1,7 +1,11 @@
-class MowerPlacedOnField {
+class PlacedOn {
   constructor(id, field) {
     this.id = id;
     this.field = field;
+  }
+
+  apply(mower) {
+    return mower.applyPlaceOn(this);
   }
 
   getId() {
@@ -13,4 +17,4 @@ class MowerPlacedOnField {
   }
 }
 
-module.exports = MowerPlacedOnField;
+module.exports = PlacedOn;
