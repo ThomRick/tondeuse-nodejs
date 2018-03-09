@@ -12,7 +12,7 @@ class InMemoryMowerRepository {
 
   getAll() {
     const mowers = [];
-    this.database.forEach((mower) => mowers.push(mower));
+    this.database.forEach((events) => mowers.push(Mower.rebuild(events)));
     return mowers;
   }
 
