@@ -8,14 +8,11 @@ const MowerController = require('../../../../src/infra/server/controllers/mower.
 describe('Mower Controller', () => {
   it('should expose POST /api/mowers endpoint when loaded', async () => {
     const controller = MowerController.load();
-
     const server = new Koa();
     server.use(controller.routes());
-
     const response = await request(server.callback())
       .post('/api/mowers')
       .send({});
-
     response.status.should.be.equal(201);
   });
 });
