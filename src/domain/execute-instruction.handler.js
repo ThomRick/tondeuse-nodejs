@@ -10,6 +10,7 @@ class ExecuteInstructionHandler {
     const mower = this.mowerRepository.get(mowerId);
     mower.execute(instruction);
     this.mowerRepository.save(mower);
+    return mower;
   }
 }
 
