@@ -1,4 +1,5 @@
 const FieldId = require('./fieldId');
+const NewFieldCreated = require('./events/new-field-created.event');
 
 class FieldBuilder {
   constructor() {}
@@ -26,8 +27,18 @@ class FieldBuilder {
 
 class Field {
   constructor(id, dimension) {
-    this.id = id;
-    this.dimension = dimension;
+    this.uncommittedChanges = [];
+    if (id !== undefined && dimension !== undefined) {
+      const event = new NewFieldCreated(id, dimension);
+      this.applyNew(event);
+      this._saveUncommittedChange(event);
+    }
+  }
+
+  applyNew(event) {
+    this.id = event.getId();
+    this.dimension = event.getDimension();
+    return this;
   }
 
   getId() {
@@ -38,8 +49,20 @@ class Field {
     return this.dimension;
   }
 
+  getUncommittedChanges() {
+    return this.uncommittedChanges;
+  }
+
   static Builder() {
     return new FieldBuilder();
+  }
+
+  _saveUncommittedChange(event) {
+    this.uncommittedChanges.push(event);
+  }
+
+  static rebuild(events) {
+    return events.reduce((field, event) => event.apply(field), new Field());
   }
 }
 
