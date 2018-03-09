@@ -2,6 +2,7 @@ const MowerId = require('./mowerId');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
 const MowerPlacedOnField = require('./events/mower-placed-on-field.event');
+const InstructionExecuted = require('./events/instruction-executed.event');
 
 class MowerBuilder {
   constructor() {}
@@ -50,7 +51,7 @@ class Mower {
   }
 
   placeOn(field) {
-    const event = new MowerPlacedOnField(field);
+    const event = new MowerPlacedOnField(this.id, field);
     this._applyPlaceOn(event);
     this._saveUncommittedChange(event);
   }
@@ -64,8 +65,14 @@ class Mower {
       throw new Error('Mower must be placed on a field before executing instruction.');
     }
     const newState = instruction.applyOn(this);
-    this.position = newState.getPosition();
-    this.orientation = newState.getOrientation();
+    const event = new InstructionExecuted(this.id, newState.getPosition(), newState.getOrientation());
+    this._applyExecute(event);
+    this._saveUncommittedChange(event);
+  }
+
+  _applyExecute(event) {
+    this.position = event.getPosition();
+    this.orientation = event.getOrientation();
   }
 
   getField() {

@@ -12,6 +12,7 @@ const Instruction = require('../../src/domain/instruction');
 
 const NewMowerCreated = require('../../src/domain/events/new-mower-created.event');
 const MowerPlacedOnField = require('../../src/domain/events/mower-placed-on-field.event');
+const InstructionExecuted = require('../../src/domain/events/instruction-executed.event');
 
 describe('Mower', () => {
   it('should have a { 0, 0 } position and be North oriented when created as default', () => {
@@ -66,10 +67,20 @@ describe('Mower', () => {
     mower.getUncommittedChanges()
       .should.be.deep.equal([
         new NewMowerCreated(mower.getId(), mower.getPosition(), mower.getOrientation()),
-        new MowerPlacedOnField(field)
+        new MowerPlacedOnField(mower.getId(), field)
       ]);
   });
-  it.skip('should add instruction execution event when executing a valid instruction', () => {
-
+  it('should add instruction execution event when executing a valid instruction', () => {
+    const field = Field.Builder().withDimension(FieldDimension.of(5, 5)).build();
+    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
+    const newMowerCreatedEvent = new NewMowerCreated(mower.getId(), mower.getPosition(), mower.getOrientation());
+    mower.placeOn(field);
+    mower.execute(Instruction.from(Instruction.MOVE_FORWARD));
+    mower.getUncommittedChanges()
+      .should.be.deep.equal([
+        newMowerCreatedEvent,
+        new MowerPlacedOnField(mower.getId(), field),
+        new InstructionExecuted(mower.getId(), mower.getPosition(), mower.getOrientation())
+      ]);
   });
 });

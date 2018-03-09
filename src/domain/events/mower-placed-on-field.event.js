@@ -1,6 +1,11 @@
 class MowerPlacedOnField {
-  constructor(field) {
+  constructor(id, field) {
+    this.id = id;
     this.field = field;
+  }
+
+  getId() {
+    return this.id;
   }
 
   getField() {
