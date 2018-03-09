@@ -1,11 +1,11 @@
 const chai = require('chai');
 chai.should();
 
-const Field = require('../../src/domain/field');
-const FieldId = require('../../src/domain/fieldId');
-const Dimension = require('../../src/domain/dimension');
+const Field = require('../../../src/domain/aggregate/field');
+const FieldId = require('../../../src/domain/aggregate/fieldId');
+const Dimension = require('../../../src/domain/aggregate/dimension');
 
-const NewFieldCreated = require('../../src/domain/events/new-field-created.event');
+const NewFieldCreated = require('../../../src/domain/aggregate/events/new-field-created.event');
 
 describe('Field', () => {
   it('should have the specified dimensions and no mowers when created with dimension', () => {

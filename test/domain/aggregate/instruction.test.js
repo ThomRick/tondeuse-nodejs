@@ -1,14 +1,14 @@
 const chai = require('chai');
 chai.should();
 
-const Instruction = require('../../src/domain/instruction');
+const Instruction = require('../../../src/domain/aggregate/instruction');
 
-const Mower = require('../../src/domain/mower');
-const Position = require('../../src/domain/position');
-const Orientation = require('../../src/domain/orientation');
+const Mower = require('../../../src/domain/aggregate/mower');
+const Position = require('../../../src/domain/aggregate/position');
+const Orientation = require('../../../src/domain/aggregate/orientation');
 
-const Field = require('../../src/domain/field');
-const Dimension = require('../../src/domain/dimension');
+const Field = require('../../../src/domain/aggregate/field');
+const Dimension = require('../../../src/domain/aggregate/dimension');
 
 describe('Instruction', () => {
   it('should update the position to x + 1 when move forward instruction is applied on a north oriented mower', () => {
