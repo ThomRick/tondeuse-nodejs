@@ -5,8 +5,9 @@ const Field = require('../../src/domain/field');
 const FieldDimension = require('../../src/domain/dimension');
 
 const Mower = require('../../src/domain/mower');
-const Orientation = require('../../src/domain/orientation');
+const MowerId = require('../../src/domain/mowerId');
 const Position = require('../../src/domain/position');
+const Orientation = require('../../src/domain/orientation');
 
 const Instruction = require('../../src/domain/instruction');
 
@@ -82,5 +83,17 @@ describe('Mower', () => {
         new MowerPlacedOnField(mower.getId(), field),
         new InstructionExecuted(mower.getId(), mower.getPosition(), mower.getOrientation())
       ]);
+  });
+  it('should rebuild mower from events', () => {
+    const id = MowerId.create();
+    const events = [
+      new NewMowerCreated(id, Position.at(0, 0), Orientation.from(Orientation.NORTH)),
+      new MowerPlacedOnField(id, Field.Builder().withDimension(FieldDimension.of(5, 5)).build()),
+      new InstructionExecuted(id, Position.at(1, 0), Orientation.from(Orientation.NORTH))
+    ];
+    const mower = Mower.rebuild(events);
+    mower.getId().should.be.deep.equal(id);
+    mower.getPosition().should.be.deep.equal(Position.at(1, 0));
+    mower.getOrientation().should.be.deep.equal(Orientation.from(Orientation.NORTH));
   });
 });

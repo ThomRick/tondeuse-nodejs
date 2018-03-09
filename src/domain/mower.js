@@ -39,12 +39,14 @@ class MowerBuilder {
 class Mower {
   constructor(id, position, orientation) {
     this.uncommittedChanges = [];
-    const event = new NewMowerCreated(id, position, orientation);
-    this._apply(event);
-    this._saveUncommittedChange(event);
+    if (id !== undefined && position !== undefined && orientation !== undefined) {
+      const event = new NewMowerCreated(id, position, orientation);
+      this.applyNew(event);
+      this._saveUncommittedChange(event);
+    }
   }
 
-  _apply(event) {
+  applyNew(event) {
     this.id = event.getId();
     this.orientation = event.getOrientation();
     this.position = event.getPosition();
@@ -52,11 +54,11 @@ class Mower {
 
   placeOn(field) {
     const event = new MowerPlacedOnField(this.id, field);
-    this._applyPlaceOn(event);
+    this.applyPlaceOn(event);
     this._saveUncommittedChange(event);
   }
 
-  _applyPlaceOn(event) {
+  applyPlaceOn(event) {
     this.field = event.getField();
   }
 
@@ -66,11 +68,11 @@ class Mower {
     }
     const newState = instruction.applyOn(this);
     const event = new InstructionExecuted(this.id, newState.getPosition(), newState.getOrientation());
-    this._applyExecute(event);
+    this.applyExecute(event);
     this._saveUncommittedChange(event);
   }
 
-  _applyExecute(event) {
+  applyExecute(event) {
     this.position = event.getPosition();
     this.orientation = event.getOrientation();
   }
@@ -95,12 +97,25 @@ class Mower {
     return this.uncommittedChanges;
   }
 
+  _saveUncommittedChange(event) {
+    this.uncommittedChanges.push(event);
+  }
+
   static Builder() {
     return new MowerBuilder();
   }
 
-  _saveUncommittedChange(event) {
-    this.uncommittedChanges.push(event);
+  static rebuild(events) {
+    return events.reduce((mower, event) => {
+      if (event instanceof NewMowerCreated) {
+        mower.applyNew(event);
+      } else if (event instanceof MowerPlacedOnField) {
+        mower.applyPlaceOn(event);
+      } else if (event instanceof InstructionExecuted) {
+        mower.applyExecute(event);
+      }
+      return mower;
+    }, new Mower());
   }
 }
 
