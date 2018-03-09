@@ -12,4 +12,4 @@ class CreateMowerHandler {
   }
 }
 
-module.exports = { CreateMowerHandler };
+module.exports = CreateMowerHandler;

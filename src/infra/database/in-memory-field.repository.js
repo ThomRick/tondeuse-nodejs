@@ -15,4 +15,4 @@ class InMemoryFieldRepository {
   }
 }
 
-module.exports = { InMemoryFieldRepository };
+module.exports = InMemoryFieldRepository;

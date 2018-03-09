@@ -14,4 +14,4 @@ class ExecuteInstructionHandler {
   }
 }
 
-module.exports = { ExecuteInstructionHandler };
+module.exports = ExecuteInstructionHandler;

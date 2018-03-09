@@ -8,8 +8,8 @@ const Orientation = require('../../src/domain/aggregate/orientation');
 const Field = require('../../src/domain/aggregate/field');
 const Dimension = require('../../src/domain/aggregate/dimension');
 
-const { InMemoryMowerRepository } = require('../../src/infra/database/in-memory-mower.repository');
-const { ExecuteInstructionHandler } = require('../../src/domain/execute-instruction.handler');
+const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mower.repository');
+const ExecuteInstructionHandler = require('../../src/domain/execute-instruction.handler');
 
 
 describe('Execute Instruction Handler', () => {

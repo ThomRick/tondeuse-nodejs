@@ -15,4 +15,4 @@ class InMemoryMowerRepository {
   }
 }
 
-module.exports = { InMemoryMowerRepository };
+module.exports = InMemoryMowerRepository;
