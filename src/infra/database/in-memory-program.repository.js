@@ -1,7 +1,7 @@
 const Program = require('../../domain/aggregates/program/program');
 
 class InMemoryProgramRepository {
-  constructor(database = new Map()) {
+  constructor(database) {
     this.database = database;
   }
 
@@ -18,6 +18,13 @@ class InMemoryProgramRepository {
 
   get(programId) {
     return Program.rebuild(this.database.get(programId));
+  }
+
+  static getInstance() {
+    if (this.instance === undefined) {
+      this.instance = new InMemoryProgramRepository(new Map());
+    }
+    return this.instance;
   }
 }
 

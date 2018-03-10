@@ -1,7 +1,7 @@
 const Mower = require('../../domain/aggregates/mower/mower');
 
 class InMemoryMowerRepository {
-  constructor(database = new Map()) {
+  constructor(database) {
     this.database = database;
   }
 
@@ -18,6 +18,13 @@ class InMemoryMowerRepository {
 
   get(mowerId) {
     return Mower.rebuild(this.database.get(mowerId));
+  }
+
+  static getInstance() {
+    if (this.instance === undefined) {
+      this.instance = new InMemoryMowerRepository(new Map());
+    }
+    return this.instance;
   }
 }
 
