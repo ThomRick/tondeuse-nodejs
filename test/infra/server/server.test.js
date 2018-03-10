@@ -45,13 +45,19 @@ describe('MowIT Web API Server', () => {
     });
     response.body.should.have.deep.property('orientation', 'N');
   });
-  it('should expose GET /api/mowers endpoint to fetch all mowers', async () => {
-    const response = await request(server.callback()).get('/api/mowers');
+  it('should expose POST /api/programs endpoint to create programs', async () => {
+    const response = await request(server.callback())
+      .post('/api/programs')
+      .send({
+        instructions: [ 'D', 'A', 'G', 'A', 'G' ]
+      });
+    response.status.should.be.equal(201);
+    response.body.should.have.property('id');
+    response.body.should.have.deep.property('instructions', [ 'D', 'A', 'G', 'A', 'G' ]);
+  });
+  it('should expose GET /api/programs endpoint to fetch all programs', async () => {
+    const response = await request(server.callback()).get('/api/programs');
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
-  });
-  it('should expose POST /api/programs endpoint to create programs', async () => {
-    const response = await request(server.callback()).post('/api/programs');
-    response.status.should.be.equal(201);
   });
 });
