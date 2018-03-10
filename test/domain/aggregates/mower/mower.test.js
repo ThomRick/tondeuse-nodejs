@@ -9,7 +9,7 @@ const MowerId = require('../../../../src/domain/aggregates/mower/mowerId');
 const Position = require('../../../../src/domain/aggregates/mower/position');
 const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 
-const Instruction = require('../../../../src/domain/aggregates/instruction');
+const Instruction = require('../../../../src/domain/aggregates/program/instruction');
 
 const NewMowerCreated = require('../../../../src/domain/aggregates/mower/events/new-mower-created.event');
 const PlacedOn = require('../../../../src/domain/aggregates/events/placed-on.event');

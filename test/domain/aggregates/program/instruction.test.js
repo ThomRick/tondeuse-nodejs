@@ -1,7 +1,7 @@
 const chai = require('chai');
 chai.should();
 
-const Instruction = require('../../../../src/domain/aggregates/instruction');
+const Instruction = require('../../../../src/domain/aggregates/program/instruction');
 
 const Mower = require('../../../../src/domain/aggregates/mower/mower');
 const Position = require('../../../../src/domain/aggregates/mower/position');
