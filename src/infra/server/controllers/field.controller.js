@@ -1,25 +1,32 @@
 const Router = require('koa-router');
 const CreateFieldHandler = require('../../../domain/handlers/field/create-field.handler');
 const ExtractFieldHandler = require('../../../domain/handlers/field/extract-field.handler');
+const InMemoryFieldRepository = require('../../database/in-memory-field.repository');
+const FieldDto = require('../dto/field.dto');
 
 class FieldController {
   constructor(router) {
-    this.createFieldHandler = new CreateFieldHandler();
-    this.extractFieldHandler = new ExtractFieldHandler();
+    const fieldRepository = InMemoryFieldRepository.getInstance();
+    this.createFieldHandler = new CreateFieldHandler(fieldRepository);
+    this.extractFieldHandler = new ExtractFieldHandler(fieldRepository);
     this.router = router;
     this._registerRoutes();
   }
 
   _registerRoutes() {
-    this.router.post('/api/fields', this.create);
-    this.router.get('/api/fields', this.getAll);
+    this.router.post('/api/fields', this.create.bind(this));
+    this.router.get('/api/fields', this.getAll.bind(this));
   }
 
   async create(context) {
-    context.status = 201;
+    console.log(`${ FieldController.name }::create() - request body - ${ JSON.stringify(context.request.body, null, 2)}`);
+    context.response.body = FieldDto.from(this.createFieldHandler.createField(context.request.body.dimension));
+    context.response.status = 201;
   }
 
   async getAll(context) {
+    console.log(`${ FieldController.name }::getAll()`);
+    context.response.body = this.extractFieldHandler.extractAll().map((field) => FieldDto.from(field));
     context.status = 200;
   }
 
