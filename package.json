@@ -21,6 +21,7 @@
   "homepage": "https://github.com/ThomRick/tondeuse-nodejs#readme",
   "dependencies": {
     "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.3.0"
   },
   "devDependencies": {

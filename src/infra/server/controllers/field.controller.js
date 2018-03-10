@@ -1,21 +1,25 @@
 const Router = require('koa-router');
+const CreateFieldHandler = require('../../../domain/create-field.handler');
+const ExtractFieldHandler = require('../../../domain/extract-field.handler');
 
 class FieldController {
   constructor(router) {
+    this.createFieldHandler = new CreateFieldHandler();
+    this.extractFieldHandler = new ExtractFieldHandler();
     this.router = router;
     this._registerRoutes();
   }
 
   _registerRoutes() {
-    this.router.post('/api/fields', this._create);
-    this.router.get('/api/fields', this._getAll);
+    this.router.post('/api/fields', this.create);
+    this.router.get('/api/fields', this.getAll);
   }
 
-  async _create(context) {
+  async create(context) {
     context.status = 201;
   }
 
-  async _getAll(context) {
+  async getAll(context) {
     context.status = 200;
   }
 
