@@ -1,12 +1,12 @@
 const chai = require('chai');
 chai.should();
 
-const Mower = require('../../src/domain/aggregates/mower/mower');
-const Orientation = require('../../src/domain/aggregates/mower/orientation');
-const Position = require('../../src/domain/aggregates/mower/position');
+const Mower = require('../../../../src/domain/aggregates/mower/mower');
+const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
+const Position = require('../../../../src/domain/aggregates/mower/position');
 
-const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mower.repository');
-const ExtractMowerHandler = require('../../src/domain/extract-mower.handler');
+const InMemoryMowerRepository = require('../../../../src/infra/database/in-memory-mower.repository');
+const ExtractMowerHandler = require('../../../../src/domain/handlers/mower/extract-mower.handler');
 
 describe('Extract Mower Handler', () => {
   let extractMowerHandler;

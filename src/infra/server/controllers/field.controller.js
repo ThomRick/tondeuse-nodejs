@@ -1,6 +1,6 @@
 const Router = require('koa-router');
-const CreateFieldHandler = require('../../../domain/create-field.handler');
-const ExtractFieldHandler = require('../../../domain/extract-field.handler');
+const CreateFieldHandler = require('../../../domain/handlers/field/create-field.handler');
+const ExtractFieldHandler = require('../../../domain/handlers/field/extract-field.handler');
 
 class FieldController {
   constructor(router) {

@@ -1,11 +1,11 @@
 const chai = require('chai');
 chai.should();
 
-const Field = require('../../src/domain/aggregates/field/field');
-const Dimension = require('../../src/domain/aggregates/field/dimension');
+const Field = require('../../../../src/domain/aggregates/field/field');
+const Dimension = require('../../../../src/domain/aggregates/field/dimension');
 
-const InMemoryFieldRepository = require('../../src/infra/database/in-memory-field.repository');
-const ExtractFieldHandler = require('../../src/domain/extract-field.handler');
+const InMemoryFieldRepository = require('../../../../src/infra/database/in-memory-field.repository');
+const ExtractFieldHandler = require('../../../../src/domain/handlers/field/extract-field.handler');
 
 describe('Extract Field Handler', () => {
   let extractFieldHandler;

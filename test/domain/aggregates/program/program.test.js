@@ -7,8 +7,8 @@ const Instruction = require('../../../../src/domain/aggregates/program/instructi
 
 const Mower = require('../../../../src/domain/aggregates/mower/mower');
 const Position = require('../../../../src/domain/aggregates/mower/position');
-const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 
+const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 const NewProgramCreated = require('../../../../src/domain/aggregates/program/events/new-program-created.event');
 const ProgramInstalled = require('../../../../src/domain/aggregates/program/events/program-installed.event');
 
