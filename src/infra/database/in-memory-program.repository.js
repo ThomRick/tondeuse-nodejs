@@ -12,12 +12,12 @@ class InMemoryProgramRepository {
 
   getAll() {
     const programs = [];
-    // this.database.forEach((events) => programs.push(Program.rebuild(events)));
+    this.database.forEach((events) => programs.push(Program.rebuild(events)));
     return programs;
   }
 
   get(programId) {
-
+    return Program.rebuild(this.database.get(programId));
   }
 }
 
