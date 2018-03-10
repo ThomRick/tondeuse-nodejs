@@ -17,8 +17,8 @@ describe('Place On Handler', () => {
   let fieldRepository;
   let placeOnHandler;
   before(() => {
-    mowerRepository = new InMemoryMowerRepository();
-    fieldRepository = new InMemoryFieldRepository();
+    mowerRepository = InMemoryMowerRepository.getInstance();
+    fieldRepository = InMemoryFieldRepository.getInstance();
     placeOnHandler = new PlaceOnHandler(mowerRepository, fieldRepository);
   });
   it('should link a mower and a field by placing the mower on it', () => {
@@ -30,5 +30,6 @@ describe('Place On Handler', () => {
     placedOnMower.getPosition().should.be.deep.equal(mower.getPosition());
     placedOnMower.getOrientation().should.be.deep.equal(mower.getOrientation());
     placedOnMower.getField().getDimension().should.be.deep.equal(field.getDimension());
+    mowerRepository.delete(placedOnMower.getId());
   });
 });

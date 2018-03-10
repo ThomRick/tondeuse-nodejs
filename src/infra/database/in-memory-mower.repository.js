@@ -20,6 +20,10 @@ class InMemoryMowerRepository {
     return Mower.rebuild(this.database.get(mowerId));
   }
 
+  delete(fieldId) {
+    this.database.delete(fieldId);
+  }
+
   static getInstance() {
     if (this.instance === undefined) {
       this.instance = new InMemoryMowerRepository(new Map());

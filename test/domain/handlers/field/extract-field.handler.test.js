@@ -11,7 +11,7 @@ describe('Extract Field Handler', () => {
   let extractFieldHandler;
   let fieldRepository;
   before(() => {
-    fieldRepository = new InMemoryFieldRepository();
+    fieldRepository = InMemoryFieldRepository.getInstance();
     extractFieldHandler = new ExtractFieldHandler(fieldRepository);
   });
   it('should retrieve all stored fields when extractAll', () => {
@@ -24,5 +24,6 @@ describe('Extract Field Handler', () => {
     extractedFields[0].getDimension().should.be.deep.equal(Dimension.of(1, 1));
     extractedFields[1].getDimension().should.be.deep.equal(Dimension.of(2, 2));
     extractedFields[2].getDimension().should.be.deep.equal(Dimension.of(3, 3));
+    extractedFields.forEach((field) => fieldRepository.delete(field.getId()));
   });
 });

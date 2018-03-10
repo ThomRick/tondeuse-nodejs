@@ -20,6 +20,10 @@ class InMemoryProgramRepository {
     return Program.rebuild(this.database.get(programId));
   }
 
+  delete(fieldId) {
+    this.database.delete(fieldId);
+  }
+
   static getInstance() {
     if (this.instance === undefined) {
       this.instance = new InMemoryProgramRepository(new Map());

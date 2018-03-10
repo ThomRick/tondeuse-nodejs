@@ -20,6 +20,10 @@ class InMemoryFieldRepository {
     return Field.rebuild(this.database.get(fieldId));
   }
 
+  delete(fieldId) {
+    this.database.delete(fieldId);
+  }
+
   static getInstance() {
     if (this.instance === undefined) {
       this.instance = new InMemoryFieldRepository(new Map());

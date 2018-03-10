@@ -10,12 +10,13 @@ describe('Create Field Handler', () => {
   let createFieldHandler;
   let fieldRepository;
   before(() => {
-    fieldRepository = new InMemoryFieldRepository();
+    fieldRepository = InMemoryFieldRepository.getInstance();
     createFieldHandler = new CreateFieldHandler(fieldRepository);
   });
   it('should should save the created field into the database', () => {
     const createdField = createFieldHandler.createField(Dimension.of(4, 4));
     const savedField = fieldRepository.get(createdField.getId());
     savedField.getDimension().should.be.deep.equal(createdField.getDimension());
+    fieldRepository.delete(createdField.getId());
   });
 });

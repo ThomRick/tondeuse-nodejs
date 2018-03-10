@@ -12,7 +12,7 @@ describe('Extract Mower Handler', () => {
   let extractMowerHandler;
   let mowerRepository;
   before(() => {
-    mowerRepository = new InMemoryMowerRepository();
+    mowerRepository = InMemoryMowerRepository.getInstance();
     extractMowerHandler = new ExtractMowerHandler(mowerRepository);
   });
   it('should retrieve all mowers when extractAll', () => {
@@ -31,5 +31,6 @@ describe('Extract Mower Handler', () => {
     extractedMowers[2].getOrientation().should.be.deep.equal(Orientation.from(Orientation.EST));
     extractedMowers[3].getPosition().should.be.deep.equal(Position.at(3, 3));
     extractedMowers[3].getOrientation().should.be.deep.equal(Orientation.from(Orientation.SOUTH));
+    extractedMowers.forEach((mower) => mowerRepository.delete(mower.getId()));
   });
 });

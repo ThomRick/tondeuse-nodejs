@@ -11,7 +11,7 @@ describe('Create Mower Handler', () => {
   let mowerRepository;
   let createMowerHandler;
   before(() => {
-    mowerRepository = new InMemoryMowerRepository();
+    mowerRepository = InMemoryMowerRepository.getInstance();
     createMowerHandler = new CreateMowerHandler(mowerRepository);
   });
   it('should add the new created mower to the database', () => {
@@ -19,5 +19,6 @@ describe('Create Mower Handler', () => {
     const savedMower = mowerRepository.get(createdMower.getId());
     savedMower.getPosition().should.be.deep.equal(createdMower.getPosition());
     savedMower.getOrientation().should.be.deep.equal(createdMower.getOrientation());
+    mowerRepository.delete(savedMower.getId());
   });
 });
