@@ -10,9 +10,15 @@ class InMemoryMowerRepository {
     this.database.set(mower.getId(), events.concat(mower.getUncommittedChanges()));
   }
 
+  getAll() {
+    const mowers = [];
+    this.database.forEach((events) => mowers.push(Mower.rebuild(events)));
+    return mowers;
+  }
+
   get(mowerId) {
     return Mower.rebuild(this.database.get(mowerId));
   }
 }
 
-module.exports = { InMemoryMowerRepository };
+module.exports = InMemoryMowerRepository;

@@ -10,9 +10,15 @@ class InMemoryFieldRepository {
     this.database.set(field.getId(), events.concat(field.getUncommittedChanges()));
   }
 
+  getAll() {
+    const fields = [];
+    this.database.forEach((events) => fields.push(Field.rebuild(events)));
+    return fields;
+  }
+
   get(fieldId) {
     return Field.rebuild(this.database.get(fieldId));
   }
 }
 
-module.exports = { InMemoryFieldRepository };
+module.exports = InMemoryFieldRepository;

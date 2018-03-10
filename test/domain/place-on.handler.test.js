@@ -8,9 +8,9 @@ const Position = require('../../src/domain/aggregate/position');
 const Field = require('../../src/domain/aggregate/field');
 const Dimension = require('../../src/domain/aggregate/dimension');
 
-const { InMemoryFieldRepository } = require('../../src/infra/database/in-memory-field.repository');
-const { InMemoryMowerRepository } = require('../../src/infra/database/in-memory-mower.repository');
-const { PlaceOnHandler } = require('../../src/domain/place-on.handler');
+const InMemoryFieldRepository = require('../../src/infra/database/in-memory-field.repository');
+const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mower.repository');
+const PlaceOnHandler = require('../../src/domain/place-on.handler');
 
 describe('Place On Handler', () => {
   let mowerRepository;

@@ -7,11 +7,16 @@ class MowerController {
   }
 
   _registerRoutes() {
-    this.router.post('/api/mowers', this._post);
+    this.router.post('/api/mowers', this.create);
+    this.router.get('/api/mowers', this.getAll);
   }
 
-  async _post(context) {
+  async create(context) {
     context.status = 201;
+  }
+
+  async getAll(context) {
+    context.status = 200;
   }
 
   routes() {

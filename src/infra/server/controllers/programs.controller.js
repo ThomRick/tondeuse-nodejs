@@ -1,16 +1,16 @@
 const Router = require('koa-router');
 
-class InstructionController {
+class ProgramController {
   constructor(router) {
     this.router = router;
     this._registerRoutes();
   }
 
   _registerRoutes() {
-    this.router.post('/api/instructions', this._post);
+    this.router.post('/api/programs', this.create);
   }
 
-  async _post(context) {
+  async create(context) {
     context.status = 201;
   }
 
@@ -19,8 +19,8 @@ class InstructionController {
   }
 
   static load() {
-    return new InstructionController(new Router());
+    return new ProgramController(new Router());
   }
 }
 
-module.exports = InstructionController;
+module.exports = ProgramController;

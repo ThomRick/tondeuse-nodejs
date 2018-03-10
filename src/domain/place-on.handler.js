@@ -13,4 +13,4 @@ class PlaceOnHandler {
   }
 }
 
-module.exports = { PlaceOnHandler };
+module.exports = PlaceOnHandler;

@@ -12,4 +12,4 @@ class CreateFieldHandler {
   }
 }
 
-module.exports = { CreateFieldHandler };
+module.exports = CreateFieldHandler;

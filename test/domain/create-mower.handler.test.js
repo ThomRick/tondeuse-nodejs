@@ -4,8 +4,8 @@ chai.should();
 const Position = require('../../src/domain/aggregate/position');
 const Orientation = require('../../src/domain/aggregate/orientation');
 
-const { CreateMowerHandler } = require('../../src/domain/create-mower.handler');
-const { InMemoryMowerRepository } = require('../../src/infra/database/in-memory-mower.repository');
+const CreateMowerHandler = require('../../src/domain/create-mower.handler');
+const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mower.repository');
 
 describe('Create Mower Handler', () => {
   let mowerRepository;
