@@ -1,19 +1,19 @@
 const chai = require('chai');
 chai.should();
 
-const Field = require('../../../src/domain/aggregate/field');
-const Dimension = require('../../../src/domain/aggregate/dimension');
+const Field = require('../../../../src/domain/aggregates/field/field');
+const Dimension = require('../../../../src/domain/aggregates/field/dimension');
 
-const Mower = require('../../../src/domain/aggregate/mower');
-const MowerId = require('../../../src/domain/aggregate/mowerId');
-const Position = require('../../../src/domain/aggregate/position');
-const Orientation = require('../../../src/domain/aggregate/orientation');
+const Mower = require('../../../../src/domain/aggregates/mower/mower');
+const MowerId = require('../../../../src/domain/aggregates/mower/mowerId');
+const Position = require('../../../../src/domain/aggregates/mower/position');
+const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 
-const Instruction = require('../../../src/domain/aggregate/instruction');
+const Instruction = require('../../../../src/domain/aggregates/instruction');
 
-const NewMowerCreated = require('../../../src/domain/aggregate/events/new-mower-created.event');
-const PlacedOn = require('../../../src/domain/aggregate/events/placed-on.event');
-const InstructionExecuted = require('../../../src/domain/aggregate/events/instruction-executed.event');
+const NewMowerCreated = require('../../../../src/domain/aggregates/mower/events/new-mower-created.event');
+const PlacedOn = require('../../../../src/domain/aggregates/events/placed-on.event');
+const InstructionExecuted = require('../../../../src/domain/aggregates/events/instruction-executed.event');
 
 describe('Mower', () => {
   it('should have a { 0, 0 } position and be North oriented when created as default', () => {

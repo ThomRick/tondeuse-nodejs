@@ -1,7 +1,7 @@
 const chai = require('chai');
 chai.should();
 
-const Dimension = require('../../src/domain/aggregate/dimension');
+const Dimension = require('../../src/domain/aggregates/field/dimension');
 
 const CreateFieldHandler = require('../../src/domain/create-field.handler');
 const InMemoryFieldRepository = require('../../src/infra/database/in-memory-field.repository');

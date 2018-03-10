@@ -1,4 +1,4 @@
-const Field = require('./aggregate/field');
+const Field = require('./aggregates/field/field');
 
 class CreateFieldHandler {
   constructor(fieldRepository) {

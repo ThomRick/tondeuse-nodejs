@@ -1,4 +1,4 @@
-const Field = require('../../domain/aggregate/field');
+const Field = require('../../domain/aggregates/field/field');
 
 class InMemoryFieldRepository {
   constructor(database = new Map()) {

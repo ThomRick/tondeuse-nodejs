@@ -1,4 +1,4 @@
-const Mower = require('../../domain/aggregate/mower');
+const Mower = require('../../domain/aggregates/mower/mower');
 
 class InMemoryMowerRepository {
   constructor(database = new Map()) {

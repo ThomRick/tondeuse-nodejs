@@ -1,12 +1,12 @@
 const chai = require('chai');
 chai.should();
 
-const Mower = require('../../src/domain/aggregate/mower');
-const Position = require('../../src/domain/aggregate/position');
-const Orientation = require('../../src/domain/aggregate/orientation');
+const Mower = require('../../src/domain/aggregates/mower/mower');
+const Position = require('../../src/domain/aggregates/mower/position');
+const Orientation = require('../../src/domain/aggregates/mower/orientation');
 
-const Field = require('../../src/domain/aggregate/field');
-const Dimension = require('../../src/domain/aggregate/dimension');
+const Field = require('../../src/domain/aggregates/field/field');
+const Dimension = require('../../src/domain/aggregates/field/dimension');
 
 const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mower.repository');
 const ExecuteInstructionHandler = require('../../src/domain/execute-instruction.handler');
