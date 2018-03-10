@@ -2,6 +2,7 @@ const chai = require('chai');
 chai.should();
 
 const Program = require('../../../../src/domain/aggregates/program/program');
+const ProgramId = require('../../../../src/domain/aggregates/program/program-id');
 const Instruction = require('../../../../src/domain/aggregates/program/instruction');
 
 const Mower = require('../../../../src/domain/aggregates/mower/mower');
@@ -30,6 +31,18 @@ describe('Program', () => {
     program.getUncommittedChanges().should.be.deep.equal([
       new NewProgramCreated(program.getId(), program.getInstructions())
     ]);
+  });
+  it('should rebuild program from events', () => {
+    const id = ProgramId.create();
+    const instructions = [
+      Instruction.from(Instruction.MOVE_FORWARD)
+    ];
+    const events = [
+      new NewProgramCreated(id, instructions)
+    ];
+    const program = Program.rebuild(events);
+    program.getId().should.be.deep.equal(id);
+    program.getInstructions().should.be.deep.equal(instructions);
   });
   it('should add an install event when installed on a mower', () => {
     const instructions = [
