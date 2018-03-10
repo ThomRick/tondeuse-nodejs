@@ -1,5 +1,7 @@
 const ProgramId = require('./program-id');
+
 const NewProgramCreated = require('./events/new-program-created.event');
+const ProgramInstalled = require('./events/program-installed.event');
 
 class Program {
   constructor(id, instructions) {
@@ -12,6 +14,16 @@ class Program {
   applyNew(event) {
     this.id = event.getId();
     this.instructions = event.getInstructions();
+  }
+
+  install(mower) {
+    const event = new ProgramInstalled(this.id, mower);
+    this.applyInstall(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyInstall(event) {
+    this.mower = event.getMower();
   }
 
   getId() {
