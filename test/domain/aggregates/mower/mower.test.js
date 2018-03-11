@@ -10,10 +10,11 @@ const MowerId = require('../../../../src/domain/aggregates/mower/mowerId');
 const Position = require('../../../../src/domain/aggregates/mower/position');
 const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 
-const Instruction = require('../../../../src/domain/aggregates/program/instruction');
-
 const NewMowerCreated = require('../../../../src/domain/aggregates/mower/events/new-mower-created.event');
 const MowerAffected = require('../../../../src/domain/aggregates/mower/events/mower-affected.event');
+const MowerMovedForward = require('../../../../src/domain/aggregates/mower/events/mower-moved.forward.event');
+const MowerTurnedLeft = require('../../../../src/domain/aggregates/mower/events/mower-turned-left.event');
+const MowerTurnedRight = require('../../../../src/domain/aggregates/mower/events/mower-turned-right.event');
 
 describe('Mower', () => {
   it('should have a { 0, 0 } position and be North oriented when created as default', () => {
@@ -51,6 +52,33 @@ describe('Mower', () => {
       .should.be.deep.equal([
         new NewMowerCreated(mower.getId(), mower.getPosition(), mower.getOrientation()),
         new MowerAffected(mower.getId(), field)
+      ]);
+  });
+  it('should add a moved forward event when move forward', () => {
+    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
+    mower.moveForward();
+    mower.getUncommittedChanges()
+      .should.be.deep.equal([
+        new NewMowerCreated(mower.getId(), Position.at(0, 0), Orientation.from(Orientation.NORTH)),
+        new MowerMovedForward(mower.getId(), Position.at(1, 0))
+      ]);
+  });
+  it('should add a turned left event when turn left', () => {
+    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
+    mower.turnLeft();
+    mower.getUncommittedChanges()
+      .should.be.deep.equal([
+        new NewMowerCreated(mower.getId(), Position.at(0, 0), Orientation.from(Orientation.NORTH)),
+        new MowerTurnedLeft(mower.getId(), Orientation.from(Orientation.WEST))
+      ]);
+  });
+  it('should add a turned right event when turn right', () => {
+    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
+    mower.turnRight();
+    mower.getUncommittedChanges()
+      .should.be.deep.equal([
+        new NewMowerCreated(mower.getId(), Position.at(0, 0), Orientation.from(Orientation.NORTH)),
+        new MowerTurnedRight(mower.getId(), Orientation.from(Orientation.EST))
       ]);
   });
   it('should rebuild mower from events', () => {

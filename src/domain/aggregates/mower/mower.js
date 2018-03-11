@@ -2,6 +2,9 @@ const MowerId = require('./mowerId');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
 const MowerAffected = require('./events/mower-affected.event');
+const MowerMovedForward = require('./events/mower-moved.forward.event');
+const MowerTurnedLeft = require('./events/mower-turned-left.event');
+const MowerTurnedRight = require('./events/mower-turned-right.event');
 
 class MowerBuilder {
   constructor() {}
@@ -60,6 +63,38 @@ class Mower {
 
   applyAffect(event) {
     this.field = event.getField();
+    return this;
+  }
+
+  moveForward() {
+    const event = new MowerMovedForward(this.id, this.position.move(this.orientation));
+    this.applyMoveForward(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyMoveForward(event) {
+    this.position = event.getPosition();
+    return this;
+  }
+
+  turnLeft() {
+    const event = new MowerTurnedLeft(this.id, this.orientation.left());
+    this.applyTurnLeft(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyTurnLeft(event) {
+    this.orientation = event.getOrientation();
+    return this;
+  }
+
+  turnRight() {
+    const event = new MowerTurnedRight(this.id, this.orientation.right());
+    this.applyTurnRight(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyTurnRight(event) {
     return this;
   }
 
