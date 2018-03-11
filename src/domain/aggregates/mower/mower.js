@@ -95,6 +95,7 @@ class Mower {
   }
 
   applyTurnRight(event) {
+    this.orientation = event.getOrientation();
     return this;
   }
 
