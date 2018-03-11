@@ -72,6 +72,7 @@ class Mower {
     const event = new InstructionExecuted(this.id, newState.getPosition(), newState.getOrientation());
     this.applyExecute(event);
     this._saveUncommittedChange(event);
+    return newState;
   }
 
   applyExecute(event) {
