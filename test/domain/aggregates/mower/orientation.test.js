@@ -1,7 +1,7 @@
 const chai = require('chai');
 chai.should();
 
-const Orientation = require('../../../src/domain/aggregate/orientation');
+const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 
 describe('Orientation', () => {
   it('should return EAST for NORTH current position when right is called', () => {

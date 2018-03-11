@@ -1,4 +1,4 @@
-const Mower = require('./aggregate/mower');
+const Mower = require('../../aggregates/mower/mower');
 
 class CreateMowerHandler {
   constructor(mowerRepository) {

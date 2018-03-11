@@ -1,4 +1,4 @@
-const Instruction = require('./aggregate/instruction');
+const Instruction = require('./aggregates/program/instruction');
 
 class ExecuteInstructionHandler {
   constructor(mowerRepository) {

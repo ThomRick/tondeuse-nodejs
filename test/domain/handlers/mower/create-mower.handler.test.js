@@ -1,17 +1,17 @@
 const chai = require('chai');
 chai.should();
 
-const Position = require('../../src/domain/aggregate/position');
-const Orientation = require('../../src/domain/aggregate/orientation');
+const Position = require('../../../../src/domain/aggregates/mower/position');
+const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 
-const CreateMowerHandler = require('../../src/domain/create-mower.handler');
-const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mower.repository');
+const CreateMowerHandler = require('../../../../src/domain/handlers/mower/create-mower.handler');
+const InMemoryMowerRepository = require('../../../../src/infra/database/in-memory-mower.repository');
 
 describe('Create Mower Handler', () => {
   let mowerRepository;
   let createMowerHandler;
   before(() => {
-    mowerRepository = new InMemoryMowerRepository();
+    mowerRepository = InMemoryMowerRepository.getInstance();
     createMowerHandler = new CreateMowerHandler(mowerRepository);
   });
   it('should add the new created mower to the database', () => {
@@ -19,5 +19,6 @@ describe('Create Mower Handler', () => {
     const savedMower = mowerRepository.get(createdMower.getId());
     savedMower.getPosition().should.be.deep.equal(createdMower.getPosition());
     savedMower.getOrientation().should.be.deep.equal(createdMower.getOrientation());
+    mowerRepository.delete(savedMower.getId());
   });
 });

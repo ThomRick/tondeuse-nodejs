@@ -1,8 +1,8 @@
 const MowerId = require('./mowerId');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
-const PlacedOn = require('./events/placed-on.event');
-const InstructionExecuted = require('./events/instruction-executed.event');
+const PlacedOn = require('../events/placed-on.event');
+const InstructionExecuted = require('../events/instruction-executed.event');
 
 class MowerBuilder {
   constructor() {}

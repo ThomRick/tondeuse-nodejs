@@ -1,6 +1,6 @@
-const Mower = require('./mower');
-const Position = require('./position');
-const Orientation = require('./orientation');
+const Mower = require('../mower/mower');
+const Position = require('../mower/position');
+const Orientation = require('../mower/orientation');
 
 class Instruction {
   static from(value) {

@@ -1,12 +1,12 @@
 const chai = require('chai');
 chai.should();
 
-const Mower = require('../../src/domain/aggregate/mower');
-const Orientation = require('../../src/domain/aggregate/orientation');
-const Position = require('../../src/domain/aggregate/position');
+const Mower = require('../../src/domain/aggregates/mower/mower');
+const Orientation = require('../../src/domain/aggregates/mower/orientation');
+const Position = require('../../src/domain/aggregates/mower/position');
 
-const Field = require('../../src/domain/aggregate/field');
-const Dimension = require('../../src/domain/aggregate/dimension');
+const Field = require('../../src/domain/aggregates/field/field');
+const Dimension = require('../../src/domain/aggregates/field/dimension');
 
 const InMemoryFieldRepository = require('../../src/infra/database/in-memory-field.repository');
 const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mower.repository');
@@ -17,8 +17,8 @@ describe('Place On Handler', () => {
   let fieldRepository;
   let placeOnHandler;
   before(() => {
-    mowerRepository = new InMemoryMowerRepository();
-    fieldRepository = new InMemoryFieldRepository();
+    mowerRepository = InMemoryMowerRepository.getInstance();
+    fieldRepository = InMemoryFieldRepository.getInstance();
     placeOnHandler = new PlaceOnHandler(mowerRepository, fieldRepository);
   });
   it('should link a mower and a field by placing the mower on it', () => {
@@ -30,5 +30,6 @@ describe('Place On Handler', () => {
     placedOnMower.getPosition().should.be.deep.equal(mower.getPosition());
     placedOnMower.getOrientation().should.be.deep.equal(mower.getOrientation());
     placedOnMower.getField().getDimension().should.be.deep.equal(field.getDimension());
+    mowerRepository.delete(placedOnMower.getId());
   });
 });
