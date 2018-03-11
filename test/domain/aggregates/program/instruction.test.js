@@ -10,7 +10,7 @@ const Orientation = require('../../../../src/domain/aggregates/mower/orientation
 const Field = require('../../../../src/domain/aggregates/field/field');
 const Dimension = require('../../../../src/domain/aggregates/field/dimension');
 
-describe('Instruction', () => {
+describe.skip('Instruction', () => {
   it('should update the position to x + 1 when move forward instruction is applied on a north oriented mower', () => {
     const field = Field
       .Builder()

@@ -1,8 +1,7 @@
 const MowerId = require('./mowerId');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
-const PlacedOn = require('../events/placed-on.event');
-const InstructionExecuted = require('../events/instruction-executed.event');
+const MowerAffected = require('./events/mower-affected.event');
 
 class MowerBuilder {
   constructor() {}
@@ -53,36 +52,15 @@ class Mower {
     return this;
   }
 
-  placeOn(field) {
-    const event = new PlacedOn(this.id, field);
-    this.applyPlaceOn(event);
+  affect(field) {
+    const event = new MowerAffected(this.id, field);
+    this.applyAffect(event);
     this._saveUncommittedChange(event);
   }
 
-  applyPlaceOn(event) {
+  applyAffect(event) {
     this.field = event.getField();
     return this;
-  }
-
-  execute(instruction) {
-    if (this.field === undefined) {
-      throw new Error('Mower must be placed on a field before executing instruction.');
-    }
-    const newState = instruction.applyOn(this);
-    const event = new InstructionExecuted(this.id, newState.getPosition(), newState.getOrientation());
-    this.applyExecute(event);
-    this._saveUncommittedChange(event);
-    return newState;
-  }
-
-  applyExecute(event) {
-    this.position = event.getPosition();
-    this.orientation = event.getOrientation();
-    return this;
-  }
-
-  getField() {
-    return this.field;
   }
 
   getId() {
@@ -95,6 +73,10 @@ class Mower {
 
   getPosition() {
     return this.position;
+  }
+
+  getField() {
+    return this.field;
   }
 
   getUncommittedChanges() {

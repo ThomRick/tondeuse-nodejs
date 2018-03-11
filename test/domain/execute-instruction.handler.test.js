@@ -12,7 +12,7 @@ const InMemoryMowerRepository = require('../../src/infra/database/in-memory-mowe
 const ExecuteInstructionHandler = require('../../src/domain/execute-instruction.handler');
 
 
-describe('Execute Instruction Handler', () => {
+describe.skip('Execute Instruction Handler', () => {
   let executeInstructionHandler;
   let mowerRepository;
   before(() => {
