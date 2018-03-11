@@ -5,7 +5,7 @@ class CreateMowerHandler {
     this.mowerRepository = mowerRepository;
   }
 
-  createMower(position, orientation) {
+  create(position, orientation) {
     const mower = Mower.Builder().withPosition(position).withOrientation(orientation).build();
     this.mowerRepository.save(mower);
     return mower;

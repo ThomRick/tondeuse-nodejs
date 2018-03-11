@@ -3,7 +3,7 @@ class ExtractMowerHandler {
     this.mowerRepository = mowerRepository;
   }
 
-  extractAll() {
+  extract() {
     return this.mowerRepository.getAll();
   }
 }

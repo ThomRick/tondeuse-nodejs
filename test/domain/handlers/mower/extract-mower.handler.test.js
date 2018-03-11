@@ -22,7 +22,7 @@ describe('Extract Mower Handler', () => {
       Mower.Builder().withPosition(Position.at(2, 2)).withOrientation(Orientation.from(Orientation.EST)).build(),
       Mower.Builder().withPosition(Position.at(3, 3)).withOrientation(Orientation.from(Orientation.SOUTH)).build()
     ].forEach((mower) => mowerRepository.save(mower));
-    const extractedMowers = extractMowerHandler.extractAll();
+    const extractedMowers = extractMowerHandler.extract();
     extractedMowers[0].getPosition().should.be.deep.equal(Position.at(0, 0));
     extractedMowers[0].getOrientation().should.be.deep.equal(Orientation.from(Orientation.NORTH));
     extractedMowers[1].getPosition().should.be.deep.equal(Position.at(1, 1));

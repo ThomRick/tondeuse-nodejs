@@ -22,13 +22,13 @@ class MowerController {
     console.log(`${ MowerController.name }::create() - request body - ${ JSON.stringify(context.request.body, null, 2)}`);
     const position = context.request.body.position;
     const orientation = context.request.body.orientation;
-    context.response.body = MowerDto.from(this.createMowerHandler.createMower(position, orientation));
+    context.response.body = MowerDto.from(this.createMowerHandler.create(position, orientation));
     context.response.status = 201;
   }
 
   async getAll(context) {
     console.log(`${ MowerController.name }::getAll()`);
-    context.response.body = this.extractMowerHandler.extractAll().map((mower) => MowerDto.from(mower));
+    context.response.body = this.extractMowerHandler.extract().map((mower) => MowerDto.from(mower));
     context.response.status = 200;
   }
 
