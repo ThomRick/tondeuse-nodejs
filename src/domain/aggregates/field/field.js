@@ -1,5 +1,7 @@
 const FieldId = require('./fieldId');
+
 const NewFieldCreated = require('./events/new-field-created.event');
+const MowerDeployed = require('./events/mower-deployed.event');
 
 class FieldBuilder {
   constructor() {}
@@ -39,6 +41,19 @@ class Field {
     this.id = event.getId();
     this.dimension = event.getDimension();
     return this;
+  }
+
+  deploy(mower) {
+    const event = new MowerDeployed(this.id, mower);
+    this.applyDeploy(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyDeploy(event) {
+    if (this.mowers === undefined) {
+      this.mowers = [];
+    }
+    this.mowers.push(event.getMower().id);
   }
 
   getId() {
