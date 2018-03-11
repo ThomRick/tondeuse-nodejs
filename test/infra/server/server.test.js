@@ -23,7 +23,8 @@ describe('MowIT Web API Server', () => {
     response.body.should.not.have.property('uncommittedChanges');
   });
   it('should expose GET /api/fields endpoint to fetch all fields', async () => {
-    const response = await request(server.callback()).get('/api/fields');
+    const response = await request(server.callback())
+      .get('/api/fields');
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
   });
@@ -56,8 +57,15 @@ describe('MowIT Web API Server', () => {
     response.body.should.have.deep.property('instructions', [ 'D', 'A', 'G', 'A', 'G' ]);
   });
   it('should expose GET /api/programs endpoint to fetch all programs', async () => {
-    const response = await request(server.callback()).get('/api/programs');
+    const response = await request(server.callback())
+      .get('/api/programs');
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
+  });
+  it('should expose PUT /api/programs/:id endpoint to update the program', async () => {
+    const response = await request(server.callback())
+      .put('/api/programs/id')
+      .send({});
+    response.status.should.be.equal(200);
   });
 });
