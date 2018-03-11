@@ -20,13 +20,13 @@ class FieldController {
 
   async create(context) {
     console.log(`${ FieldController.name }::create() - request body - ${ JSON.stringify(context.request.body, null, 2)}`);
-    context.response.body = FieldDto.from(this.createFieldHandler.createField(context.request.body.dimension));
+    context.response.body = FieldDto.from(this.createFieldHandler.create(context.request.body.dimension));
     context.response.status = 201;
   }
 
   async getAll(context) {
     console.log(`${ FieldController.name }::getAll()`);
-    context.response.body = this.extractFieldHandler.extractAll().map((field) => FieldDto.from(field));
+    context.response.body = this.extractFieldHandler.extract().map((field) => FieldDto.from(field));
     context.status = 200;
   }
 

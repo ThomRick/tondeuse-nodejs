@@ -20,7 +20,7 @@ describe('Extract Field Handler', () => {
       Field.Builder().withDimension(Dimension.of(2, 2)).build(),
       Field.Builder().withDimension(Dimension.of(3, 3)).build(),
     ].forEach((field) => fieldRepository.save(field));
-    const extractedFields = extractFieldHandler.extractAll();
+    const extractedFields = extractFieldHandler.extract();
     extractedFields[0].getDimension().should.be.deep.equal(Dimension.of(1, 1));
     extractedFields[1].getDimension().should.be.deep.equal(Dimension.of(2, 2));
     extractedFields[2].getDimension().should.be.deep.equal(Dimension.of(3, 3));

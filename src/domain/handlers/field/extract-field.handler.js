@@ -3,7 +3,7 @@ class ExtractFieldHandler {
     this.fieldRepository = fieldRepository;
   }
 
-  extractAll() {
+  extract() {
     return this.fieldRepository.getAll();
   }
 }

@@ -5,7 +5,7 @@ class CreateFieldHandler {
     this.fieldRepository = fieldRepository;
   }
 
-  createField(dimension) {
+  create(dimension) {
     const field = Field.Builder().withDimension(dimension).build();
     this.fieldRepository.save(field);
     return field;
