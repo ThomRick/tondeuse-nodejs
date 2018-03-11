@@ -20,6 +20,7 @@ describe('MowIT Web API Server', () => {
       width: 4,
       length: 4
     });
+    response.body.should.have.deep.property('mowers', []);
     response.body.should.not.have.property('uncommittedChanges');
   });
   it('should expose GET /api/fields endpoint to fetch all fields', async () => {

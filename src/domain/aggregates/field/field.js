@@ -40,6 +40,7 @@ class Field {
   applyNew(event) {
     this.id = event.getId();
     this.dimension = event.getDimension();
+    this.mowers = [];
     return this;
   }
 
@@ -50,10 +51,7 @@ class Field {
   }
 
   applyDeploy(event) {
-    if (this.mowers === undefined) {
-      this.mowers = [];
-    }
-    this.mowers.push(event.getMower().id);
+    this.mowers.push(event.getMower());
   }
 
   getId() {
@@ -62,6 +60,10 @@ class Field {
 
   getDimension() {
     return this.dimension;
+  }
+
+  getMowers() {
+    return this.mowers;
   }
 
   getUncommittedChanges() {
