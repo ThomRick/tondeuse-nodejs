@@ -2,7 +2,6 @@ const ProgramId = require('./program-id');
 
 const NewProgramCreated = require('./events/new-program-created.event');
 const ProgramInstalled = require('./events/program-installed.event');
-const ProgramExecuted = require('./events/program-executed.event');
 
 class Program {
   constructor(id, instructions) {
@@ -27,20 +26,6 @@ class Program {
   }
 
   applyInstall(event) {
-    this.mower = event.getMower();
-    return this;
-  }
-
-  execute() {
-    const newState = this.instructions.reduce((mower, instruction) => {
-      return mower.execute(instruction);
-    }, this.mower);
-    const event = new ProgramExecuted(this.id, newState);
-    this.applyExecute(event);
-    this._saveUncommittedChange(event);
-  }
-
-  applyExecute(event) {
     this.mower = event.getMower();
     return this;
   }
