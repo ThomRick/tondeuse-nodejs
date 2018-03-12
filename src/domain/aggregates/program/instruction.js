@@ -1,7 +1,3 @@
-const Mower = require('../mower/mower');
-const Position = require('../mower/position');
-const Orientation = require('../mower/orientation');
-
 class Instruction {
   static from(value) {
     switch (value) {
@@ -13,98 +9,54 @@ class Instruction {
         return new TurnLeftInstruction();
     }
   }
+
+  canExecute() {
+    return false;
+  }
 }
 
 class MoveForwardInstruction extends Instruction {
-  applyOn(mower) {
-    return Mower
-      .Builder()
-      .withId(mower.getId())
-      .withPosition(this._computeNewPositionOf(mower))
-      .withOrientation(mower.getOrientation())
-      .build();
-  }
-
-  _computeNewPositionOf(mower) {
-    const currentPosition = mower.getPosition();
-    switch (mower.getOrientation().getValue()) {
-      case Orientation.NORTH:
-        return Position.at(this._computeNewXPositionToTheNorth(mower), currentPosition.getY());
-      case Orientation.EST:
-        return Position.at(currentPosition.getX(), this._computeNewYPositionToTheEast(mower));
-      case Orientation.SOUTH:
-        return Position.at(this._computeNewXPositionToTheSouth(mower), currentPosition.getY());
-      case Orientation.WEST:
-        return Position.at(currentPosition.getX(), this._computeNewYPositionToTheWest(mower));
+  canExecute(mower) {
+    switch (mower.orientation) {
+      case 'W':
+        return this._isNoCollisionToWest(mower.position.y);
+      case 'E':
+        return this._isNoCollisionToEast(mower.position.y, mower.field.dimension.length);
+      case 'N':
+        return this._isNoCollisionToNorth(mower.position.x, mower.field.dimension.width);
+      case 'S':
+        return this._isNoCollisionToSouth(mower.position.x);
+      default:
+        return false;
     }
   }
 
-  _computeNewXPositionToTheNorth(mower) {
-    const position = mower.getPosition();
-    const fieldDimension = mower.getField().getDimension();
-    const newPosition = position.getX() + 1;
-    if (newPosition > fieldDimension.getWidth()) {
-      throw new Error('Mower is out of the field.');
-    }
-    return newPosition;
+  _isNoCollisionToWest(y) {
+    return 0 < y;
   }
 
-  _computeNewYPositionToTheEast(mower) {
-    const position = mower.getPosition();
-    const fieldDimension = mower.getField().getDimension();
-    const newPosition = position.getY() + 1;
-    if (newPosition > fieldDimension.getLength()) {
-      throw new Error('Mower is out of the field.');
-    }
-    return newPosition;
+  _isNoCollisionToEast(y, length) {
+    return y < length;
   }
 
-  _computeNewXPositionToTheSouth(mower) {
-    const position = mower.getPosition();
-    const newPosition = position.getX() - 1;
-    if (newPosition < 0) {
-      throw new Error('Mower is out of the field.');
-    }
-    return newPosition;
+  _isNoCollisionToNorth(x, width) {
+    return x < width;
   }
 
-  _computeNewYPositionToTheWest(mower) {
-    const position = mower.getPosition();
-    const newPosition = position.getY() - 1;
-    if (newPosition < 0) {
-      throw new Error('Mower is out of the field.');
-    }
-    return newPosition;
+  _isNoCollisionToSouth(x) {
+    return 0 < x;
   }
 }
 
 class TurnLeftInstruction extends Instruction {
-  applyOn(mower) {
-    return Mower
-      .Builder()
-      .withId(mower.getId())
-      .withPosition(mower.getPosition())
-      .withOrientation(this._computeNewOrientationOf(mower))
-      .build();
-  }
-
-  _computeNewOrientationOf(mower) {
-    return mower.getOrientation().left();
+  canExecute() {
+    return true;
   }
 }
 
 class TurnRightInstruction extends Instruction {
-  applyOn(mower) {
-    return Mower
-      .Builder()
-      .withId(mower.getId())
-      .withPosition(mower.getPosition())
-      .withOrientation(this._computeNewOrientationOf(mower))
-      .build();
-  }
-
-  _computeNewOrientationOf(mower) {
-    return mower.getOrientation().right();
+  canExecute() {
+    return true;
   }
 }
 
