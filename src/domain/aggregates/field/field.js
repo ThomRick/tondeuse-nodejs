@@ -52,6 +52,7 @@ class Field {
 
   applyDeploy(event) {
     this.mowers.push(event.getMower());
+    return this;
   }
 
   getId() {

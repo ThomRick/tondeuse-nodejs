@@ -1,11 +1,6 @@
 const chai = require('chai');
 chai.should();
 
-const Mower = require('../../../../src/domain/aggregates/mower/mower');
-const Position = require('../../../../src/domain/aggregates/mower/position');
-const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
-const MowerDto = require('../../../../src/infra/server/dto/mower.dto');
-
 const Field = require('../../../../src/domain/aggregates/field/field');
 const FieldId = require('../../../../src/domain/aggregates/field/fieldId');
 const Dimension = require('../../../../src/domain/aggregates/field/dimension');
@@ -33,8 +28,16 @@ describe('Field', () => {
       ]);
   });
   it('should add a deployed event when deploy a mower', () => {
-    const mower = MowerDto.from(Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build());
     const field = Field.Builder().withDimension(Dimension.of(5, 5)).build();
+    const mower = {
+      id: 'id',
+      position: {
+        x: 0,
+        y: 0
+      },
+      orientation: 'N',
+      field: field.getId().getValue()
+    };
     field.deploy(mower);
     field.getUncommittedChanges()
       .should.be.an('array')
@@ -45,8 +48,18 @@ describe('Field', () => {
   });
   it('should rebuild field from events', () => {
     const id = FieldId.create();
+    const mower = {
+      id: 'id',
+      position: {
+        x: 0,
+        y: 0
+      },
+      orientation: 'N',
+      field: id.getValue()
+    };
     const events = [
-      new NewFieldCreated(id, Dimension.of(5, 5))
+      new NewFieldCreated(id, Dimension.of(5, 5)),
+      new MowerDeployed(id, mower)
     ];
     const field = Field.rebuild(events);
     field.getId().should.be.deep.equal(id);
