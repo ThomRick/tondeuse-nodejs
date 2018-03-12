@@ -26,7 +26,7 @@ class MowerController {
   }
 
   async create(context) {
-    console.log(`${ MowerController.name }::create() - request body - ${ JSON.stringify(context.request.body, null, 2)}`);
+    console.log(`${ MowerController.name }::create() - request body : ${ JSON.stringify(context.request.body, null, 2)}`);
     const position = context.request.body.position;
     const orientation = context.request.body.orientation;
     context.response.body = MowerDto.from(this.createMowerHandler.create(position, orientation));
@@ -40,7 +40,7 @@ class MowerController {
   }
 
   async update(context) {
-    console.log(`${ MowerController.name }::update()`);
+    console.log(`${ MowerController.name }::update() - action : ${ context.query.action } - request body : ${ JSON.stringify(context.request.body, null, 2) }`);
     const action = context.query.action;
     switch (action) {
       case 'affect':
