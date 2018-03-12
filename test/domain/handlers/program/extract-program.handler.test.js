@@ -11,7 +11,7 @@ describe('Extract Program Handler', () => {
   let extractProgramHandler;
   let programRepository;
   before(() => {
-    programRepository = InMemoryProgramRepository.getInstance();
+    programRepository = new InMemoryProgramRepository();
     extractProgramHandler = new ExtractProgramHandler(programRepository);
   });
   it('should retrieve all programs', () => {
@@ -24,6 +24,5 @@ describe('Extract Program Handler', () => {
     extractedPrograms[0].getInstructions().should.be.deep.equal([ Instruction.from(Instruction.MOVE_FORWARD) ]);
     extractedPrograms[1].getInstructions().should.be.deep.equal([ Instruction.from(Instruction.TURN_RIGHT) ]);
     extractedPrograms[2].getInstructions().should.be.deep.equal([ Instruction.from(Instruction.TURN_LEFT) ]);
-    extractedPrograms.forEach((program) => programRepository.delete(program));
   });
 });

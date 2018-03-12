@@ -13,7 +13,7 @@ class ProgramInstalled {
   }
 
   apply(program) {
-
+    return program.applyInstall(this);
   }
 }
 

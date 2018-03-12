@@ -42,7 +42,15 @@ describe('Program', () => {
       Instruction.from(Instruction.MOVE_FORWARD)
     ];
     const events = [
-      new NewProgramCreated(id, instructions)
+      new NewProgramCreated(id, instructions),
+      new ProgramInstalled(id, {
+        id: 'id',
+        position: {
+          x: 0,
+          y: 0
+        },
+        orientation: 'N'
+      })
     ];
     const program = Program.rebuild(events);
     program.getId().should.be.deep.equal(id);
@@ -53,7 +61,14 @@ describe('Program', () => {
       Instruction.from(Instruction.MOVE_FORWARD)
     ];
     const program = Program.with(instructions);
-    const mower = Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).build();
+    const mower = {
+      id: 'id',
+      position: {
+        x: 0,
+        y: 0
+      },
+      orientation: 'N'
+    };
     program.install(mower);
     program.getUncommittedChanges().should.be.deep.equal([
       new NewProgramCreated(program.getId(), program.getInstructions()),

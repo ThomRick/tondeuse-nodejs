@@ -6,9 +6,9 @@ const ProgramDto = require('../dto/program.dto');
 
 class ProgramController {
   constructor(router) {
-    const programRepository = InMemoryProgramRepository.getInstance();
-    this.createProgramHandler = new CreateProgramHandler(programRepository);
-    this.extractProgramhandler = new ExtractProgramHandler(programRepository);
+    const repository = new InMemoryProgramRepository();
+    this.createProgramHandler = new CreateProgramHandler(repository);
+    this.extractProgramhandler = new ExtractProgramHandler(repository);
     this.router = router;
     this._registerRoutes();
   }

@@ -9,8 +9,8 @@ const CreateProgramHandler = require('../../../../src/domain/handlers/program/cr
 describe('Create Program Handler', () => {
   let createProgramHandler;
   let programRepository;
-  before(() => {
-    programRepository = ProgramRepository.getInstance();
+  beforeEach(() => {
+    programRepository = new ProgramRepository();
     createProgramHandler = new CreateProgramHandler(programRepository);
   });
   it('should save the create program', () => {
@@ -19,6 +19,5 @@ describe('Create Program Handler', () => {
     ]);
     const savedProgram = programRepository.get(createdProgram.getId());
     savedProgram.getInstructions().should.be.deep.equal([ Instruction.from(Instruction.MOVE_FORWARD) ]);
-    programRepository.delete(savedProgram.getId());
   });
 });
