@@ -7,16 +7,15 @@ const CreateFieldHandler = require('../../../../src/domain/handlers/field/create
 const InMemoryFieldRepository = require('../../../../src/infra/database/in-memory-field.repository');
 
 describe('Create Field Handler', () => {
-  let createFieldHandler;
-  let fieldRepository;
+  let handler;
+  let repository;
   before(() => {
-    fieldRepository = InMemoryFieldRepository.getInstance();
-    createFieldHandler = new CreateFieldHandler(fieldRepository);
+    repository = new InMemoryFieldRepository();
+    handler = new CreateFieldHandler(repository);
   });
   it('should should save the created field into the database', () => {
-    const createdField = createFieldHandler.create(Dimension.of(4, 4));
-    const savedField = fieldRepository.get(createdField.getId());
+    const createdField = handler.create(Dimension.of(4, 4));
+    const savedField = repository.get(createdField.getId());
     savedField.getDimension().should.be.deep.equal(createdField.getDimension());
-    fieldRepository.delete(createdField.getId());
   });
 });

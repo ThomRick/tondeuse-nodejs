@@ -7,17 +7,17 @@ const ProgramRepository = require('../../../../src/infra/database/in-memory-prog
 const CreateProgramHandler = require('../../../../src/domain/handlers/program/create-program.handler');
 
 describe('Create Program Handler', () => {
-  let createProgramHandler;
-  let programRepository;
+  let handler;
+  let repository;
   beforeEach(() => {
-    programRepository = new ProgramRepository();
-    createProgramHandler = new CreateProgramHandler(programRepository);
+    repository = new ProgramRepository();
+    handler = new CreateProgramHandler(repository);
   });
   it('should save the create program', () => {
-    const createdProgram = createProgramHandler.create([
+    const createdProgram = handler.create([
       Instruction.from(Instruction.MOVE_FORWARD)
     ]);
-    const savedProgram = programRepository.get(createdProgram.getId());
+    const savedProgram = repository.get(createdProgram.getId());
     savedProgram.getInstructions().should.be.deep.equal([ Instruction.from(Instruction.MOVE_FORWARD) ]);
   });
 });

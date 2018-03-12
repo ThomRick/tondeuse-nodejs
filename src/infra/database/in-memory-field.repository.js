@@ -1,7 +1,7 @@
 const Field = require('../../domain/aggregates/field/field');
 
 class InMemoryFieldRepository {
-  constructor(database) {
+  constructor(database = new Map()) {
     this.database = database;
   }
 
@@ -18,17 +18,6 @@ class InMemoryFieldRepository {
 
   get(fieldId) {
     return Field.rebuild(this.database.get(fieldId));
-  }
-
-  delete(fieldId) {
-    this.database.delete(fieldId);
-  }
-
-  static getInstance() {
-    if (this.instance === undefined) {
-      this.instance = new InMemoryFieldRepository(new Map());
-    }
-    return this.instance;
   }
 }
 

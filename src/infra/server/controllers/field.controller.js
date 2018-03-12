@@ -6,9 +6,9 @@ const FieldDto = require('../dto/field.dto');
 
 class FieldController {
   constructor(router) {
-    const fieldRepository = InMemoryFieldRepository.getInstance();
-    this.createFieldHandler = new CreateFieldHandler(fieldRepository);
-    this.extractFieldHandler = new ExtractFieldHandler(fieldRepository);
+    const repository = new InMemoryFieldRepository();
+    this.createFieldHandler = new CreateFieldHandler(repository);
+    this.extractFieldHandler = new ExtractFieldHandler(repository);
     this.router = router;
     this._registerRoutes();
   }
