@@ -4,6 +4,7 @@ const sinon = require('sinon');
 const request = require('supertest');
 
 const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
+const AffectMowerHandler = require('../../../src/domain/handlers/mower/affect-mower.handler');
 
 describe('MowIT Web API Server', () => {
   let server;
@@ -50,11 +51,35 @@ describe('MowIT Web API Server', () => {
     });
     response.body.should.have.deep.property('orientation', 'N');
   });
+  it('should expose PUT /api/mowers/:id endpoint to affect a mower into a field', async () => {
+    const sandbox = sinon.sandbox.create();
+    const affectStub = sandbox.stub(AffectMowerHandler.prototype, 'affect');
+    const response = await request(server.callback())
+      .put('/api/mowers/id?action=affect')
+      .send({
+        field: {
+          id: 'id',
+          dimension: {
+            width: 4,
+            length: 4
+          }
+        }
+      });
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(affectStub, 'id', {
+      id: 'id',
+      dimension: {
+        width: 4,
+        length: 4
+      }
+    });
+    sandbox.restore();
+  });
   it('should expose PUT /api/mowers/:id endpoint to execute a mower move', async () => {
     const sandbox = sinon.sandbox.create();
     const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move');
     const response = await request(server.callback())
-      .put('/api/mowers/id')
+      .put('/api/mowers/id?action=move')
       .send({
         instruction: 'A'
       });
