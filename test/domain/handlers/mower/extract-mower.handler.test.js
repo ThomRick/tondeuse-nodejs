@@ -9,11 +9,11 @@ const InMemoryMowerRepository = require('../../../../src/infra/database/in-memor
 const ExtractMowerHandler = require('../../../../src/domain/handlers/mower/extract-mower.handler');
 
 describe('Extract Mower Handler', () => {
-  let extractMowerHandler;
-  let mowerRepository;
+  let handler;
+  let repository;
   before(() => {
-    mowerRepository = InMemoryMowerRepository.getInstance();
-    extractMowerHandler = new ExtractMowerHandler(mowerRepository);
+    repository = new InMemoryMowerRepository();
+    handler = new ExtractMowerHandler(repository);
   });
   it('should retrieve all mowers when extractAll', () => {
     [
@@ -21,8 +21,8 @@ describe('Extract Mower Handler', () => {
       Mower.Builder().withPosition(Position.at(1, 1)).withOrientation(Orientation.from(Orientation.WEST)).build(),
       Mower.Builder().withPosition(Position.at(2, 2)).withOrientation(Orientation.from(Orientation.EST)).build(),
       Mower.Builder().withPosition(Position.at(3, 3)).withOrientation(Orientation.from(Orientation.SOUTH)).build()
-    ].forEach((mower) => mowerRepository.save(mower));
-    const extractedMowers = extractMowerHandler.extract();
+    ].forEach((mower) => repository.save(mower));
+    const extractedMowers = handler.extract();
     extractedMowers[0].getPosition().should.be.deep.equal(Position.at(0, 0));
     extractedMowers[0].getOrientation().should.be.deep.equal(Orientation.from(Orientation.NORTH));
     extractedMowers[1].getPosition().should.be.deep.equal(Position.at(1, 1));
@@ -31,6 +31,5 @@ describe('Extract Mower Handler', () => {
     extractedMowers[2].getOrientation().should.be.deep.equal(Orientation.from(Orientation.EST));
     extractedMowers[3].getPosition().should.be.deep.equal(Position.at(3, 3));
     extractedMowers[3].getOrientation().should.be.deep.equal(Orientation.from(Orientation.SOUTH));
-    extractedMowers.forEach((mower) => mowerRepository.delete(mower.getId()));
   });
 });

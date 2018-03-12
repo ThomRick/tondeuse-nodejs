@@ -13,7 +13,7 @@ describe('Move Mower Handler', () => {
   let handler;
   let repository;
   beforeEach(() => {
-    repository = new InMemoryMowerRepository(new Map());
+    repository = new InMemoryMowerRepository();
     handler = new MoveMowerHandler(repository);
   });
   it('should move the mower forward', () => {

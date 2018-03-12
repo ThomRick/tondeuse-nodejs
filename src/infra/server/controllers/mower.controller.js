@@ -10,7 +10,7 @@ const MowerDto = require('../dto/mower.dto');
 
 class MowerController {
   constructor(router) {
-    const repository = InMemoryMowerRepository.getInstance();
+    const repository = new InMemoryMowerRepository();
     this.createMowerHandler = new CreateMowerHandler(repository);
     this.extractMowerHandler = new ExtractMowerHandler(repository);
     this.affectMowerHandler = new AffectMowerHandler(repository);

@@ -18,7 +18,7 @@ describe('Affect Mower Handler', () => {
   let handler;
   let repository;
   beforeEach(() => {
-    repository = new InMemoryMowerRepository(new Map());
+    repository = new InMemoryMowerRepository();
     handler = new AffectMowerHandler(repository);
   });
   it('should affect the mower id on a field', () => {

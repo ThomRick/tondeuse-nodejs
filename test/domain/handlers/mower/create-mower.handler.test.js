@@ -8,17 +8,16 @@ const CreateMowerHandler = require('../../../../src/domain/handlers/mower/create
 const InMemoryMowerRepository = require('../../../../src/infra/database/in-memory-mower.repository');
 
 describe('Create Mower Handler', () => {
-  let mowerRepository;
-  let createMowerHandler;
+  let repository;
+  let handler;
   before(() => {
-    mowerRepository = InMemoryMowerRepository.getInstance();
-    createMowerHandler = new CreateMowerHandler(mowerRepository);
+    repository = new InMemoryMowerRepository();
+    handler = new CreateMowerHandler(repository);
   });
   it('should add the new created mower to the database', () => {
-    const createdMower = createMowerHandler.create(Position.at(0, 0), Orientation.from(Orientation.NORTH));
-    const savedMower = mowerRepository.get(createdMower.getId());
+    const createdMower = handler.create(Position.at(0, 0), Orientation.from(Orientation.NORTH));
+    const savedMower = repository.get(createdMower.getId());
     savedMower.getPosition().should.be.deep.equal(createdMower.getPosition());
     savedMower.getOrientation().should.be.deep.equal(createdMower.getOrientation());
-    mowerRepository.delete(savedMower.getId());
   });
 });
