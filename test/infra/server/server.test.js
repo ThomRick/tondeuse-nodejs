@@ -1,6 +1,9 @@
 const chai = require('chai');
 chai.should();
+const sinon = require('sinon');
 const request = require('supertest');
+
+const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
 
 describe('MowIT Web API Server', () => {
   let server;
@@ -46,6 +49,18 @@ describe('MowIT Web API Server', () => {
       y: 0
     });
     response.body.should.have.deep.property('orientation', 'N');
+  });
+  it('should expose PUT /api/mowers/:id endpoint to execute a mower move', async () => {
+    const sandbox = sinon.sandbox.create();
+    const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move');
+    const response = await request(server.callback())
+      .put('/api/mowers/id')
+      .send({
+        instruction: 'A'
+      });
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(moveStub, 'id', 'A');
+    sandbox.restore();
   });
   it('should expose POST /api/programs endpoint to create programs', async () => {
     const response = await request(server.callback())
