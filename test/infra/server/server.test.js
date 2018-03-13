@@ -3,6 +3,9 @@ chai.should();
 const sinon = require('sinon');
 const request = require('supertest');
 
+const Field = require('../../../src/domain/aggregates/field/field');
+const Dimension = require('../../../src/domain/aggregates/field/dimension');
+
 const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
 
 const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
@@ -34,18 +37,15 @@ describe('MowIT Web API Server', () => {
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
   });
-  it.skip('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
+  it('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
     const sandbox = sinon.sandbox.create();
-    const deployStub = sandbox.stub(DeployMowerHandler.prototype, 'deploy').callsFake((id, mower) => Promise.resolve({
-      id: 'fieldId',
-      dimension: {
-        width: 4,
-        length: 4
-      },
-      mowers: [ mower ]
-    }));
+    const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
+    sandbox.stub(DeployMowerHandler.prototype, 'deploy')
+      .callsFake((id, mower) =>
+        Promise.resolve(Field.Builder().withId(field.getId()).withDimension(Dimension.of(4, 4)).withMowers([ mower ]).build())
+      );
     const response = await request(server.callback())
-      .put('/api/fields/fieldId')
+      .put(`/api/fields/${ field.getId().getValue() }`)
       .send({
         position: {
           x: 0,
@@ -55,7 +55,7 @@ describe('MowIT Web API Server', () => {
       });
     response.status.should.be.equal(200);
     response.body.should.be.deep.equal({
-      id: 'fieldId',
+      id: field.getId().getValue(),
       dimension: {
         width: 4,
         length: 4
@@ -66,19 +66,9 @@ describe('MowIT Web API Server', () => {
             x: 0,
             y: 0
           },
-          orientation: 'N',
-          field: {
-            id: 'fieldId'
-          }
+          orientation: 'N'
         }
       ]
-    });
-    sandbox.assert.calledWith(deployStub, 'fieldId', {
-      position: {
-        x: 0,
-        y: 0
-      },
-      orientation: 'N'
     });
     sandbox.restore();
   });
