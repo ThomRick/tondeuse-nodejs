@@ -1,4 +1,4 @@
-class MowerId {
+class FieldId {
   constructor(value) {
     this.value = value;
   }
@@ -8,8 +8,10 @@ class MowerId {
   }
 
   static create() {
-    return new MowerId(Date.now());
+    return new FieldId(++FieldId.COUNTER);
   }
 }
 
-module.exports = MowerId;
+FieldId.COUNTER = 0;
+
+module.exports = FieldId;

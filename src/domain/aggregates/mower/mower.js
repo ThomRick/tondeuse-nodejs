@@ -1,4 +1,4 @@
-const MowerId = require('./mowerId');
+const MowerId = require('./mower-id');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
 const MowerMovedForward = require('./events/mower-moved.forward.event');

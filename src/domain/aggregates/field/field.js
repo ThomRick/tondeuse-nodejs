@@ -1,4 +1,4 @@
-const FieldId = require('./fieldId');
+const FieldId = require('./field-id');
 
 const NewFieldCreated = require('./events/new-field-created.event');
 const MowerDeployed = require('./events/mower-deployed.event');

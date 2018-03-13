@@ -2,7 +2,7 @@ const chai = require('chai');
 chai.should();
 
 const Mower = require('../../../../src/domain/aggregates/mower/mower');
-const MowerId = require('../../../../src/domain/aggregates/mower/mowerId');
+const MowerId = require('../../../../src/domain/aggregates/mower/mower-id');
 const Position = require('../../../../src/domain/aggregates/mower/position');
 const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 

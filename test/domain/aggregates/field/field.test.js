@@ -2,7 +2,7 @@ const chai = require('chai');
 chai.should();
 
 const Field = require('../../../../src/domain/aggregates/field/field');
-const FieldId = require('../../../../src/domain/aggregates/field/fieldId');
+const FieldId = require('../../../../src/domain/aggregates/field/field-id');
 const Dimension = require('../../../../src/domain/aggregates/field/dimension');
 
 const NewFieldCreated = require('../../../../src/domain/aggregates/field/events/new-field-created.event');
