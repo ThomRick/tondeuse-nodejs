@@ -34,9 +34,16 @@ describe('MowIT Web API Server', () => {
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
   });
-  it('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
+  it.skip('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
     const sandbox = sinon.sandbox.create();
-    const deployStub = sandbox.stub(DeployMowerHandler.prototype, 'deploy');
+    const deployStub = sandbox.stub(DeployMowerHandler.prototype, 'deploy').callsFake((id, mower) => Promise.resolve({
+      id: 'fieldId',
+      dimension: {
+        width: 4,
+        length: 4
+      },
+      mowers: [ mower ]
+    }));
     const response = await request(server.callback())
       .put('/api/fields/fieldId')
       .send({
@@ -47,6 +54,25 @@ describe('MowIT Web API Server', () => {
         orientation: 'N'
       });
     response.status.should.be.equal(200);
+    response.body.should.be.deep.equal({
+      id: 'fieldId',
+      dimension: {
+        width: 4,
+        length: 4
+      },
+      mowers: [
+        {
+          position: {
+            x: 0,
+            y: 0
+          },
+          orientation: 'N',
+          field: {
+            id: 'fieldId'
+          }
+        }
+      ]
+    });
     sandbox.assert.calledWith(deployStub, 'fieldId', {
       position: {
         x: 0,

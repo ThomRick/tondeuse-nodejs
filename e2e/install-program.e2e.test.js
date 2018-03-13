@@ -3,9 +3,9 @@ chai.should();
 
 const request = require('request');
 
-describe('Deploy Mower', () => {
-  it('should deploy the mower on the identified field', async () => {
-    const fieldToCreate = {
+describe.skip('Install Program', () => {
+  it('should install the program on a mower', async () => {
+    const field = {
       dimension: {
         width: 4,
         length: 4
@@ -17,7 +17,7 @@ describe('Deploy Mower', () => {
         headers: {
           'content-type': 'application/json'
         },
-        body: JSON.stringify(fieldToCreate)
+        body: JSON.stringify(field)
       }, (error, response, body) => {
         if (error !== undefined && error !== null) {
           reject(error);
@@ -25,7 +25,7 @@ describe('Deploy Mower', () => {
         resolve(JSON.parse(body));
       });
     }).then((field) => {
-      const mowerToDeploy = {
+      const mower = {
         position: {
           x: 0,
           y: 0
@@ -38,20 +38,16 @@ describe('Deploy Mower', () => {
           headers: {
             'content-type': 'application/json'
           },
-          body: JSON.stringify(mowerToDeploy)
+          body: JSON.stringify(mower)
         }, (error, response, body) => {
           if (error !== undefined && error !== null) {
             reject(error);
           }
-          response.statusCode.should.be.equal(200);
-          const field = JSON.parse(body);
-          field.should.have.property('mowers');
-          field.should.not.have.property('uncommittedChanges');
-          resolve();
+          resolve(JSON.parse(body));
         });
+      }).then((field) => {
+        console.log(field);
       });
     });
   });
 });
-
-

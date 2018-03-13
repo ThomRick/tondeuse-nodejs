@@ -21,7 +21,7 @@ class DeployMowerHandler {
       (error, response, createdMower) => {
         field.deploy(JSON.parse(createdMower));
         this.repository.save(field);
-        resolve();
+        resolve(field);
       });
     });
   }

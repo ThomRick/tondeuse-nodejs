@@ -37,9 +37,8 @@ class FieldController {
   async update(context) {
     const id = context.params.id;
     const mower = context.request.body;
-    await this.deployMowerHandler.deploy(id, mower);
+    context.response.body = FieldDto.from(await this.deployMowerHandler.deploy(id, mower));
     context.response.status = 200;
-
   }
 
   routes() {

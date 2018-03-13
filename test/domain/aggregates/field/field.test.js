@@ -24,7 +24,7 @@ describe('Field', () => {
     field.getUncommittedChanges()
       .should.be.an('array')
       .that.is.deep.equal([
-        new NewFieldCreated(field.getId(), field.getDimension())
+        new NewFieldCreated(field.getId(), field.getDimension(), field.getMowers())
       ]);
   });
   it('should add a deployed event when deploy a mower', () => {
@@ -36,13 +36,16 @@ describe('Field', () => {
         y: 0
       },
       orientation: 'N',
-      field: field.getId().getValue()
+      field: {
+        id: field.getId().getValue()
+
+      }
     };
     field.deploy(mower);
     field.getUncommittedChanges()
       .should.be.an('array')
       .that.is.deep.equal([
-        new NewFieldCreated(field.getId(), field.getDimension()),
+        new NewFieldCreated(field.getId(), field.getDimension(), field.getMowers()),
         new MowerDeployed(field.getId(), mower)
       ]);
   });
@@ -55,14 +58,29 @@ describe('Field', () => {
         y: 0
       },
       orientation: 'N',
-      field: id.getValue()
+      field: {
+        id: id.getValue()
+      }
     };
     const events = [
-      new NewFieldCreated(id, Dimension.of(5, 5)),
+      new NewFieldCreated(id, Dimension.of(5, 5), []),
       new MowerDeployed(id, mower)
     ];
     const field = Field.rebuild(events);
     field.getId().should.be.deep.equal(id);
     field.getDimension().should.be.deep.equal(Dimension.of(5, 5));
+    field.getMowers().should.be.deep.equal([
+      {
+        id: 'id',
+        position: {
+          x: 0,
+          y: 0
+        },
+        orientation: 'N',
+        field: {
+          id: id.getValue()
+        }
+      }
+    ]);
   });
 });
