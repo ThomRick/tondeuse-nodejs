@@ -7,7 +7,10 @@ class InMemoryMowerRepository {
 
   save(mower) {
     const events = this.database.get(mower.getId().getValue().toString()) || [];
-    this.database.set(mower.getId().getValue().toString(), events.concat(mower.getUncommittedChanges()));
+    while (mower.getUncommittedChanges().length !== 0) {
+      events.push(mower.getUncommittedChanges().shift());
+    }
+    this.database.set(mower.getId().getValue().toString(), events);
   }
 
   getAll() {

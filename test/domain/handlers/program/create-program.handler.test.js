@@ -17,7 +17,7 @@ describe('Create Program Handler', () => {
     const createdProgram = handler.create([
       Instruction.from(Instruction.MOVE_FORWARD)
     ]);
-    const savedProgram = repository.get(createdProgram.getId());
+    const savedProgram = repository.get(createdProgram.getId().getValue());
     savedProgram.getInstructions().should.be.deep.equal([ Instruction.from(Instruction.MOVE_FORWARD) ]);
   });
 });

@@ -6,7 +6,6 @@ const ProgramId = require('../../../../src/domain/aggregates/program/program-id'
 const Instruction = require('../../../../src/domain/aggregates/program/instruction');
 
 const NewProgramCreated = require('../../../../src/domain/aggregates/program/events/new-program-created.event');
-const ProgramInstalled = require('../../../../src/domain/aggregates/program/events/program-installed.event');
 
 describe('Program', () => {
   it('should have the defined instructions when create with instructions', () => {
@@ -34,43 +33,10 @@ describe('Program', () => {
       Instruction.from(Instruction.MOVE_FORWARD)
     ];
     const events = [
-      new NewProgramCreated(id, instructions),
-      new ProgramInstalled(id, {
-        id: 'mowerId',
-        position: {
-          x: 0,
-          y: 0
-        },
-        orientation: 'N',
-        field: {
-          id: 'fieldId'
-        }
-      })
+      new NewProgramCreated(id, instructions)
     ];
     const program = Program.rebuild(events);
     program.getId().should.be.deep.equal(id);
     program.getInstructions().should.be.deep.equal(instructions);
-  });
-  it('should add an installed event when installed on a mower', () => {
-    const instructions = [
-      Instruction.from(Instruction.MOVE_FORWARD)
-    ];
-    const program = Program.with(instructions);
-    const mower = {
-      id: 'mowerId',
-      position: {
-        x: 0,
-        y: 0
-      },
-      orientation: 'N',
-      field: {
-        id: 'fieldId'
-      }
-    };
-    program.install(mower);
-    program.getUncommittedChanges().should.be.deep.equal([
-      new NewProgramCreated(program.getId(), program.getInstructions()),
-      new ProgramInstalled(program.getId(), mower)
-    ]);
   });
 });

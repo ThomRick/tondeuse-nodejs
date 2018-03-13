@@ -6,8 +6,11 @@ class InMemoryProgramRepository {
   }
 
   save(program) {
-    const events = this.database.get(program.getId()) || [];
-    this.database.set(program.getId(), events.concat(program.getUncommittedChanges()));
+    const events = this.database.get(program.getId().getValue().toString()) || [];
+    while (program.getUncommittedChanges().length !== 0) {
+      events.push(program.getUncommittedChanges().shift());
+    }
+    this.database.set(program.getId().getValue().toString(), events);
   }
 
   getAll() {
@@ -17,7 +20,7 @@ class InMemoryProgramRepository {
   }
 
   get(programId) {
-    return Program.rebuild(this.database.get(programId));
+    return Program.rebuild(this.database.get(programId.toString()));
   }
 }
 
