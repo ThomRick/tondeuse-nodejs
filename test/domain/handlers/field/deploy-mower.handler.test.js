@@ -63,7 +63,7 @@ describe('Deploy Mower Handler', () => {
       })
     });
   });
-  it.skip('should add the new created mower into the field', async () => {
+  it('should add the new created mower into the field', async () => {
     const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
     repository.save(field);
     sandbox.stub(request, 'post')
@@ -86,9 +86,7 @@ describe('Deploy Mower Handler', () => {
       orientation: 'N'
     };
     const deployedField = await handler.deploy(field.getId().getValue(), mower);
-    console.log(JSON.stringify(deployedField, null, 2));
     const affectedField = repository.get(field.getId().getValue());
-    console.log(JSON.stringify(affectedField, null, 2));
     affectedField.getMowers().should.be.deep.equal([
       {
         id: 'mowerId',

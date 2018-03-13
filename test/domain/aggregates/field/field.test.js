@@ -38,14 +38,13 @@ describe('Field', () => {
       orientation: 'N',
       field: {
         id: field.getId().getValue()
-
       }
     };
     field.deploy(mower);
     field.getUncommittedChanges()
       .should.be.an('array')
       .that.is.deep.equal([
-        new NewFieldCreated(field.getId(), field.getDimension(), field.getMowers()),
+        new NewFieldCreated(field.getId(), field.getDimension(), []),
         new MowerDeployed(field.getId(), mower)
       ]);
   });

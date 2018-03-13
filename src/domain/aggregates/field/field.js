@@ -48,7 +48,7 @@ class Field {
   applyNew(event) {
     this.id = event.getId();
     this.dimension = event.getDimension();
-    this.mowers = event.getMowers();
+    this.mowers = [].concat(event.getMowers());
     return this;
   }
 

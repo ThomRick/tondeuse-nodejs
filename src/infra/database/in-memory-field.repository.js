@@ -7,7 +7,10 @@ class InMemoryFieldRepository {
 
   save(field) {
     const events = this.database.get(field.getId().getValue().toString()) || [];
-    this.database.set(field.getId().getValue().toString(), events.concat(field.getUncommittedChanges()));
+    while (field.getUncommittedChanges().length !== 0) {
+      events.push(field.getUncommittedChanges().shift());
+    }
+    this.database.set(field.getId().getValue().toString(), events);
   }
 
   getAll() {
