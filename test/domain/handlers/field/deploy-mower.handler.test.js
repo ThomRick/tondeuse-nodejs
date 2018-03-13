@@ -24,42 +24,45 @@ describe('Deploy Mower Handler', () => {
     sandbox.restore();
   });
   it('should call the mower service to create the mower', async () => {
+    const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
+    repository.save(field);
     const mower = {
       position: {
         x: 0,
         y: 0
       },
-      orientation: 'N'
+      orientation: 'N',
+      field: field.getId().getValue()
     };
     const postStub = sandbox.stub(request, 'post')
-      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'id' })));
-    const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
-    repository.save(field);
+      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'mowerId' })));
     await handler.deploy(field.getId(), mower);
     sandbox.assert.calledWith(postStub, '/api/mowers', mower);
   });
   it('should add the new created mower into the field', async () => {
+    const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
+    repository.save(field);
     const mower = {
       position: {
         x: 0,
         y: 0
       },
-      orientation: 'N'
+      orientation: 'N',
+      field: field.getId().getValue()
     };
     sandbox.stub(request, 'post')
-      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'id' })));
-    const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
-    repository.save(field);
+      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'mowerId' })));
     await handler.deploy(field.getId(), mower);
     const affectedField = repository.get(field.getId());
     affectedField.getMowers().should.be.deep.equal([
       {
-        id: 'id',
+        id: 'mowerId',
         position: {
           x: 0,
           y: 0
         },
-        orientation: 'N'
+        orientation: 'N',
+        field: field.getId().getValue()
       }
     ]);
   });
