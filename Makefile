@@ -14,7 +14,7 @@ test:
 
 e2e: compile
 	@docker-compose up -d
-	@docker run -t -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm run -s e2e"
+	@-npm run -s e2e
 	@docker-compose stop
 	@echo "e2e done"
 
