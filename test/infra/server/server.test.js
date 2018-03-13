@@ -6,6 +6,8 @@ const request = require('supertest');
 const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
 const AffectMowerHandler = require('../../../src/domain/handlers/mower/affect-mower.handler');
 
+const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
+
 describe('MowIT Web API Server', () => {
   let server;
   beforeEach(() => server = require('../../../src/infra/server/server'));
@@ -32,6 +34,28 @@ describe('MowIT Web API Server', () => {
       .get('/api/fields');
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
+  });
+  it('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
+    const sandbox = sinon.sandbox.create();
+    const deployStub = sandbox.stub(DeployMowerHandler.prototype, 'deploy');
+    const response = await request(server.callback())
+      .put('/api/fields/fieldId')
+      .send({
+        position: {
+          x: 0,
+          y: 0
+        },
+        orientation: 'N'
+      });
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(deployStub, 'fieldId', {
+      position: {
+        x: 0,
+        y: 0
+      },
+      orientation: 'N'
+    });
+    sandbox.restore();
   });
   it('should expose POST /api/mowers endpoint to create mowers', async () => {
     const response = await request(server.callback())
