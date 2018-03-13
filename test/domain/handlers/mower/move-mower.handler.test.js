@@ -9,7 +9,7 @@ const Orientation = require('../../../../src/domain/aggregates/mower/orientation
 const InMemoryMowerRepository = require('../../../../src/infra/database/in-memory-mower.repository');
 const MoveMowerHandler = require('../../../../src/domain/handlers/mower/move-mower.handler');
 
-describe.skip('Move Mower Handler', () => {
+describe('Move Mower Handler', () => {
   let handler;
   let repository;
   beforeEach(() => {
@@ -22,6 +22,7 @@ describe.skip('Move Mower Handler', () => {
       .withId(id)
       .withPosition(Position.at(0, 0))
       .withOrientation(Orientation.from(Orientation.NORTH))
+      .withField({ id: 'fieldId' })
       .build();
     repository.save(mower);
     handler.move(id, 'A');
@@ -34,6 +35,7 @@ describe.skip('Move Mower Handler', () => {
       .withId(id)
       .withPosition(Position.at(0, 0))
       .withOrientation(Orientation.from(Orientation.NORTH))
+      .withField({ id: 'fieldId' })
       .build();
     repository.save(mower);
     handler.move(id, 'G');
@@ -46,6 +48,7 @@ describe.skip('Move Mower Handler', () => {
       .withId(id)
       .withPosition(Position.at(0, 0))
       .withOrientation(Orientation.from(Orientation.NORTH))
+      .withField({ id: 'fieldId' })
       .build();
     repository.save(mower);
     handler.move(id, 'D');

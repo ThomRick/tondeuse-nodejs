@@ -84,7 +84,7 @@ describe('MowIT Web API Server', () => {
     const sandbox = sinon.sandbox.create();
     const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move');
     const response = await request(server.callback())
-      .put('/api/mowers/id?action=move')
+      .put('/api/mowers/id')
       .send({
         instruction: 'A'
       });

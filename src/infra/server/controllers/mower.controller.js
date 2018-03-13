@@ -3,7 +3,6 @@ const InMemoryMowerRepository = require('../../database/in-memory-mower.reposito
 
 const CreateMowerHandler = require('../../../domain/handlers/mower/create-mower.handler');
 const ExtractMowerHandler = require('../../../domain/handlers/mower/extract-mower.handler');
-const AffectMowerHandler = require('../../../domain/handlers/mower/affect-mower.handler');
 const MoveMowerHandler = require('../../../domain/handlers/mower/move-mower.handler');
 
 const MowerDto = require('../dto/mower.dto');
@@ -13,7 +12,6 @@ class MowerController {
     const repository = new InMemoryMowerRepository();
     this.createMowerHandler = new CreateMowerHandler(repository);
     this.extractMowerHandler = new ExtractMowerHandler(repository);
-    this.affectMowerHandler = new AffectMowerHandler(repository);
     this.moveMowerHandler = new MoveMowerHandler(repository);
     this.router = router;
     this._registerRoutes();
@@ -41,16 +39,8 @@ class MowerController {
   }
 
   async update(context) {
-    console.log(`${ MowerController.name }::update() - action : ${ context.query.action } - request body : ${ JSON.stringify(context.request.body, null, 2) }`);
-    const action = context.query.action;
-    switch (action) {
-      case 'affect':
-        this.affectMowerHandler.affect(context.params.id, context.request.body.field);
-        break;
-      case 'move':
-        this.moveMowerHandler.move(context.params.id, context.request.body.instruction);
-        break;
-    }
+    console.log(`${ MowerController.name }::update() - request body : ${ JSON.stringify(context.request.body, null, 2) }`);
+    this.moveMowerHandler.move(context.params.id, context.request.body.instruction);
     context.response.status = 200;
   }
 
