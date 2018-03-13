@@ -1,10 +1,6 @@
 const chai = require('chai');
 chai.should();
 
-const Field = require('../../../../src/domain/aggregates/field/field');
-const Dimension = require('../../../../src/domain/aggregates/field/dimension');
-const FieldDto = require('../../../../src/infra/server/dto/field.dto');
-
 const Mower = require('../../../../src/domain/aggregates/mower/mower');
 const MowerId = require('../../../../src/domain/aggregates/mower/mowerId');
 const Position = require('../../../../src/domain/aggregates/mower/position');

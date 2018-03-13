@@ -7,7 +7,7 @@ const Orientation = require('../../../../src/domain/aggregates/mower/orientation
 const CreateMowerHandler = require('../../../../src/domain/handlers/mower/create-mower.handler');
 const InMemoryMowerRepository = require('../../../../src/infra/database/in-memory-mower.repository');
 
-describe.skip('Create Mower Handler', () => {
+describe('Create Mower Handler', () => {
   let repository;
   let handler;
   before(() => {
@@ -15,9 +15,13 @@ describe.skip('Create Mower Handler', () => {
     handler = new CreateMowerHandler(repository);
   });
   it('should add the new created mower to the database', () => {
-    const createdMower = handler.create(Position.at(0, 0), Orientation.from(Orientation.NORTH));
+    const position = Position.at(0, 0);
+    const orientation = Orientation.from(Orientation.NORTH);
+    const field = { id: 'fieldId '};
+    const createdMower = handler.create(position, orientation, field);
     const savedMower = repository.get(createdMower.getId());
-    savedMower.getPosition().should.be.deep.equal(createdMower.getPosition());
-    savedMower.getOrientation().should.be.deep.equal(createdMower.getOrientation());
+    savedMower.getPosition().should.be.deep.equal(position);
+    savedMower.getOrientation().should.be.deep.equal(orientation);
+    savedMower.getField().should.be.deep.equal(field);
   });
 });
