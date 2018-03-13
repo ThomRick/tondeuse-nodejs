@@ -3,7 +3,7 @@ chai.should();
 
 const request = require('request');
 
-describe('Install Program', () => {
+describe.skip('Install Program', () => {
   it('should install the program on a mower', async () => {
     const field = {
       dimension: {
@@ -46,7 +46,26 @@ describe('Install Program', () => {
           resolve(JSON.parse(body));
         });
       }).then((field) => {
-        console.log(field);
+        const program = {
+          instructions: [ 'D', 'A', 'G', 'A', 'G' ]
+        };
+        const mower = field.mowers[0];
+        return new Promise((resolve, reject) => {
+          request.put({
+            url: `http://localhost:3000/api/mowers/${ mower.id }?action=install`,
+            headers: {
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify(program)
+          }, (error, response, body) => {
+            if (error !== undefined && error !== null) {
+              reject(error);
+            }
+            response.statusCode.should.be.equal(200);
+            const mower = JSON.parse(body);
+            resolve();
+          });
+        });
       });
     });
   });
