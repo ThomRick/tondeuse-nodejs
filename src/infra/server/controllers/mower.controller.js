@@ -29,7 +29,8 @@ class MowerController {
     console.log(`${ MowerController.name }::create() - request body : ${ JSON.stringify(context.request.body, null, 2)}`);
     const position = context.request.body.position;
     const orientation = context.request.body.orientation;
-    context.response.body = MowerDto.from(this.createMowerHandler.create(position, orientation));
+    const field = context.request.body.field;
+    context.response.body = MowerDto.from(this.createMowerHandler.create(position, orientation, field));
     context.response.status = 201;
   }
 
