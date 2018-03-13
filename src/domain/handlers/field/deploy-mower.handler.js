@@ -6,7 +6,6 @@ class DeployMowerHandler {
   }
 
   async deploy(id, mower) {
-    console.log(`${ DeployMowerHandler.name }::deploy - id : ${ id } - mower ${ JSON.stringify(mower, null, 2) }`);
     const field = this.repository.get(id);
     mower.field = {
       id: field.getId().getValue()

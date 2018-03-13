@@ -25,19 +25,16 @@ class FieldController {
   }
 
   async create(context) {
-    console.log(`${ FieldController.name }::create() - request body : ${ JSON.stringify(context.request.body, null, 2)}`);
     context.response.body = FieldDto.from(this.createFieldHandler.create(context.request.body.dimension));
     context.response.status = 201;
   }
 
   async getAll(context) {
-    console.log(`${ FieldController.name }::getAll()`);
     context.response.body = this.extractFieldHandler.extract().map((field) => FieldDto.from(field));
     context.response.status = 200;
   }
 
   async update(context) {
-    console.log(`${ FieldController.name }::update() - request body : ${ JSON.stringify(context.request.body, null, 2) }`);
     const id = context.params.id;
     const mower = context.request.body;
     await this.deployMowerHandler.deploy(id, mower);

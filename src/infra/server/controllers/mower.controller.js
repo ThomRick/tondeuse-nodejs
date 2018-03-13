@@ -24,7 +24,6 @@ class MowerController {
   }
 
   async create(context) {
-    console.log(`${ MowerController.name }::create() - request body : ${ JSON.stringify(context.request.body, null, 2)}`);
     const position = context.request.body.position;
     const orientation = context.request.body.orientation;
     const field = context.request.body.field;
@@ -33,13 +32,11 @@ class MowerController {
   }
 
   async getAll(context) {
-    console.log(`${ MowerController.name }::getAll()`);
     context.response.body = this.extractMowerHandler.extract().map((mower) => MowerDto.from(mower));
     context.response.status = 200;
   }
 
   async update(context) {
-    console.log(`${ MowerController.name }::update() - request body : ${ JSON.stringify(context.request.body, null, 2) }`);
     this.moveMowerHandler.move(context.params.id, context.request.body.instruction);
     context.response.status = 200;
   }
