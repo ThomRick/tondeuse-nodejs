@@ -1,0 +1,66 @@
+const chai = require('chai');
+chai.should();
+const sinon = require('sinon');
+
+const request = require('request');
+
+const Field = require('../../../../src/domain/aggregates/field/field');
+const Dimension = require('../../../../src/domain/aggregates/field/dimension');
+
+const InMemoryFieldRepository = require('../../../../src/infra/database/in-memory-field.repository');
+
+const DeployMowerHandler = require('../../../../src/domain/handlers/field/deploy-mower.handler');
+
+describe('Deploy Mower Handler', () => {
+  let sandbox;
+  let handler;
+  let repository;
+  beforeEach(() => {
+    repository = new InMemoryFieldRepository();
+    handler = new DeployMowerHandler(repository);
+    sandbox = sinon.sandbox.create();
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+  it('should call the mower service to create the mower', async () => {
+    const mower = {
+      position: {
+        x: 0,
+        y: 0
+      },
+      orientation: 'N'
+    };
+    const postStub = sandbox.stub(request, 'post')
+      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'id' })));
+    const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
+    repository.save(field);
+    await handler.deploy(field.getId(), mower);
+    sandbox.assert.calledWith(postStub, '/api/mowers', mower);
+  });
+  it('should add the new created mower into the field', async () => {
+    const mower = {
+      position: {
+        x: 0,
+        y: 0
+      },
+      orientation: 'N'
+    };
+    sandbox.stub(request, 'post')
+      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'id' })));
+    const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
+    repository.save(field);
+    await handler.deploy(field.getId(), mower);
+    const affectedField = repository.get(field.getId());
+    affectedField.getMowers().should.be.deep.equal([
+      {
+        id: 'id',
+        position: {
+          x: 0,
+          y: 0
+        },
+        orientation: 'N'
+      }
+    ]);
+  });
+});
