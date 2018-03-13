@@ -1,4 +1,4 @@
-.PHONY: test
+.PHONY: test e2e
 
 install:
 	@docker run -t -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm install"
@@ -12,7 +12,7 @@ test:
 	@docker run -t -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm run -s test"
 	@echo "test done"
 
-e2e: compile
+e2e:
 	@docker-compose up -d
 	@-npm run -s e2e
 	@docker-compose stop
