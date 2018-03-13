@@ -19,7 +19,7 @@ describe('Create Mower Handler', () => {
     const orientation = Orientation.from(Orientation.NORTH);
     const field = { id: 'fieldId '};
     const createdMower = handler.create(position, orientation, field);
-    const savedMower = repository.get(createdMower.getId());
+    const savedMower = repository.get(createdMower.getId().getValue());
     savedMower.getPosition().should.be.deep.equal(position);
     savedMower.getOrientation().should.be.deep.equal(orientation);
     savedMower.getField().should.be.deep.equal(field);

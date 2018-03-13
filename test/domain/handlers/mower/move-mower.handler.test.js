@@ -25,8 +25,8 @@ describe('Move Mower Handler', () => {
       .withField({ id: 'fieldId' })
       .build();
     repository.save(mower);
-    handler.move(id, 'A');
-    const movedMower = repository.get(id);
+    handler.move(id.getValue(), 'A');
+    const movedMower = repository.get(id.getValue());
     movedMower.getPosition().should.be.deep.equal(Position.at(1, 0));
   });
   it('should turn left the mower', () => {
@@ -38,8 +38,8 @@ describe('Move Mower Handler', () => {
       .withField({ id: 'fieldId' })
       .build();
     repository.save(mower);
-    handler.move(id, 'G');
-    const movedMower = repository.get(id);
+    handler.move(id.getValue(), 'G');
+    const movedMower = repository.get(id.getValue());
     movedMower.getOrientation().should.be.deep.equal(Orientation.from(Orientation.WEST));
   });
   it('should turn right the mower', () => {
@@ -51,8 +51,8 @@ describe('Move Mower Handler', () => {
       .withField({ id: 'fieldId' })
       .build();
     repository.save(mower);
-    handler.move(id, 'D');
-    const movedMower = repository.get(id);
+    handler.move(id.getValue(), 'D');
+    const movedMower = repository.get(id.getValue());
     movedMower.getOrientation().should.be.deep.equal(Orientation.from(Orientation.EST));
   });
 });

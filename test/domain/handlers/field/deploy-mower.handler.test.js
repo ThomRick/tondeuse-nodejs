@@ -31,13 +31,37 @@ describe('Deploy Mower Handler', () => {
         x: 0,
         y: 0
       },
-      orientation: 'N',
-      field: field.getId().getValue()
+      orientation: 'N'
     };
     const postStub = sandbox.stub(request, 'post')
-      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'mowerId' })));
+      .callsFake((options, callback) => callback(null, {}, JSON.stringify({
+        id: 'mowerId',
+        position: {
+          x: 0,
+          y: 0
+        },
+        orientation: 'N',
+        field: {
+          id: field.getId().getValue()
+        }
+      })));
     await handler.deploy(field.getId().getValue(), mower);
-    sandbox.assert.calledWith(postStub, '/api/mowers', mower);
+    sandbox.assert.calledWith(postStub, {
+      url: 'http://localhost:3000/api/mowers',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        position: {
+          x: 0,
+          y: 0
+        },
+        orientation: 'N',
+        field: {
+          id: field.getId().getValue()
+        }
+      })
+    });
   });
   it('should add the new created mower into the field', async () => {
     const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
@@ -47,11 +71,20 @@ describe('Deploy Mower Handler', () => {
         x: 0,
         y: 0
       },
-      orientation: 'N',
-      field: field.getId().getValue()
+      orientation: 'N'
     };
     sandbox.stub(request, 'post')
-      .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'mowerId' })));
+      .callsFake((options, callback) => callback(null, {}, JSON.stringify({
+        id: 'mowerId',
+        position: {
+          x: 0,
+          y: 0
+        },
+        orientation: 'N',
+        field: {
+          id: field.getId().getValue()
+        }
+      })));
     await handler.deploy(field.getId().getValue(), mower);
     const affectedField = repository.get(field.getId().getValue());
     affectedField.getMowers().should.be.deep.equal([
@@ -62,7 +95,9 @@ describe('Deploy Mower Handler', () => {
           y: 0
         },
         orientation: 'N',
-        field: field.getId().getValue()
+        field: {
+          id: field.getId().getValue()
+        }
       }
     ]);
   });

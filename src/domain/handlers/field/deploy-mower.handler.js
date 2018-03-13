@@ -8,9 +8,19 @@ class DeployMowerHandler {
   async deploy(id, mower) {
     console.log(`${ DeployMowerHandler.name }::deploy - id : ${ id } - mower ${ JSON.stringify(mower, null, 2) }`);
     const field = this.repository.get(id);
+    mower.field = {
+      id: field.getId().getValue()
+    };
     return new Promise((resolve) => {
-      request.post('/api/mowers', mower, (error, response, mower) => {
-        field.deploy(mower);
+      request.post({
+        url: 'http://localhost:3000/api/mowers',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(mower)
+      },
+      (error, response, createdMower) => {
+        field.deploy(JSON.parse(createdMower));
         this.repository.save(field);
         resolve();
       });

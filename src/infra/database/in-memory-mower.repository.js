@@ -6,8 +6,8 @@ class InMemoryMowerRepository {
   }
 
   save(mower) {
-    const events = this.database.get(mower.getId()) || [];
-    this.database.set(mower.getId(), events.concat(mower.getUncommittedChanges()));
+    const events = this.database.get(mower.getId().getValue().toString()) || [];
+    this.database.set(mower.getId().getValue().toString(), events.concat(mower.getUncommittedChanges()));
   }
 
   getAll() {
@@ -17,7 +17,7 @@ class InMemoryMowerRepository {
   }
 
   get(mowerId) {
-    return Mower.rebuild(this.database.get(mowerId));
+    return Mower.rebuild(this.database.get(mowerId.toString()));
   }
 }
 
