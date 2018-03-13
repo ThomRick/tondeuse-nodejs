@@ -36,12 +36,15 @@ describe('Program', () => {
     const events = [
       new NewProgramCreated(id, instructions),
       new ProgramInstalled(id, {
-        id: 'id',
+        id: 'mowerId',
         position: {
           x: 0,
           y: 0
         },
-        orientation: 'N'
+        orientation: 'N',
+        field: {
+          id: 'fieldId'
+        }
       })
     ];
     const program = Program.rebuild(events);
@@ -54,12 +57,15 @@ describe('Program', () => {
     ];
     const program = Program.with(instructions);
     const mower = {
-      id: 'id',
+      id: 'mowerId',
       position: {
         x: 0,
         y: 0
       },
-      orientation: 'N'
+      orientation: 'N',
+      field: {
+        id: 'fieldId'
+      }
     };
     program.install(mower);
     program.getUncommittedChanges().should.be.deep.equal([
