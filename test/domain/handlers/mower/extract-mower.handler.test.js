@@ -8,7 +8,7 @@ const Position = require('../../../../src/domain/aggregates/mower/position');
 const InMemoryMowerRepository = require('../../../../src/infra/database/in-memory-mower.repository');
 const ExtractMowerHandler = require('../../../../src/domain/handlers/mower/extract-mower.handler');
 
-describe('Extract Mower Handler', () => {
+describe.skip('Extract Mower Handler', () => {
   let handler;
   let repository;
   before(() => {

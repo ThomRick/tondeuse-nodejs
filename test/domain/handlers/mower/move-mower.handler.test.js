@@ -9,7 +9,7 @@ const Orientation = require('../../../../src/domain/aggregates/mower/orientation
 const InMemoryMowerRepository = require('../../../../src/infra/database/in-memory-mower.repository');
 const MoveMowerHandler = require('../../../../src/domain/handlers/mower/move-mower.handler');
 
-describe('Move Mower Handler', () => {
+describe.skip('Move Mower Handler', () => {
   let handler;
   let repository;
   beforeEach(() => {

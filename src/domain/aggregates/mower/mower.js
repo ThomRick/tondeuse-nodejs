@@ -1,7 +1,6 @@
 const MowerId = require('./mowerId');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
-const MowerAffected = require('./events/mower-affected.event');
 const MowerMovedForward = require('./events/mower-moved.forward.event');
 const MowerTurnedLeft = require('./events/mower-turned-left.event');
 const MowerTurnedRight = require('./events/mower-turned-right.event');
@@ -24,6 +23,11 @@ class MowerBuilder {
     return this;
   }
 
+  withField(field) {
+    this.field = field;
+    return this;
+  }
+
   build() {
     if (this.id === undefined) {
       this.id = MowerId.create();
@@ -34,15 +38,18 @@ class MowerBuilder {
     if (this.orientation === undefined) {
       throw new Error('Orientation must be specified');
     }
-    return new Mower(this.id, this.positon, this.orientation);
+    if (this.field === undefined) {
+      throw new Error('Field must be specified');
+    }
+    return new Mower(this.id, this.positon, this.orientation, this.field);
   }
 }
 
 class Mower {
-  constructor(id, position, orientation) {
+  constructor(id, position, orientation, field) {
     this.uncommittedChanges = [];
     if (id !== undefined && position !== undefined && orientation !== undefined) {
-      const event = new NewMowerCreated(id, position, orientation);
+      const event = new NewMowerCreated(id, position, orientation, field);
       this.applyNew(event);
       this._saveUncommittedChange(event);
     }
@@ -52,16 +59,6 @@ class Mower {
     this.id = event.getId();
     this.orientation = event.getOrientation();
     this.position = event.getPosition();
-    return this;
-  }
-
-  affect(field) {
-    const event = new MowerAffected(this.id, field);
-    this.applyAffect(event);
-    this._saveUncommittedChange(event);
-  }
-
-  applyAffect(event) {
     this.field = event.getField();
     return this;
   }

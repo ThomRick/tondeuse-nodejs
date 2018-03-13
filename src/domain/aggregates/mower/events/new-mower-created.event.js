@@ -1,12 +1,9 @@
 class NewMowerCreated {
-  constructor(id, position, orientation) {
+  constructor(id, position, orientation, field) {
     this.id = id;
     this.position = position;
     this.orientation = orientation;
-  }
-
-  apply(mower) {
-    return mower.applyNew(this);
+    this.field = field;
   }
 
   getId() {
@@ -19,6 +16,14 @@ class NewMowerCreated {
 
   getOrientation() {
     return this.orientation;
+  }
+
+  getField() {
+    return this.field;
+  }
+
+  apply(mower) {
+    return mower.applyNew(this);
   }
 }
 
