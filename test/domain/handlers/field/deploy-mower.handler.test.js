@@ -36,7 +36,7 @@ describe('Deploy Mower Handler', () => {
     };
     const postStub = sandbox.stub(request, 'post')
       .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'mowerId' })));
-    await handler.deploy(field.getId(), mower);
+    await handler.deploy(field.getId().getValue(), mower);
     sandbox.assert.calledWith(postStub, '/api/mowers', mower);
   });
   it('should add the new created mower into the field', async () => {
@@ -52,8 +52,8 @@ describe('Deploy Mower Handler', () => {
     };
     sandbox.stub(request, 'post')
       .callsFake((url, body, callback) => callback(null, {}, Object.assign(mower, { id: 'mowerId' })));
-    await handler.deploy(field.getId(), mower);
-    const affectedField = repository.get(field.getId());
+    await handler.deploy(field.getId().getValue(), mower);
+    const affectedField = repository.get(field.getId().getValue());
     affectedField.getMowers().should.be.deep.equal([
       {
         id: 'mowerId',

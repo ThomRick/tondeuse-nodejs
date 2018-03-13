@@ -15,7 +15,7 @@ describe('Create Field Handler', () => {
   });
   it('should should save the created field into the database', () => {
     const createdField = handler.create(Dimension.of(4, 4));
-    const savedField = repository.get(createdField.getId());
+    const savedField = repository.get(createdField.getId().getValue());
     savedField.getDimension().should.be.deep.equal(createdField.getDimension());
   });
 });
