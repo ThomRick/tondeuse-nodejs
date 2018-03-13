@@ -56,7 +56,7 @@ describe('MowIT Web API Server', () => {
     });
     sandbox.restore();
   });
-  it.skip('should expose POST /api/mowers endpoint to create mowers', async () => {
+  it('should expose POST /api/mowers endpoint to create mowers', async () => {
     const response = await request(server.callback())
       .post('/api/mowers')
       .send({
@@ -64,7 +64,10 @@ describe('MowIT Web API Server', () => {
           x: 0,
           y: 0
         },
-        orientation: 'N'
+        orientation: 'N',
+        field: {
+          id: 'fieldId'
+        }
       });
     response.status.should.be.equal(201);
     response.body.should.have.property('id');
@@ -73,6 +76,9 @@ describe('MowIT Web API Server', () => {
       y: 0
     });
     response.body.should.have.deep.property('orientation', 'N');
+    response.body.should.have.deep.property('field', {
+      id: 'fieldId'
+    });
   });
   it('should expose PUT /api/mowers/:id endpoint to execute a mower move', async () => {
     const sandbox = sinon.sandbox.create();
