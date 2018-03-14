@@ -6,10 +6,12 @@ const request = require('supertest');
 const Field = require('../../../src/domain/aggregates/field/field');
 const Dimension = require('../../../src/domain/aggregates/field/dimension');
 
+const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
+
 const InstallProgramHandler = require('../../../src/domain/handlers/mower/install-program.handler');
 const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
 
-const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
+const RunProgramHandler = require('../../../src/domain/handlers/program/run-program.handler');
 
 describe('MowIT Web API Server', () => {
   let sandbox;
@@ -48,9 +50,13 @@ describe('MowIT Web API Server', () => {
   it('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
     const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
     sandbox.stub(DeployMowerHandler.prototype, 'deploy')
-      .callsFake((id, mower) =>
-        Promise.resolve(Field.Builder().withId(field.getId()).withDimension(Dimension.of(4, 4)).withMowers([ mower ]).build())
-      );
+      .callsFake((id, mower) => Promise.resolve(
+        Field.Builder()
+          .withId(field.getId())
+          .withDimension(Dimension.of(4, 4))
+          .withMowers([ mower ])
+          .build()
+      ));
     const response = await request(server.callback())
       .put(`/api/fields/${ field.getId().getValue() }`)
       .send({
@@ -148,9 +154,11 @@ describe('MowIT Web API Server', () => {
     response.body.should.be.an('array');
   });
   it('should expose PUT /api/programs/:id endpoint to run the program and return an execution report', async () => {
+    const runStub = sandbox.stub(RunProgramHandler.prototype, 'run')
+      .callsFake(() => Promise.resolve());
     const response = await request(server.callback())
-      .put('/api/programs/id')
-      .send({});
+      .put('/api/programs/id');
     response.status.should.be.equal(200);
+    sandbox.assert.calledWith(runStub, 'id');
   });
 });
