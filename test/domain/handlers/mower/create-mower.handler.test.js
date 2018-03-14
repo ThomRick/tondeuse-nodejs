@@ -15,13 +15,13 @@ describe('Create Mower Handler', () => {
     handler = new CreateMowerHandler(repository);
   });
   it('should add the new created mower to the database', () => {
-    const position = Position.at(0, 0);
-    const orientation = Orientation.from(Orientation.NORTH);
+    const position = { x: 0, y: 0 };
+    const orientation = 'N';
     const field = { id: 'fieldId '};
     const createdMower = handler.create(position, orientation, field);
     const savedMower = repository.get(createdMower.getId().getValue());
-    savedMower.getPosition().should.be.deep.equal(position);
-    savedMower.getOrientation().should.be.deep.equal(orientation);
+    savedMower.getPosition().should.be.deep.equal(Position.at(0, 0));
+    savedMower.getOrientation().should.be.deep.equal(Orientation.from(Orientation.NORTH));
     savedMower.getField().should.be.deep.equal(field);
   });
 });

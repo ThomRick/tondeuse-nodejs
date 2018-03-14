@@ -14,7 +14,7 @@ class MowerDto {
       mower.getId().getValue(),
       mower.getField(),
       mower.getPosition(),
-      mower.getOrientation(),
+      mower.getOrientation().getValue(),
       mower.getProgram()
     );
   }

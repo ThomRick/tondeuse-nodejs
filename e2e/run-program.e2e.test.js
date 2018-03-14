@@ -28,7 +28,7 @@ describe('Run Program', () => {
       const mower = {
         position: {
           x: 0,
-          y: 0
+          y: 1
         },
         orientation: 'N'
       };
@@ -77,6 +77,7 @@ describe('Run Program', () => {
                 reject('Can not execute program : ' + error);
               }
               const report = JSON.parse(body);
+              console.log(report);
               resolve();
             });
           });
