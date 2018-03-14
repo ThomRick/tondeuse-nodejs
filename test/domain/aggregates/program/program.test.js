@@ -9,12 +9,12 @@ const NewProgramCreated = require('../../../../src/domain/aggregates/program/eve
 
 describe('Program', () => {
   it('should have the defined instructions when create with instructions', () => {
-    const mower = {
-      id: 'mowerId'
-    };
     const instructions = [
       Instruction.from(Instruction.MOVE_FORWARD)
     ];
+    const mower = {
+      id: 'mowerId'
+    };
     const program = Program
       .Builder()
       .withInstructions(instructions)
@@ -43,28 +43,36 @@ describe('Program', () => {
       .build()
     ).should.throw('Mower must be provided.');
   });
-  it.skip('should add creation event when created a program', () => {
+  it('should add creation event when created a program', () => {
     const instructions = [
       Instruction.from(Instruction.MOVE_FORWARD)
     ];
+    const mower = {
+      id: 'mowerId'
+    };
     const program = Program
       .Builder()
       .withInstructions(instructions)
+      .withMower(mower)
       .build();
     program.getUncommittedChanges().should.be.deep.equal([
-      new NewProgramCreated(program.getId(), program.getInstructions())
+      new NewProgramCreated(program.getId(), program.getInstructions(), program.getMower())
     ]);
   });
-  it.skip('should rebuild program from events', () => {
+  it('should rebuild program from events', () => {
     const id = ProgramId.create();
     const instructions = [
       Instruction.from(Instruction.MOVE_FORWARD)
     ];
+    const mower = {
+      id: 'mowerId'
+    };
     const events = [
-      new NewProgramCreated(id, instructions)
+      new NewProgramCreated(id, instructions, mower)
     ];
     const program = Program.rebuild(events);
     program.getId().should.be.deep.equal(id);
     program.getInstructions().should.be.deep.equal(instructions);
+    program.getMower().should.be.deep.equal(mower);
   });
 });
