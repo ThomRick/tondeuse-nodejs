@@ -28,20 +28,24 @@ class RunProgramHandler {
       });
     }).then(({ mower, field }) => {
       const instructions = program.getInstructions();
-      return new Promise((resolve) => {
-        request.put({
-          url: `http://localhost:3000/api/mowers/${ mower.id }?action=move`,
-          headers: {
-            'content-type': 'application/json'
+      return instructions.reduce(async (report, instruction) => {
+        return new Promise((resolve) => {
+          request.put({
+            url: `http://localhost:3000/api/mowers/${ mower.id }?action=move`,
+            headers: {
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+              instruction: instruction.getValue()
+            })
           },
-          body: JSON.stringify({
-            instruction: instructions[0].getValue()
-          })
-        },
-        (error, response, body) => {
-          resolve();
+          (error, response, body) => {
+            resolve({
+              mower: JSON.parse(body)
+            });
+          });
         });
-      });
+      }, {});
     });
   }
 }

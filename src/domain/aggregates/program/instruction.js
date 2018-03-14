@@ -61,12 +61,20 @@ class MoveForwardInstruction extends Instruction {
 }
 
 class TurnLeftInstruction extends Instruction {
+  constructor() {
+    super('G');
+  }
+
   canExecute() {
     return true;
   }
 }
 
 class TurnRightInstruction extends Instruction {
+  constructor() {
+    super('D');
+  }
+
   canExecute() {
     return true;
   }
