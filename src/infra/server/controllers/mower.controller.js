@@ -3,6 +3,7 @@ const InMemoryMowerRepository = require('../../database/in-memory-mower.reposito
 
 const CreateMowerHandler = require('../../../domain/handlers/mower/create-mower.handler');
 const ExtractMowerHandler = require('../../../domain/handlers/mower/extract-mower.handler');
+const InstallProgramHandler = require('../../../domain/handlers/mower/install-program.handler');
 const MoveMowerHandler = require('../../../domain/handlers/mower/move-mower.handler');
 
 const MowerDto = require('../dto/mower.dto');
@@ -12,6 +13,7 @@ class MowerController {
     const repository = new InMemoryMowerRepository();
     this.createMowerHandler = new CreateMowerHandler(repository);
     this.extractMowerHandler = new ExtractMowerHandler(repository);
+    this.installProgramHandler = new InstallProgramHandler(repository);
     this.moveMowerHandler = new MoveMowerHandler(repository);
     this.router = router;
     this._registerRoutes();
@@ -37,7 +39,17 @@ class MowerController {
   }
 
   async update(context) {
-    this.moveMowerHandler.move(context.params.id, context.request.body.instruction);
+    const action = context.query.action;
+    switch (action) {
+      case 'move':
+        this.moveMowerHandler.move(context.params.id, context.request.body.instruction);
+        break;
+      case 'install':
+        const id = context.params.id;
+        const program = context.request.body;
+        context.response.body = await this.installProgramHandler.install(id, program);
+        break;
+    }
     context.response.status = 200;
   }
 
