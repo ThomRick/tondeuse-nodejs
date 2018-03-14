@@ -13,11 +13,11 @@ describe('Instruction', () => {
         y: 0
       },
       orientation: 'N',
-      field: {
-        dimension: {
-          width: 4,
-          length: 4
-        }
+    },
+    {
+      dimension: {
+        width: 4,
+        length: 4
       }
     }).should.be.true;
   });
@@ -30,11 +30,11 @@ describe('Instruction', () => {
         y: 0
       },
       orientation: 'N',
-      field: {
-        dimension: {
-          width: 4,
-          length: 4
-        }
+    },
+    {
+      dimension: {
+        width: 4,
+        length: 4
       }
     }).should.be.true;
   });
@@ -47,11 +47,11 @@ describe('Instruction', () => {
         y: 0
       },
       orientation: 'N',
-      field: {
-        dimension: {
-          width: 4,
-          length: 4
-        }
+    },
+    {
+      dimension: {
+        width: 4,
+        length: 4
       }
     }).should.be.true;
   });
@@ -64,11 +64,11 @@ describe('Instruction', () => {
         y: 0
       },
       orientation: 'W',
-      field: {
-        dimension: {
-          width: 4,
-          length: 4
-        }
+    },
+    {
+      dimension: {
+        width: 4,
+        length: 4
       }
     }).should.be.false;
   });
@@ -81,11 +81,11 @@ describe('Instruction', () => {
         y: 4
       },
       orientation: 'E',
-      field: {
-        dimension: {
-          width: 4,
-          length: 4
-        }
+    },
+    {
+      dimension: {
+        width: 4,
+        length: 4
       }
     }).should.be.false;
   });
@@ -98,11 +98,11 @@ describe('Instruction', () => {
         y: 0
       },
       orientation: 'N',
-      field: {
-        dimension: {
-          width: 4,
-          length: 4
-        }
+    },
+    {
+      dimension: {
+        width: 4,
+        length: 4
       }
     }).should.be.false;
   });
@@ -115,11 +115,11 @@ describe('Instruction', () => {
         y: 0
       },
       orientation: 'S',
-      field: {
-        dimension: {
-          width: 4,
-          length: 4
-        }
+    },
+    {
+      dimension: {
+        width: 4,
+        length: 4
       }
     }).should.be.false;
   });

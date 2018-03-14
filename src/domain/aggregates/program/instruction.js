@@ -28,14 +28,14 @@ class MoveForwardInstruction extends Instruction {
     super('A');
   }
 
-  canExecute(mower) {
+  canExecute(mower, field) {
     switch (mower.orientation) {
       case 'W':
         return this._isNoCollisionToWest(mower.position.y);
       case 'E':
-        return this._isNoCollisionToEast(mower.position.y, mower.field.dimension.length);
+        return this._isNoCollisionToEast(mower.position.y, field.dimension.length);
       case 'N':
-        return this._isNoCollisionToNorth(mower.position.x, mower.field.dimension.width);
+        return this._isNoCollisionToNorth(mower.position.x, field.dimension.width);
       case 'S':
         return this._isNoCollisionToSouth(mower.position.x);
       default:
