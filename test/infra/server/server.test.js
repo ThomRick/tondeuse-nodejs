@@ -147,7 +147,7 @@ describe('MowIT Web API Server', () => {
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
   });
-  it('should expose PUT /api/programs/:id endpoint to update the program', async () => {
+  it('should expose PUT /api/programs/:id endpoint to run the program and return an execution report', async () => {
     const response = await request(server.callback())
       .put('/api/programs/id')
       .send({});
