@@ -77,7 +77,9 @@ describe('Run Program', () => {
                 reject('Can not execute program : ' + error);
               }
               const report = JSON.parse(body);
-              console.log(report);
+              report.mower.position.x.should.be.equal(1);
+              report.mower.position.y.should.be.equal(2);
+              report.mower.orientation.should.be.equal('W');
               resolve();
             });
           });
