@@ -1,4 +1,8 @@
 class Instruction {
+  constructor(value) {
+    this.value = value;
+  }
+
   static from(value) {
     switch (value) {
       case Instruction.MOVE_FORWARD:
@@ -13,9 +17,17 @@ class Instruction {
   canExecute() {
     return false;
   }
+
+  getValue() {
+    return this.value;
+  }
 }
 
 class MoveForwardInstruction extends Instruction {
+  constructor() {
+    super('A');
+  }
+
   canExecute(mower) {
     switch (mower.orientation) {
       case 'W':
