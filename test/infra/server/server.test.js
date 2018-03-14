@@ -140,7 +140,14 @@ describe('MowIT Web API Server', () => {
     sandbox.assert.calledWith(extractStub, 'id');
   });
   it('should expose PUT /api/mowers/:id?action=move endpoint to execute a mower move', async () => {
-    const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move');
+    const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move')
+      .callsFake(() => Mower
+        .Builder()
+        .withField({ id: 'fieldId' })
+        .withPosition(Position.at(0, 0))
+        .withOrientation(Orientation.from(Orientation.NORTH))
+        .build()
+      );
     const response = await request(server.callback())
       .put('/api/mowers/id?action=move')
       .send({

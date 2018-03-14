@@ -49,7 +49,7 @@ class MowerController {
     const action = context.query.action;
     switch (action) {
       case 'move':
-        context.response.body = this.moveMowerHandler.move(context.params.id, context.request.body.instruction);
+        context.response.body = MowerDto.from(this.moveMowerHandler.move(context.params.id, context.request.body.instruction));
         break;
       case 'install':
         const id = context.params.id;
