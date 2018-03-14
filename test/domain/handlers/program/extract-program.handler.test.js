@@ -7,7 +7,7 @@ const InMemoryProgramRepository = require('../../../../src/infra/database/in-mem
 
 const ExtractProgramHandler = require('../../../../src/domain/handlers/program/extract-program.handler');
 
-describe.skip('Extract Program Handler', () => {
+describe('Extract Program Handler', () => {
   let handler;
   let repository;
   before(() => {
@@ -16,13 +16,16 @@ describe.skip('Extract Program Handler', () => {
   });
   it('should retrieve all programs', () => {
     [
-      Program.with([ Instruction.from(Instruction.MOVE_FORWARD) ]),
-      Program.with([ Instruction.from(Instruction.TURN_RIGHT) ]),
-      Program.with([ Instruction.from(Instruction.TURN_LEFT) ])
+      Program.Builder().withInstructions([ Instruction.from(Instruction.MOVE_FORWARD) ]).withMower({ id: 'mowerId0' }).build(),
+      Program.Builder().withInstructions([ Instruction.from(Instruction.TURN_RIGHT) ]).withMower({ id: 'mowerId1' }).build(),
+      Program.Builder().withInstructions([ Instruction.from(Instruction.TURN_LEFT) ]).withMower({ id: 'mowerId2' }).build()
     ].forEach((program) => repository.save(program));
     const extractedPrograms = handler.extract();
     extractedPrograms[0].getInstructions().should.be.deep.equal([ Instruction.from(Instruction.MOVE_FORWARD) ]);
+    extractedPrograms[0].getMower().should.be.deep.equal({ id: 'mowerId0' });
     extractedPrograms[1].getInstructions().should.be.deep.equal([ Instruction.from(Instruction.TURN_RIGHT) ]);
+    extractedPrograms[1].getMower().should.be.deep.equal({ id: 'mowerId1' });
     extractedPrograms[2].getInstructions().should.be.deep.equal([ Instruction.from(Instruction.TURN_LEFT) ]);
+    extractedPrograms[2].getMower().should.be.deep.equal({ id: 'mowerId2' });
   });
 });
