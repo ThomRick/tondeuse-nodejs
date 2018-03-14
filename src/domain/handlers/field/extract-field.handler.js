@@ -1,10 +1,14 @@
 class ExtractFieldHandler {
-  constructor(fieldRepository) {
-    this.fieldRepository = fieldRepository;
+  constructor(repository) {
+    this.repository = repository;
   }
 
-  extract() {
-    return this.fieldRepository.getAll();
+  extract(fieldId) {
+    if (fieldId !== undefined) {
+      return this.repository.get(fieldId);
+    } else {
+      return this.repository.getAll();
+    }
   }
 }
 
