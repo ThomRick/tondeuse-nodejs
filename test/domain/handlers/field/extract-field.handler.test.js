@@ -8,22 +8,21 @@ const InMemoryFieldRepository = require('../../../../src/infra/database/in-memor
 const ExtractFieldHandler = require('../../../../src/domain/handlers/field/extract-field.handler');
 
 describe('Extract Field Handler', () => {
-  let extractFieldHandler;
-  let fieldRepository;
+  let handler;
+  let repository;
   before(() => {
-    fieldRepository = InMemoryFieldRepository.getInstance();
-    extractFieldHandler = new ExtractFieldHandler(fieldRepository);
+    repository = new InMemoryFieldRepository();
+    handler = new ExtractFieldHandler(repository);
   });
   it('should retrieve all stored fields when extractAll', () => {
     [
       Field.Builder().withDimension(Dimension.of(1, 1)).build(),
       Field.Builder().withDimension(Dimension.of(2, 2)).build(),
       Field.Builder().withDimension(Dimension.of(3, 3)).build(),
-    ].forEach((field) => fieldRepository.save(field));
-    const extractedFields = extractFieldHandler.extractAll();
+    ].forEach((field) => repository.save(field));
+    const extractedFields = handler.extract();
     extractedFields[0].getDimension().should.be.deep.equal(Dimension.of(1, 1));
     extractedFields[1].getDimension().should.be.deep.equal(Dimension.of(2, 2));
     extractedFields[2].getDimension().should.be.deep.equal(Dimension.of(3, 3));
-    extractedFields.forEach((field) => fieldRepository.delete(field.getId()));
   });
 });

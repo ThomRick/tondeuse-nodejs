@@ -1,8 +1,9 @@
-const MowerId = require('./mowerId');
+const MowerId = require('./mower-id');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
-const PlacedOn = require('../events/placed-on.event');
-const InstructionExecuted = require('../events/instruction-executed.event');
+const MowerMovedForward = require('./events/mower-moved.forward.event');
+const MowerTurnedLeft = require('./events/mower-turned-left.event');
+const MowerTurnedRight = require('./events/mower-turned-right.event');
 
 class MowerBuilder {
   constructor() {}
@@ -22,6 +23,11 @@ class MowerBuilder {
     return this;
   }
 
+  withField(field) {
+    this.field = field;
+    return this;
+  }
+
   build() {
     if (this.id === undefined) {
       this.id = MowerId.create();
@@ -32,15 +38,18 @@ class MowerBuilder {
     if (this.orientation === undefined) {
       throw new Error('Orientation must be specified');
     }
-    return new Mower(this.id, this.positon, this.orientation);
+    if (this.field === undefined) {
+      throw new Error('Field must be specified');
+    }
+    return new Mower(this.id, this.positon, this.orientation, this.field);
   }
 }
 
 class Mower {
-  constructor(id, position, orientation) {
+  constructor(id, position, orientation, field) {
     this.uncommittedChanges = [];
     if (id !== undefined && position !== undefined && orientation !== undefined) {
-      const event = new NewMowerCreated(id, position, orientation);
+      const event = new NewMowerCreated(id, position, orientation, field);
       this.applyNew(event);
       this._saveUncommittedChange(event);
     }
@@ -50,38 +59,41 @@ class Mower {
     this.id = event.getId();
     this.orientation = event.getOrientation();
     this.position = event.getPosition();
-    return this;
-  }
-
-  placeOn(field) {
-    const event = new PlacedOn(this.id, field);
-    this.applyPlaceOn(event);
-    this._saveUncommittedChange(event);
-  }
-
-  applyPlaceOn(event) {
     this.field = event.getField();
     return this;
   }
 
-  execute(instruction) {
-    if (this.field === undefined) {
-      throw new Error('Mower must be placed on a field before executing instruction.');
-    }
-    const newState = instruction.applyOn(this);
-    const event = new InstructionExecuted(this.id, newState.getPosition(), newState.getOrientation());
-    this.applyExecute(event);
+  moveForward() {
+    const event = new MowerMovedForward(this.id, this.position.move(this.orientation));
+    this.applyMoveForward(event);
     this._saveUncommittedChange(event);
   }
 
-  applyExecute(event) {
+  applyMoveForward(event) {
     this.position = event.getPosition();
+    return this;
+  }
+
+  turnLeft() {
+    const event = new MowerTurnedLeft(this.id, this.orientation.left());
+    this.applyTurnLeft(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyTurnLeft(event) {
     this.orientation = event.getOrientation();
     return this;
   }
 
-  getField() {
-    return this.field;
+  turnRight() {
+    const event = new MowerTurnedRight(this.id, this.orientation.right());
+    this.applyTurnRight(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyTurnRight(event) {
+    this.orientation = event.getOrientation();
+    return this;
   }
 
   getId() {
@@ -94,6 +106,10 @@ class Mower {
 
   getPosition() {
     return this.position;
+  }
+
+  getField() {
+    return this.field;
   }
 
   getUncommittedChanges() {

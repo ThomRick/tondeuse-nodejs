@@ -1,13 +1,16 @@
 const Mower = require('../../domain/aggregates/mower/mower');
 
 class InMemoryMowerRepository {
-  constructor(database) {
+  constructor(database= new Map()) {
     this.database = database;
   }
 
   save(mower) {
-    const events = this.database.get(mower.getId()) || [];
-    this.database.set(mower.getId(), events.concat(mower.getUncommittedChanges()));
+    const events = this.database.get(mower.getId().getValue().toString()) || [];
+    while (mower.getUncommittedChanges().length !== 0) {
+      events.push(mower.getUncommittedChanges().shift());
+    }
+    this.database.set(mower.getId().getValue().toString(), events);
   }
 
   getAll() {
@@ -17,18 +20,7 @@ class InMemoryMowerRepository {
   }
 
   get(mowerId) {
-    return Mower.rebuild(this.database.get(mowerId));
-  }
-
-  delete(fieldId) {
-    this.database.delete(fieldId);
-  }
-
-  static getInstance() {
-    if (this.instance === undefined) {
-      this.instance = new InMemoryMowerRepository(new Map());
-    }
-    return this.instance;
+    return Mower.rebuild(this.database.get(mowerId.toString()));
   }
 }
 

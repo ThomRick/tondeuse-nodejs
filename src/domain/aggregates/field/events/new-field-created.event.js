@@ -1,11 +1,8 @@
 class NewFieldCreated {
-  constructor(id, dimension) {
+  constructor(id, dimension, mowers) {
     this.id = id;
     this.dimension = dimension;
-  }
-
-  apply(field) {
-    return field.applyNew(this);
+    this.mowers = mowers;
   }
 
   getId() {
@@ -14,6 +11,14 @@ class NewFieldCreated {
 
   getDimension() {
     return this.dimension;
+  }
+
+  getMowers() {
+    return this.mowers;
+  }
+
+  apply(field) {
+    return field.applyNew(this);
   }
 }
 

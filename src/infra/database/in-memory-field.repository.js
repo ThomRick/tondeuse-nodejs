@@ -1,13 +1,16 @@
 const Field = require('../../domain/aggregates/field/field');
 
 class InMemoryFieldRepository {
-  constructor(database) {
+  constructor(database = new Map()) {
     this.database = database;
   }
 
   save(field) {
-    const events = this.database.get(field.getId()) || [];
-    this.database.set(field.getId(), events.concat(field.getUncommittedChanges()));
+    const events = this.database.get(field.getId().getValue().toString()) || [];
+    while (field.getUncommittedChanges().length !== 0) {
+      events.push(field.getUncommittedChanges().shift());
+    }
+    this.database.set(field.getId().getValue().toString(), events);
   }
 
   getAll() {
@@ -17,18 +20,7 @@ class InMemoryFieldRepository {
   }
 
   get(fieldId) {
-    return Field.rebuild(this.database.get(fieldId));
-  }
-
-  delete(fieldId) {
-    this.database.delete(fieldId);
-  }
-
-  static getInstance() {
-    if (this.instance === undefined) {
-      this.instance = new InMemoryFieldRepository(new Map());
-    }
-    return this.instance;
+    return Field.rebuild(this.database.get(fieldId.toString()));
   }
 }
 

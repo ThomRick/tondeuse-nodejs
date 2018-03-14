@@ -8,8 +8,10 @@ class ProgramId {
   }
 
   static create() {
-    return new ProgramId(Date.now());
+    return new ProgramId(++ProgramId.COUNTER);
   }
 }
+
+ProgramId.COUNTER = 0;
 
 module.exports = ProgramId;

@@ -3,6 +3,7 @@
 .docker/
 .dockerignore/
 Dockerfile
+docker-compose.yml
 
 .gitignore
 
@@ -12,5 +13,6 @@ Makefile
 README.md
 
 node_modules/
+e2e/
 src/
 test/

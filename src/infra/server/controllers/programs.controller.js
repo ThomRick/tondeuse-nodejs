@@ -6,9 +6,9 @@ const ProgramDto = require('../dto/program.dto');
 
 class ProgramController {
   constructor(router) {
-    const programRepository = InMemoryProgramRepository.getInstance();
-    this.createProgramHandler = new CreateProgramHandler(programRepository);
-    this.extractProgramhandler = new ExtractProgramHandler(programRepository);
+    const repository = new InMemoryProgramRepository();
+    this.createProgramHandler = new CreateProgramHandler(repository);
+    this.extractProgramhandler = new ExtractProgramHandler(repository);
     this.router = router;
     this._registerRoutes();
   }
@@ -16,18 +16,22 @@ class ProgramController {
   _registerRoutes() {
     this.router.post('/api/programs', this.create.bind(this));
     this.router.get('/api/programs', this.getAll.bind(this));
+    this.router.put('/api/programs/:id', this.update.bind(this));
   }
 
   async create(context) {
-    console.log(`${ ProgramController.name }::create() - request body - ${ JSON.stringify(context.request.body, null, 2)}`);
     const instructions = context.request.body.instructions;
-    context.response.body = ProgramDto.from(this.createProgramHandler.create(instructions));
+    const mower = context.request.body.mower;
+    context.response.body = ProgramDto.from(this.createProgramHandler.create(instructions, mower));
     context.response.status = 201;
   }
 
   async getAll(context) {
-    console.log(`${ ProgramController.name }::getAll()`);
     context.response.body = this.extractProgramhandler.extract().map((program) => ProgramDto.from(program));
+    context.response.status = 200;
+  }
+
+  async update(context) {
     context.response.status = 200;
   }
 

@@ -1,4 +1,4 @@
-class ProgramInstalled {
+class MowerDeployed {
   constructor(id, mower) {
     this.id = id;
     this.mower = mower;
@@ -12,9 +12,9 @@ class ProgramInstalled {
     return this.mower;
   }
 
-  apply(program) {
-
+  apply(field) {
+    return field.applyDeploy(this);
   }
 }
 
-module.exports = ProgramInstalled;
+module.exports = MowerDeployed;

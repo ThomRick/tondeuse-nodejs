@@ -1,7 +1,8 @@
 class NewProgramCreated {
-  constructor(id, instructions) {
+  constructor(id, instructions, mower) {
     this.id = id;
     this.instructions = instructions;
+    this.mower = mower;
   }
 
   getId() {
@@ -10,6 +11,10 @@ class NewProgramCreated {
 
   getInstructions() {
     return this.instructions;
+  }
+
+  getMower() {
+    return this.mower;
   }
 
   apply(program) {

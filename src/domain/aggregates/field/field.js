@@ -1,35 +1,45 @@
-const FieldId = require('./fieldId');
+const FieldId = require('./field-id');
+
 const NewFieldCreated = require('./events/new-field-created.event');
+const MowerDeployed = require('./events/mower-deployed.event');
 
 class FieldBuilder {
   constructor() {}
-
-  withDimension(dimension) {
-    this.dimension = dimension;
-    return this;
-  }
 
   withId(id) {
     this.id = id;
     return this;
   }
 
+  withDimension(dimension) {
+    this.dimension = dimension;
+    return this;
+  }
+
+  withMowers(mowers) {
+    this.mowers = mowers;
+    return this;
+  }
+
   build() {
-    if (this.dimension === undefined) {
-      throw new Error('Dimension must be specified');
-    }
     if (this.id === undefined) {
       this.id = FieldId.create();
     }
-    return new Field(this.id, this.dimension);
+    if (this.dimension === undefined) {
+      throw new Error('Dimension must be specified');
+    }
+    if (this.mowers === undefined) {
+      this.mowers = [];
+    }
+    return new Field(this.id, this.dimension, this.mowers);
   }
 }
 
 class Field {
-  constructor(id, dimension) {
+  constructor(id, dimension, mowers) {
     this.uncommittedChanges = [];
-    if (id !== undefined && dimension !== undefined) {
-      const event = new NewFieldCreated(id, dimension);
+    if (id !== undefined && dimension !== undefined && mowers !== undefined) {
+      const event = new NewFieldCreated(id, dimension, mowers);
       this.applyNew(event);
       this._saveUncommittedChange(event);
     }
@@ -38,6 +48,18 @@ class Field {
   applyNew(event) {
     this.id = event.getId();
     this.dimension = event.getDimension();
+    this.mowers = [].concat(event.getMowers());
+    return this;
+  }
+
+  deploy(mower) {
+    const event = new MowerDeployed(this.id, mower);
+    this.applyDeploy(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyDeploy(event) {
+    this.mowers.push(event.getMower());
     return this;
   }
 
@@ -47,6 +69,10 @@ class Field {
 
   getDimension() {
     return this.dimension;
+  }
+
+  getMowers() {
+    return this.mowers;
   }
 
   getUncommittedChanges() {

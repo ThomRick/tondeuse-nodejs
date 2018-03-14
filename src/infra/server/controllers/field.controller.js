@@ -1,14 +1,19 @@
 const Router = require('koa-router');
+
+const FieldDto = require('../dto/field.dto');
+
+const InMemoryFieldRepository = require('../../database/in-memory-field.repository');
+
 const CreateFieldHandler = require('../../../domain/handlers/field/create-field.handler');
 const ExtractFieldHandler = require('../../../domain/handlers/field/extract-field.handler');
-const InMemoryFieldRepository = require('../../database/in-memory-field.repository');
-const FieldDto = require('../dto/field.dto');
+const DeployMowerHandler = require('../../../domain/handlers/field/deploy-mower.handler');
 
 class FieldController {
   constructor(router) {
-    const fieldRepository = InMemoryFieldRepository.getInstance();
-    this.createFieldHandler = new CreateFieldHandler(fieldRepository);
-    this.extractFieldHandler = new ExtractFieldHandler(fieldRepository);
+    const repository = new InMemoryFieldRepository();
+    this.createFieldHandler = new CreateFieldHandler(repository);
+    this.extractFieldHandler = new ExtractFieldHandler(repository);
+    this.deployMowerHandler = new DeployMowerHandler(repository);
     this.router = router;
     this._registerRoutes();
   }
@@ -16,18 +21,25 @@ class FieldController {
   _registerRoutes() {
     this.router.post('/api/fields', this.create.bind(this));
     this.router.get('/api/fields', this.getAll.bind(this));
+    this.router.put('/api/fields/:id', this.update.bind(this));
   }
 
   async create(context) {
-    console.log(`${ FieldController.name }::create() - request body - ${ JSON.stringify(context.request.body, null, 2)}`);
-    context.response.body = FieldDto.from(this.createFieldHandler.createField(context.request.body.dimension));
+    context.response.body = FieldDto.from(this.createFieldHandler.create(context.request.body.dimension));
     context.response.status = 201;
   }
 
   async getAll(context) {
-    console.log(`${ FieldController.name }::getAll()`);
-    context.response.body = this.extractFieldHandler.extractAll().map((field) => FieldDto.from(field));
-    context.status = 200;
+    context.response.body = this.extractFieldHandler.extract().map((field) => FieldDto.from(field));
+    context.response.status = 200;
+  }
+
+  async update(context) {
+    const id = context.params.id;
+    const mower = context.request.body;
+    const field = await this.deployMowerHandler.deploy(id, mower);
+    context.response.body = FieldDto.from(field);
+    context.response.status = 200;
   }
 
   routes() {

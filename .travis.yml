@@ -7,7 +7,7 @@ jobs:
     - stage: continuous_integration
       if: NOT tag IS present
       script:
-        - make install && make lint && make test && make compile && make build
+        - make
         - docker tag local/mow-it $DOCKER_USER/mow-it:$TRAVIS_COMMIT
         - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         - docker push $DOCKER_USER/mow-it:$TRAVIS_COMMIT
