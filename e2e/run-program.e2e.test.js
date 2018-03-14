@@ -20,7 +20,7 @@ describe('Run Program', () => {
         body: JSON.stringify(field)
       }, (error, response, body) => {
         if (error !== undefined && error !== null) {
-          reject(error);
+          reject(new Error('Can not create field : ' + error));
         }
         resolve(JSON.parse(body));
       });
@@ -41,7 +41,7 @@ describe('Run Program', () => {
           body: JSON.stringify(mower)
         }, (error, response, body) => {
           if (error !== undefined && error !== null) {
-            reject(error);
+            reject(new Error('Can not deploy mower : ' + error));
           }
           resolve(JSON.parse(body));
         });
@@ -59,7 +59,7 @@ describe('Run Program', () => {
             body: JSON.stringify(program)
           }, (error, response, body) => {
             if (error !== undefined && error !== null) {
-              reject(error);
+              reject(new Error('Can not install program : ' + error));
             }
             response.statusCode.should.be.equal(200);
             const mower = JSON.parse(body);
@@ -74,7 +74,7 @@ describe('Run Program', () => {
               }
             }, (error, response, body) => {
               if (error !== undefined && error !== null) {
-                reject(error);
+                reject('Can not execute program : ' + error);
               }
               const report = JSON.parse(body);
               resolve();
