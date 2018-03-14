@@ -54,7 +54,7 @@ class MowerController {
       case 'install':
         const id = context.params.id;
         const program = context.request.body;
-        context.response.body = await this.installProgramHandler.install(id, program);
+        context.response.body = MowerDto.from(await this.installProgramHandler.install(id, program));
         break;
     }
     context.response.status = 200;

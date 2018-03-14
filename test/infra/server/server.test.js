@@ -137,7 +137,14 @@ describe('MowIT Web API Server', () => {
     sandbox.assert.calledWith(moveStub, 'id', 'A');
   });
   it('should expose PUT /api/mowers/:id?action=install endpoint to install a new program on the mower', async () => {
-    const installStub = sandbox.stub(InstallProgramHandler.prototype, 'install');
+    const installStub = sandbox.stub(InstallProgramHandler.prototype, 'install')
+      .callsFake(() => Promise.resolve(
+        Mower.Builder()
+          .withField({ id: 'fieldId' })
+          .withPosition(Position.at(0, 0))
+          .withOrientation(Orientation.from(Orientation.NORTH))
+          .build()
+      ));
     const response = await request(server.callback())
       .put('/api/mowers/id?action=install')
       .send({
