@@ -6,13 +6,21 @@ const request = require('supertest');
 const Field = require('../../../src/domain/aggregates/field/field');
 const Dimension = require('../../../src/domain/aggregates/field/dimension');
 
+const InstallProgramHandler = require('../../../src/domain/handlers/mower/install-program.handler');
 const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
 
 const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
 
 describe('MowIT Web API Server', () => {
+  let sandbox;
   let server;
-  beforeEach(() => server = require('../../../src/infra/server/server'));
+  beforeEach(() => {
+    server = require('../../../src/infra/server/server');
+    sandbox = sinon.sandbox.create();
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
   it('should expose POST /api/fields endpoint to create fields', async () => {
     const response = await request(server.callback())
       .post('/api/fields')
@@ -38,7 +46,6 @@ describe('MowIT Web API Server', () => {
     response.body.should.be.an('array');
   });
   it('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
-    const sandbox = sinon.sandbox.create();
     const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
     sandbox.stub(DeployMowerHandler.prototype, 'deploy')
       .callsFake((id, mower) =>
@@ -70,7 +77,6 @@ describe('MowIT Web API Server', () => {
         }
       ]
     });
-    sandbox.restore();
   });
   it('should expose POST /api/mowers endpoint to create mowers', async () => {
     const response = await request(server.callback())
@@ -96,17 +102,30 @@ describe('MowIT Web API Server', () => {
       id: 'fieldId'
     });
   });
-  it('should expose PUT /api/mowers/:id endpoint to execute a mower move', async () => {
-    const sandbox = sinon.sandbox.create();
+  it('should expose PUT /api/mowers/:id?action=move endpoint to execute a mower move', async () => {
     const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move');
     const response = await request(server.callback())
-      .put('/api/mowers/id')
+      .put('/api/mowers/id?action=move')
       .send({
         instruction: 'A'
       });
     response.status.should.be.equal(200);
     sandbox.assert.calledWith(moveStub, 'id', 'A');
-    sandbox.restore();
+  });
+  it('should expose PUT /api/mowers/:id?action=install endpoint to install a new program on the mower', async () => {
+    const installStub = sandbox.stub(InstallProgramHandler.prototype, 'install');
+    const response = await request(server.callback())
+      .put('/api/mowers/id?action=install')
+      .send({
+        instructions: [ 'D', 'A', 'G', 'A', 'G' ]
+      });
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(installStub,
+      'id',
+      {
+        instructions: [ 'D', 'A', 'G', 'A', 'G' ]
+      }
+    );
   });
   it('should expose POST /api/programs endpoint to create programs', async () => {
     const response = await request(server.callback())

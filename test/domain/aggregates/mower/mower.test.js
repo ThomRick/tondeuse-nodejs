@@ -7,6 +7,7 @@ const Position = require('../../../../src/domain/aggregates/mower/position');
 const Orientation = require('../../../../src/domain/aggregates/mower/orientation');
 
 const NewMowerCreated = require('../../../../src/domain/aggregates/mower/events/new-mower-created.event');
+const ProgramInstalled = require('../../../../src/domain/aggregates/mower/events/program-installed.event');
 const MowerMovedForward = require('../../../../src/domain/aggregates/mower/events/mower-moved.forward.event');
 const MowerTurnedLeft = require('../../../../src/domain/aggregates/mower/events/mower-turned-left.event');
 const MowerTurnedRight = require('../../../../src/domain/aggregates/mower/events/mower-turned-right.event');
@@ -100,6 +101,24 @@ describe('Mower', () => {
       .should.be.deep.equal([
         new NewMowerCreated(mower.getId(), Position.at(0, 0), Orientation.from(Orientation.NORTH), field),
         new MowerTurnedRight(mower.getId(), Orientation.from(Orientation.EST))
+      ]);
+  });
+  it('should add a program installed event when install a program', () => {
+    const field = { id: 'fieldId' };
+    const mower = Mower
+      .Builder()
+      .withPosition(Position.at(0, 0))
+      .withOrientation(Orientation.from(Orientation.NORTH))
+      .withField(field)
+      .build();
+    const program = {
+      id: 'programId'
+    };
+    mower.install(program);
+    mower.getUncommittedChanges()
+      .should.be.deep.equal([
+        new NewMowerCreated(mower.getId(), Position.at(0, 0), Orientation.from(Orientation.NORTH), field),
+        new ProgramInstalled(mower.getId(), program)
       ]);
   });
   it('should rebuild mower from events', () => {

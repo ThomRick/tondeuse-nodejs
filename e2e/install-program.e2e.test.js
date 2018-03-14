@@ -3,7 +3,7 @@ chai.should();
 
 const request = require('request');
 
-describe.skip('Install Program', () => {
+describe('Install Program', () => {
   it('should install the program on a mower', async () => {
     const field = {
       dimension: {
@@ -63,6 +63,7 @@ describe.skip('Install Program', () => {
             }
             response.statusCode.should.be.equal(200);
             const mower = JSON.parse(body);
+            mower.should.have.property('program');
             resolve();
           });
         });
