@@ -63,6 +63,7 @@ describe('Install Program', () => {
             }
             response.statusCode.should.be.equal(200);
             const mower = JSON.parse(body);
+            mower.should.have.property('program');
             resolve();
           });
         });
