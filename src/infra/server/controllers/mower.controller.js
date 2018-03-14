@@ -22,6 +22,7 @@ class MowerController {
   _registerRoutes() {
     this.router.post('/api/mowers', this.create.bind(this));
     this.router.get('/api/mowers', this.getAll.bind(this));
+    this.router.get('/api/mowers/:id', this.getById.bind(this));
     this.router.put('/api/mowers/:id', this.update.bind(this));
   }
 
@@ -31,6 +32,12 @@ class MowerController {
     const field = context.request.body.field;
     context.response.body = MowerDto.from(this.createMowerHandler.create(position, orientation, field));
     context.response.status = 201;
+  }
+
+  async getById(context) {
+    const id = context.params.id;
+    context.response.body = MowerDto.from(this.extractMowerHandler.extract(id));
+    context.response.status = 200;
   }
 
   async getAll(context) {

@@ -6,8 +6,13 @@ const request = require('supertest');
 const Field = require('../../../src/domain/aggregates/field/field');
 const Dimension = require('../../../src/domain/aggregates/field/dimension');
 
+const Mower = require('../../../src/domain/aggregates/mower/mower');
+const Position = require('../../../src/domain/aggregates/mower/position');
+const Orientation = require('../../../src/domain/aggregates/mower/orientation');
+
 const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
 
+const ExtractMowerHandler = require('../../../src/domain/handlers/mower/extract-mower.handler');
 const InstallProgramHandler = require('../../../src/domain/handlers/mower/install-program.handler');
 const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
 
@@ -107,6 +112,19 @@ describe('MowIT Web API Server', () => {
     response.body.should.have.deep.property('field', {
       id: 'fieldId'
     });
+  });
+  it('should expose GET /api/mowers/:id endpoint to extract mower with the given id', async () => {
+    const extractStub = sandbox.stub(ExtractMowerHandler.prototype, 'extract')
+      .callsFake(() => Mower.Builder()
+        .withField({ id: 'fieldId' })
+        .withPosition(Position.at(0, 0))
+        .withOrientation(Orientation.from(Orientation.NORTH))
+        .build()
+      );
+    const response = await request(server.callback())
+      .get('/api/mowers/id');
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(extractStub, 'id');
   });
   it('should expose PUT /api/mowers/:id?action=move endpoint to execute a mower move', async () => {
     const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move');

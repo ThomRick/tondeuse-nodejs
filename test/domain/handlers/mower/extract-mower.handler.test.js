@@ -15,7 +15,7 @@ describe('Extract Mower Handler', () => {
     repository = new InMemoryMowerRepository();
     handler = new ExtractMowerHandler(repository);
   });
-  it('should retrieve all mowers when extractAll', () => {
+  it('should retrieve all mowers when extract without id', () => {
     const field = { id: 'fieldId' };
     [
       Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).withField(field).build(),
@@ -32,5 +32,18 @@ describe('Extract Mower Handler', () => {
     extractedMowers[2].getPosition().should.be.deep.equal(Position.at(2, 2));
     extractedMowers[2].getOrientation().should.be.deep.equal(Orientation.from(Orientation.EST));
     extractedMowers[2].getField().should.be.deep.equal(field);
+  });
+  it('should retrieve one mower when extract with an id', () => {
+    const field = { id: 'fieldId' };
+    const mowers = [
+      Mower.Builder().withPosition(Position.at(0, 0)).withOrientation(Orientation.from(Orientation.NORTH)).withField(field).build(),
+      Mower.Builder().withPosition(Position.at(1, 1)).withOrientation(Orientation.from(Orientation.WEST)).withField(field).build(),
+      Mower.Builder().withPosition(Position.at(2, 2)).withOrientation(Orientation.from(Orientation.EST)).withField(field).build(),
+    ];
+    mowers.forEach((mower) => repository.save(mower));
+    const extractedMower = handler.extract(mowers[1].getId().getValue());
+    extractedMower.getPosition().should.be.deep.equal(Position.at(1, 1));
+    extractedMower.getOrientation().should.be.deep.equal(Orientation.from(Orientation.WEST));
+    extractedMower.getField().should.be.deep.equal(field);
   });
 });
