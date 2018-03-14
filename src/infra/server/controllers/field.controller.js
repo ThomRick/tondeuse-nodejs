@@ -21,6 +21,7 @@ class FieldController {
   _registerRoutes() {
     this.router.post('/api/fields', this.create.bind(this));
     this.router.get('/api/fields', this.getAll.bind(this));
+    this.router.get('/api/fields/:id', this.getById.bind(this));
     this.router.put('/api/fields/:id', this.update.bind(this));
   }
 
@@ -31,6 +32,12 @@ class FieldController {
 
   async getAll(context) {
     context.response.body = this.extractFieldHandler.extract().map((field) => FieldDto.from(field));
+    context.response.status = 200;
+  }
+
+  async getById(context) {
+    const id = context.params.id;
+    context.response.body = FieldDto.from(this.extractFieldHandler.extract(id));
     context.response.status = 200;
   }
 

@@ -10,6 +10,8 @@ const Mower = require('../../../src/domain/aggregates/mower/mower');
 const Position = require('../../../src/domain/aggregates/mower/position');
 const Orientation = require('../../../src/domain/aggregates/mower/orientation');
 
+const ExtractFieldHandler = require('../../../src/domain/handlers/field/extract-field.handler');
+
 const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
 
 const ExtractMowerHandler = require('../../../src/domain/handlers/mower/extract-mower.handler');
@@ -51,6 +53,17 @@ describe('MowIT Web API Server', () => {
       .get('/api/fields');
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
+  });
+  it('should expose GET /api/fields/:id endpoint to fetch field by id', async () => {
+    const extractStub = sandbox.stub(ExtractFieldHandler.prototype, 'extract')
+      .callsFake(() => Field.Builder()
+        .withDimension(Dimension.of(4, 4))
+        .build()
+      );
+    const response = await request(server.callback())
+      .get('/api/fields/id');
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(extractStub, 'id');
   });
   it('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
     const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
