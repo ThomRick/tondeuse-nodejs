@@ -5,8 +5,12 @@ class CreateProgramHandler {
     this.programRepository = programRepository;
   }
 
-  create(instructions) {
-    const program = Program.with(instructions);
+  create(instructions, mower) {
+    const program = Program
+      .Builder()
+      .withInstructions(instructions)
+      .withMower(mower)
+      .build();
     this.programRepository.save(program);
     return program;
   }
