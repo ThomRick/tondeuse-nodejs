@@ -3,7 +3,7 @@ chai.should();
 
 const request = require('request');
 
-describe.skip('Install Program', () => {
+describe('Install Program', () => {
   it('should install the program on a mower', async () => {
     const field = {
       dimension: {

@@ -1,6 +1,7 @@
 const MowerId = require('./mower-id');
 
 const NewMowerCreated = require('./events/new-mower-created.event');
+const ProgramInstalled = require('./events/program-installed.event');
 const MowerMovedForward = require('./events/mower-moved.forward.event');
 const MowerTurnedLeft = require('./events/mower-turned-left.event');
 const MowerTurnedRight = require('./events/mower-turned-right.event');
@@ -63,6 +64,17 @@ class Mower {
     return this;
   }
 
+  install(program) {
+    const event = new ProgramInstalled(this.id, program);
+    this.applyInstall(event);
+    this._saveUncommittedChange(event);
+  }
+
+  applyInstall(event) {
+    this.program = event.getProgram();
+    return this;
+  }
+
   moveForward() {
     const event = new MowerMovedForward(this.id, this.position.move(this.orientation));
     this.applyMoveForward(event);
@@ -100,6 +112,10 @@ class Mower {
     return this.id;
   }
 
+  getField() {
+    return this.field;
+  }
+
   getOrientation() {
     return this.orientation;
   }
@@ -108,8 +124,8 @@ class Mower {
     return this.position;
   }
 
-  getField() {
-    return this.field;
+  getProgram() {
+    return this.program;
   }
 
   getUncommittedChanges() {
