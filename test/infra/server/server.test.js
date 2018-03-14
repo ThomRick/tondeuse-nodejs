@@ -108,15 +108,19 @@ describe('MowIT Web API Server', () => {
     sandbox.assert.calledWith(moveStub, 'id', 'A');
     sandbox.restore();
   });
-  it.skip('should expose POST /api/programs endpoint to create programs', async () => {
+  it('should expose POST /api/programs endpoint to create programs', async () => {
     const response = await request(server.callback())
       .post('/api/programs')
       .send({
-        instructions: [ 'D', 'A', 'G', 'A', 'G' ]
+        instructions: [ 'D', 'A', 'G', 'A', 'G' ],
+        mower: {
+          id: 'mowerId'
+        }
       });
     response.status.should.be.equal(201);
     response.body.should.have.property('id');
     response.body.should.have.deep.property('instructions', [ 'D', 'A', 'G', 'A', 'G' ]);
+    response.body.should.have.deep.property('mower', { id: 'mowerId' });
   });
   it('should expose GET /api/programs endpoint to fetch all programs', async () => {
     const response = await request(server.callback())

@@ -21,7 +21,8 @@ class ProgramController {
 
   async create(context) {
     const instructions = context.request.body.instructions;
-    context.response.body = ProgramDto.from(this.createProgramHandler.create(instructions));
+    const mower = context.request.body.mower;
+    context.response.body = ProgramDto.from(this.createProgramHandler.create(instructions, mower));
     context.response.status = 201;
   }
 
