@@ -6,7 +6,7 @@ const ProgramRepository = require('../../../../src/infra/database/in-memory-prog
 
 const CreateProgramHandler = require('../../../../src/domain/handlers/program/create-program.handler');
 
-describe('Create Program Handler', () => {
+describe.skip('Create Program Handler', () => {
   let handler;
   let repository;
   beforeEach(() => {

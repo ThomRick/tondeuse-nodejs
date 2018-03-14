@@ -108,7 +108,7 @@ describe('MowIT Web API Server', () => {
     sandbox.assert.calledWith(moveStub, 'id', 'A');
     sandbox.restore();
   });
-  it('should expose POST /api/programs endpoint to create programs', async () => {
+  it.skip('should expose POST /api/programs endpoint to create programs', async () => {
     const response = await request(server.callback())
       .post('/api/programs')
       .send({

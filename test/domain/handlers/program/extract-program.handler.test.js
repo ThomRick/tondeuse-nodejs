@@ -7,7 +7,7 @@ const InMemoryProgramRepository = require('../../../../src/infra/database/in-mem
 
 const ExtractProgramHandler = require('../../../../src/domain/handlers/program/extract-program.handler');
 
-describe('Extract Program Handler', () => {
+describe.skip('Extract Program Handler', () => {
   let handler;
   let repository;
   before(() => {
