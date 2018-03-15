@@ -6,10 +6,19 @@ const request = require('supertest');
 const Field = require('../../../src/domain/aggregates/field/field');
 const Dimension = require('../../../src/domain/aggregates/field/dimension');
 
+const Mower = require('../../../src/domain/aggregates/mower/mower');
+const Position = require('../../../src/domain/aggregates/mower/position');
+const Orientation = require('../../../src/domain/aggregates/mower/orientation');
+
+const ExtractFieldHandler = require('../../../src/domain/handlers/field/extract-field.handler');
+
+const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
+
+const ExtractMowerHandler = require('../../../src/domain/handlers/mower/extract-mower.handler');
 const InstallProgramHandler = require('../../../src/domain/handlers/mower/install-program.handler');
 const MoveMowerHandler = require('../../../src/domain/handlers/mower/move-mower.handler');
 
-const DeployMowerHandler = require('../../../src/domain/handlers/field/deploy-mower.handler');
+const RunProgramHandler = require('../../../src/domain/handlers/program/run-program.handler');
 
 describe('MowIT Web API Server', () => {
   let sandbox;
@@ -45,12 +54,27 @@ describe('MowIT Web API Server', () => {
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
   });
+  it('should expose GET /api/fields/:id endpoint to fetch field by id', async () => {
+    const extractStub = sandbox.stub(ExtractFieldHandler.prototype, 'extract')
+      .callsFake(() => Field.Builder()
+        .withDimension(Dimension.of(4, 4))
+        .build()
+      );
+    const response = await request(server.callback())
+      .get('/api/fields/id');
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(extractStub, 'id');
+  });
   it('should expose PUT /api/fields/:id endpoint to deploy mower', async () => {
     const field = Field.Builder().withDimension(Dimension.of(4, 4)).build();
     sandbox.stub(DeployMowerHandler.prototype, 'deploy')
-      .callsFake((id, mower) =>
-        Promise.resolve(Field.Builder().withId(field.getId()).withDimension(Dimension.of(4, 4)).withMowers([ mower ]).build())
-      );
+      .callsFake((id, mower) => Promise.resolve(
+        Field.Builder()
+          .withId(field.getId())
+          .withDimension(Dimension.of(4, 4))
+          .withMowers([ mower ])
+          .build()
+      ));
     const response = await request(server.callback())
       .put(`/api/fields/${ field.getId().getValue() }`)
       .send({
@@ -102,8 +126,28 @@ describe('MowIT Web API Server', () => {
       id: 'fieldId'
     });
   });
+  it('should expose GET /api/mowers/:id endpoint to extract mower with the given id', async () => {
+    const extractStub = sandbox.stub(ExtractMowerHandler.prototype, 'extract')
+      .callsFake(() => Mower.Builder()
+        .withField({ id: 'fieldId' })
+        .withPosition(Position.at(0, 0))
+        .withOrientation(Orientation.from(Orientation.NORTH))
+        .build()
+      );
+    const response = await request(server.callback())
+      .get('/api/mowers/id');
+    response.status.should.be.equal(200);
+    sandbox.assert.calledWith(extractStub, 'id');
+  });
   it('should expose PUT /api/mowers/:id?action=move endpoint to execute a mower move', async () => {
-    const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move');
+    const moveStub = sandbox.stub(MoveMowerHandler.prototype, 'move')
+      .callsFake(() => Mower
+        .Builder()
+        .withField({ id: 'fieldId' })
+        .withPosition(Position.at(0, 0))
+        .withOrientation(Orientation.from(Orientation.NORTH))
+        .build()
+      );
     const response = await request(server.callback())
       .put('/api/mowers/id?action=move')
       .send({
@@ -113,7 +157,14 @@ describe('MowIT Web API Server', () => {
     sandbox.assert.calledWith(moveStub, 'id', 'A');
   });
   it('should expose PUT /api/mowers/:id?action=install endpoint to install a new program on the mower', async () => {
-    const installStub = sandbox.stub(InstallProgramHandler.prototype, 'install');
+    const installStub = sandbox.stub(InstallProgramHandler.prototype, 'install')
+      .callsFake(() => Promise.resolve(
+        Mower.Builder()
+          .withField({ id: 'fieldId' })
+          .withPosition(Position.at(0, 0))
+          .withOrientation(Orientation.from(Orientation.NORTH))
+          .build()
+      ));
     const response = await request(server.callback())
       .put('/api/mowers/id?action=install')
       .send({
@@ -147,10 +198,12 @@ describe('MowIT Web API Server', () => {
     response.status.should.be.equal(200);
     response.body.should.be.an('array');
   });
-  it('should expose PUT /api/programs/:id endpoint to update the program', async () => {
+  it('should expose PUT /api/programs/:id endpoint to run the program and return an execution report', async () => {
+    const runStub = sandbox.stub(RunProgramHandler.prototype, 'run')
+      .callsFake(() => Promise.resolve());
     const response = await request(server.callback())
-      .put('/api/programs/id')
-      .send({});
+      .put('/api/programs/id');
     response.status.should.be.equal(200);
+    sandbox.assert.calledWith(runStub, 'id');
   });
 });

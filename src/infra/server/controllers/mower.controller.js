@@ -22,6 +22,7 @@ class MowerController {
   _registerRoutes() {
     this.router.post('/api/mowers', this.create.bind(this));
     this.router.get('/api/mowers', this.getAll.bind(this));
+    this.router.get('/api/mowers/:id', this.getById.bind(this));
     this.router.put('/api/mowers/:id', this.update.bind(this));
   }
 
@@ -33,6 +34,12 @@ class MowerController {
     context.response.status = 201;
   }
 
+  async getById(context) {
+    const id = context.params.id;
+    context.response.body = MowerDto.from(this.extractMowerHandler.extract(id));
+    context.response.status = 200;
+  }
+
   async getAll(context) {
     context.response.body = this.extractMowerHandler.extract().map((mower) => MowerDto.from(mower));
     context.response.status = 200;
@@ -42,12 +49,12 @@ class MowerController {
     const action = context.query.action;
     switch (action) {
       case 'move':
-        this.moveMowerHandler.move(context.params.id, context.request.body.instruction);
+        context.response.body = MowerDto.from(this.moveMowerHandler.move(context.params.id, context.request.body.instruction));
         break;
       case 'install':
         const id = context.params.id;
         const program = context.request.body;
-        context.response.body = await this.installProgramHandler.install(id, program);
+        context.response.body = MowerDto.from(await this.installProgramHandler.install(id, program));
         break;
     }
     context.response.status = 200;

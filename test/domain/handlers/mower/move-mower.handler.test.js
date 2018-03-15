@@ -55,4 +55,16 @@ describe('Move Mower Handler', () => {
     const movedMower = repository.get(id.getValue());
     movedMower.getOrientation().should.be.deep.equal(Orientation.from(Orientation.EST));
   });
+  it('should return the mower after the move', () => {
+    const id = MowerId.create();
+    const mower = Mower.Builder()
+      .withId(id)
+      .withPosition(Position.at(0, 0))
+      .withOrientation(Orientation.from(Orientation.NORTH))
+      .withField({ id: 'fieldId' })
+      .build();
+    repository.save(mower);
+    const movedMower = handler.move(id.getValue(), 'A');
+    movedMower.getPosition().should.be.deep.equal(Position.at(1, 0));
+  });
 });

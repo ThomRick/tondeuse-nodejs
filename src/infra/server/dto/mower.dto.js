@@ -1,13 +1,22 @@
 class MowerDto {
-  constructor(id, position, orientation, field) {
+  constructor(id, field, position, orientation, program) {
     this.id = id;
+    this.field = field;
     this.position = position;
     this.orientation = orientation;
-    this.field = field;
+    if (program !== undefined) {
+      this.program = program;
+    }
   }
 
   static from(mower) {
-    return new MowerDto(mower.getId().getValue(), mower.getPosition(), mower.getOrientation(), mower.getField());
+    return new MowerDto(
+      mower.getId().getValue(),
+      mower.getField(),
+      mower.getPosition(),
+      mower.getOrientation().getValue(),
+      mower.getProgram()
+    );
   }
 }
 

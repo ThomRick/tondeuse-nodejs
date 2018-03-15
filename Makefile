@@ -24,6 +24,6 @@ build:
 
 e2e:
 	@docker-compose up -d
-	@-npm run -s e2e
+	@-docker run -t --net=host -v $$(pwd):/usr/local/app $$(docker build -qf .docker/build/Dockerfile .) /bin/sh -c "npm run -s e2e"
 	@docker-compose stop
 	@echo "E2E TESTS DONE"

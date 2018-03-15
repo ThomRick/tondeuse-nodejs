@@ -1,4 +1,6 @@
 const Mower = require('../../aggregates/mower/mower');
+const Position = require('../../aggregates/mower/position');
+const Orientation = require('../../aggregates/mower/orientation');
 
 class CreateMowerHandler {
   constructor(mowerRepository) {
@@ -8,8 +10,8 @@ class CreateMowerHandler {
   create(position, orientation, field) {
     const mower = Mower
       .Builder()
-      .withPosition(position)
-      .withOrientation(orientation)
+      .withPosition(Position.at(position.x, position.y))
+      .withOrientation(Orientation.from(orientation))
       .withField(field)
       .build();
     this.mowerRepository.save(mower);

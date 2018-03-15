@@ -1,14 +1,18 @@
 const Router = require('koa-router');
+
 const InMemoryProgramRepository = require('../../database/in-memory-program.repository');
+const ProgramDto = require('../dto/program.dto');
+
 const CreateProgramHandler = require('../../../domain/handlers/program/create-program.handler');
 const ExtractProgramHandler = require('../../../domain/handlers/program/extract-program.handler');
-const ProgramDto = require('../dto/program.dto');
+const RunProgramHandler = require('../../../domain/handlers/program/run-program.handler');
 
 class ProgramController {
   constructor(router) {
     const repository = new InMemoryProgramRepository();
     this.createProgramHandler = new CreateProgramHandler(repository);
     this.extractProgramhandler = new ExtractProgramHandler(repository);
+    this.runProgramHandler = new RunProgramHandler(repository);
     this.router = router;
     this._registerRoutes();
   }
@@ -32,6 +36,8 @@ class ProgramController {
   }
 
   async update(context) {
+    const id = context.params.id;
+    context.response.body = await this.runProgramHandler.run(id);
     context.response.status = 200;
   }
 

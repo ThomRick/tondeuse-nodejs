@@ -1,4 +1,5 @@
 const Program = require('../../aggregates/program/program');
+const Instruction = require('../../aggregates/program/instruction');
 
 class CreateProgramHandler {
   constructor(programRepository) {
@@ -8,7 +9,7 @@ class CreateProgramHandler {
   create(instructions, mower) {
     const program = Program
       .Builder()
-      .withInstructions(instructions)
+      .withInstructions(instructions.map((instruction) => Instruction.from(instruction)))
       .withMower(mower)
       .build();
     this.programRepository.save(program);

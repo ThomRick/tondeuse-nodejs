@@ -1,4 +1,8 @@
 class Instruction {
+  constructor(value) {
+    this.value = value;
+  }
+
   static from(value) {
     switch (value) {
       case Instruction.MOVE_FORWARD:
@@ -13,17 +17,25 @@ class Instruction {
   canExecute() {
     return false;
   }
+
+  getValue() {
+    return this.value;
+  }
 }
 
 class MoveForwardInstruction extends Instruction {
-  canExecute(mower) {
+  constructor() {
+    super(Instruction.MOVE_FORWARD);
+  }
+
+  canExecute(mower, field) {
     switch (mower.orientation) {
       case 'W':
         return this._isNoCollisionToWest(mower.position.y);
       case 'E':
-        return this._isNoCollisionToEast(mower.position.y, mower.field.dimension.length);
+        return this._isNoCollisionToEast(mower.position.y, field.dimension.length);
       case 'N':
-        return this._isNoCollisionToNorth(mower.position.x, mower.field.dimension.width);
+        return this._isNoCollisionToNorth(mower.position.x, field.dimension.width);
       case 'S':
         return this._isNoCollisionToSouth(mower.position.x);
       default:
@@ -49,12 +61,20 @@ class MoveForwardInstruction extends Instruction {
 }
 
 class TurnLeftInstruction extends Instruction {
+  constructor() {
+    super(Instruction.TURN_LEFT);
+  }
+
   canExecute() {
     return true;
   }
 }
 
 class TurnRightInstruction extends Instruction {
+  constructor() {
+    super(Instruction.TURN_RIGHT);
+  }
+
   canExecute() {
     return true;
   }

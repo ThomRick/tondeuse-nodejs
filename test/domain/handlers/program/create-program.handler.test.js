@@ -15,14 +15,16 @@ describe('Create Program Handler', () => {
   });
   it('should save the create program', () => {
     const instructions = [
-      Instruction.from(Instruction.MOVE_FORWARD)
+      'A'
     ];
     const mower = {
       id: 'mowerId'
     };
     const createdProgram = handler.create(instructions, mower);
     const savedProgram = repository.get(createdProgram.getId().getValue());
-    savedProgram.getInstructions().should.be.deep.equal(instructions);
+    savedProgram.getInstructions().should.be.deep.equal([
+      Instruction.from(Instruction.MOVE_FORWARD)
+    ]);
     savedProgram.getMower().should.be.deep.equal(mower);
   });
 });

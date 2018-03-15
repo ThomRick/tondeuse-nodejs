@@ -17,6 +17,7 @@ class MoveMowerHandler {
         break;
     }
     this.repository.save(mower);
+    return mower;
   }
 }
 

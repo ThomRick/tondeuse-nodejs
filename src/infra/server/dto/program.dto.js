@@ -1,7 +1,7 @@
 class ProgramDto {
   constructor(id, instructions, mower) {
     this.id = id;
-    this.instructions = instructions;
+    this.instructions = instructions.map((instruction) => instruction.getValue());
     this.mower = mower;
   }
 

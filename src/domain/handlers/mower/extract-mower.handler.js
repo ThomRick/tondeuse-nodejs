@@ -3,8 +3,12 @@ class ExtractMowerHandler {
     this.mowerRepository = mowerRepository;
   }
 
-  extract() {
-    return this.mowerRepository.getAll();
+  extract(mowerId) {
+    if (mowerId !== undefined && mowerId !== null) {
+      return this.mowerRepository.get(mowerId);
+    } else {
+      return this.mowerRepository.getAll();
+    }
   }
 }
 
