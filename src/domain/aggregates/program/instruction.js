@@ -25,7 +25,7 @@ class Instruction {
 
 class MoveForwardInstruction extends Instruction {
   constructor() {
-    super('A');
+    super(Instruction.MOVE_FORWARD);
   }
 
   canExecute(mower, field) {
@@ -62,7 +62,7 @@ class MoveForwardInstruction extends Instruction {
 
 class TurnLeftInstruction extends Instruction {
   constructor() {
-    super('G');
+    super(Instruction.TURN_LEFT);
   }
 
   canExecute() {
@@ -72,7 +72,7 @@ class TurnLeftInstruction extends Instruction {
 
 class TurnRightInstruction extends Instruction {
   constructor() {
-    super('D');
+    super(Instruction.TURN_RIGHT);
   }
 
   canExecute() {
