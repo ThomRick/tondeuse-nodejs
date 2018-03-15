@@ -37,6 +37,21 @@ describe('Run Program Handler', () => {
               id: 'programId'
             }
           }));
+        } else if (options.url === `http://localhost:3000/api/mowers/${ 'collisionMowerId' }`) {
+          callback(null, {}, JSON.stringify({
+            id: 'collisionMowerId',
+            position: {
+              x: 0,
+              y: 0
+            },
+            orientation: 'W',
+            field: {
+              id: 'fieldId'
+            },
+            program: {
+              id: 'programId'
+            }
+          }));
         } else {
           callback(null, {}, JSON.stringify({
             id: 'fieldId',
@@ -156,5 +171,17 @@ describe('Run Program Handler', () => {
         id: 'programId'
       }
     });
+  });
+  it('should not execute the instruction', async () => {
+    let program = Program
+      .Builder()
+      .withInstructions([
+        Instruction.from(Instruction.MOVE_FORWARD)
+      ])
+      .withMower({ id: 'collisionMowerId' })
+      .build();
+    repository.save(program);
+    await handler.run(program.getId().getValue());
+    sandbox.assert.notCalled(putStub);
   });
 });

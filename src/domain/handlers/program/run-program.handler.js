@@ -29,7 +29,7 @@ class RunProgramHandler {
     }).then(({ mower, field }) => {
       const instructions = program.getInstructions();
       return instructions.reduce(async (report, instruction) => {
-        return new Promise((resolve) => {
+        return instruction.canExecute(report.mower, field) ? new Promise((resolve) => {
           request.put({
             url: `http://localhost:3000/api/mowers/${ mower.id }?action=move`,
             headers: {
@@ -44,8 +44,10 @@ class RunProgramHandler {
               mower: JSON.parse(body)
             });
           });
-        });
-      }, {});
+        }) : Promise.resolve(report);
+      }, {
+        mower: mower
+      });
     });
   }
 }
