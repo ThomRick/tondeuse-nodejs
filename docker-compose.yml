@@ -1,6 +1,18 @@
-version: '3'
+version: "3"
 services:
   api:
-    image: local/mow-it
-    ports:
-     - "3000:3000"
+    image: thomrick/mow-it:e5bbb7a00cb049e959975303383fce372e8610ca
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.port=3000"
+        - "traefik.frontend.rule=Host:mow-it.thomrick.com"
+      placement:
+        constraints: [node.role == worker]
+    networks:
+      - proxy
+networks:
+  proxy:
+    external:
+      name: proxy
